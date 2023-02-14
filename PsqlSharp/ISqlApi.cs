@@ -16,7 +16,9 @@ namespace PsqlSharp
 
         public bool IsConnected { get; }
 
-        public Task<bool> ConnectAsync(string database, string username, string password);
+        public event EventHandler ConnectionStatusChanged;
+
+        public Task<bool> ConnectAsync(string database, string username, string password,string server,string port = "5432");
 
         public Task<bool> DisconnectAsync();
 

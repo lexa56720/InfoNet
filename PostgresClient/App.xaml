@@ -4,6 +4,73 @@
              xmlns:local="clr-namespace:PostgresClient.View"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
+        
+        <Style TargetType="Label">
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.Foreground" Value="White" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        
+        <Style TargetType="Button" x:Key="BaseButton">
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.Background" Value="#424242" />
+            <Setter Property="Control.Foreground" Value="White" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Control.Margin" Value="2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#8d8d8d"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="Grid">
+            <Setter Property="Control.Background" Value="#1b1b1b" />
+        </Style>
+        
+        <Style TargetType="TextBlock">
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        
+        <Style TargetType="TextBox">
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#484848" />
+        </Style>
+        
+        <Style TargetType="PasswordBox">
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Background" Value="#484848" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        
+        <Style TargetType="Frame">
+            <Setter Property="Background" Value="#1b1b1b" />
+            <Setter Property="BorderThickness" Value="0"  />
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
+        <Style TargetType="StackPanel">
+            <Setter Property="Background" Value="#1b1b1b" />
+            <Setter Property="Margin" Value="0"  />
+        </Style>
+
+    
     </Application.Resources>
 </Application>

@@ -9,12 +9,14 @@ namespace PostgresClient.Model
 {
     class MainModel
     {
+        public ISqlApi Api { get; }
 
-        public MainModel(ISqlApi api) 
+        public event EventHandler<bool> NewConnectStatus;
+        public MainModel(ISqlApi api)
         {
             Api = api;
+            api.ConnectionStatusChanged += (o, e) => NewConnectStatus?.Invoke(o, api.IsConnected);
         }
 
-        public ISqlApi Api { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PsqlSharp;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -10,8 +11,16 @@ namespace PostgresClient
 {
     /// <summary>
     /// Interaction logic for App.xaml
-    /// </summary>
+    /// </summary>          
+
     public partial class App : Application
     {
+        public static ISqlApi Api { get; private set; }
+
+        public App()
+        {
+            Api = new PostgresApi();
+        }
+
     }
 }

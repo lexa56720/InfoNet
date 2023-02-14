@@ -5,22 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostgresClient.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="900"  Width="1500">
+    <Window.Resources>
+
+
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="12*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Cyan" />
-        <Frame Grid.Row="1" Grid.Column="1" Background="Aquamarine" />
-        <Frame Background="AliceBlue" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"/>
-        <Grid Grid.Row="2" Grid.Column="2" Background="Green" VerticalAlignment="Center">
+
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Content="Выполнить" FontSize="20" Style="{StaticResource BaseButton}"/>
+        </StackPanel>
+        <Frame Background="#FF101010" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  BorderThickness="0"/>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Padding="5" Margin="5" BorderThickness="1" BorderBrush="#707070">
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="FontSize" Value="20"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="Инициализировать соеденение" Click="Button_Click"/>
+                    <Button Content="Закрыть сеанс связи"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Padding="5" Margin="5" BorderThickness="1" BorderBrush="#707070">
+                <Frame  Content="{Binding SidePanel}" Navigated="Frame_Navigated" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Background="#424242">
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -30,10 +61,36 @@
             </Grid.ColumnDefinitions>
             <Viewbox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Canvas Width="100" Height="100">
-                    <Ellipse Fill="Red" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="25"  />
+                    <Ellipse  Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="25">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                        <Setter Property="Fill" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsConnected}" Value="false">
+                                        <Setter Property="Fill" Value="Red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
                 </Canvas>
             </Viewbox>
-            <TextBlock Text="Не подключено"  Grid.Row="2" Grid.Column="1" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" />
+            <Label  Grid.Row="2" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" >
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                <Setter Property="Content" Value="Подключено"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsConnected}" Value="false">
+                                <Setter Property="Content" Value="Не подключено"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
         </Grid>
 
     </Grid>
