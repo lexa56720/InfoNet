@@ -23,12 +23,12 @@
 
 
 
-        <TabControl  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#212121"  BorderThickness="0"  Padding="5"  >
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#212121"  BorderThickness="0"  Padding="5"  >
             <TabItem Header="Выполнить комманду" >
-                <Frame   Content="{Binding MainFrame}"    BorderThickness="0"  />
+                <Frame   Content="{Binding WorkFrame}"    BorderThickness="0"  />
             </TabItem>
-            <TabItem Header="Вывести содержимое таблицы">
-                Вторая вкладка
+            <TabItem Header="Вывести содержимое таблицы" IsEnabled="{Binding IsConnected}">
+                <Frame   Content="{Binding TableViewerFrame}"    BorderThickness="0"  />
             </TabItem>
         </TabControl>
 

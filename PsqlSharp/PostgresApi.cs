@@ -124,5 +124,15 @@ namespace PsqlSharp
         {
             throw new NotImplementedException();
         }
+
+        public Task<string[]?> GetTables()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string[,]?> GetTableContent()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -32,17 +32,27 @@ namespace PostgresClient.ViewModel
 
         private MainModel Model { get; set; }
 
-
-        public Page MainFrame
+        public Page TableViewerFrame
         {
-            get => mainFrame;
+            get => tableViewerFrame;
             set
             {
-                mainFrame = value;
+                tableViewerFrame = value;
                 OnPropertyChanged(nameof(SidePanel));
             }
         }
-        private Page mainFrame;
+        private Page tableViewerFrame;
+
+        public Page WorkFrame
+        {
+            get => workFrame;
+            set
+            {
+                workFrame = value;
+                OnPropertyChanged(nameof(SidePanel));
+            }
+        }
+        private Page workFrame;
 
         public Page SidePanel
         {
@@ -61,7 +71,8 @@ namespace PostgresClient.ViewModel
             Model = new MainModel(api);
             Model.NewConnectStatus += NewConnectStatus;
             SidePanel = new ConnectView();
-            MainFrame =new  WorkArea();
+            WorkFrame =new  WorkArea();
+            TableViewerFrame = new TableViewer();
         }
 
         private async Task Disconnect()
