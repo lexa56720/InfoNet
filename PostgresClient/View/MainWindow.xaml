@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostgresClient.View"
+        xmlns:src="clr-namespace:PostgresClient.Utils"
         mc:Ignorable="d"
         Title="MainWindow" Height="900"  Width="1500">
     <Window.Resources>
-
-
+        <src:InverseBooleanConverter x:Key="boolConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,19 +16,26 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+
             <RowDefinition Height="12*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
 
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Content="Выполнить" FontSize="20" Style="{StaticResource BaseButton}"/>
-        </StackPanel>
-        <Frame Background="#FF101010" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  BorderThickness="0"/>
+        <TabControl  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#212121"  BorderThickness="0"  Padding="5"  >
+            <TabItem Header="Выполнить комманду" >
+                <Frame   Content="{Binding MainFrame}"    BorderThickness="0"  />
+            </TabItem>
+            <TabItem Header="Вывести содержимое таблицы">
+                Вторая вкладка
+            </TabItem>
+        </TabControl>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+
+
+
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition/>
@@ -41,17 +48,17 @@
                             <Setter Property="FontSize" Value="20"/>
                         </Style>
                     </StackPanel.Resources>
-                    <Button Content="Инициализировать соеденение" Click="Button_Click"/>
-                    <Button Content="Закрыть сеанс связи"/>
+                    <Button Content="Инициализировать соеденение"/>
+                    <Button Content="Закрыть сеанс связи" IsEnabled="{Binding IsConnected}" Command="{Binding DisconnectClick}"/>
                 </StackPanel>
             </Border>
 
             <Border Grid.Row="1" Padding="5" Margin="5" BorderThickness="1" BorderBrush="#707070">
-                <Frame  Content="{Binding SidePanel}" Navigated="Frame_Navigated" />
+                <Frame  Content="{Binding SidePanel}" />
             </Border>
         </Grid>
 
-        <Grid Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Background="#424242">
+        <Grid Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -59,7 +66,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Canvas Width="100" Height="100">
                     <Ellipse  Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="25">
                         <Ellipse.Style>

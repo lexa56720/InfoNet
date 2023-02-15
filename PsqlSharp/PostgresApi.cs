@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Logging;
+using Npgsql;
 using Npgsql.Internal;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,36 @@ namespace PsqlSharp
         private NpgsqlConnection? Connection { get; set; }
 
 
+        private class A : ILogger
+        {
+            public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public class B : ILoggerProvider
+        {
+            public ILogger CreateLogger(string categoryName)
+            {
+                return new A();
+            }
+
+            public void Dispose()
+            {
+       
+            }
+        }
 
         public async Task<bool> ConnectAsync(string database, string username, string password, string server, string port = "5432")
         {
@@ -38,13 +69,20 @@ namespace PsqlSharp
                 try
                 {
                     var connectionString = $"Host={server};Username={username};Password={password};Database={database.ToLower()};Port={port}";
-                    await using var dataSource = NpgsqlDataSource.Create(connectionString);
+                    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+                  
+                    dataSourceBuilder.UseLoggerFactory(LoggerFactory.Create(builder =>
+                    {
+                        builder
+                        .AddDebug()
+                        .SetMinimumLevel(LogLevel.Trace);
+                    }));
+                    await using var dataSource = dataSourceBuilder.Build();
                     Connection = await dataSource.OpenConnectionAsync();
                     IsConnected = true;
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
                     IsConnected = false;
                 }
 
@@ -60,9 +98,8 @@ namespace PsqlSharp
                     IsConnected = false;
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
-                    Debug.WriteLine(e.Message);
 
                 }
             return false;
@@ -77,9 +114,8 @@ namespace PsqlSharp
                     await using var reader = await commandObj.ExecuteReaderAsync();
                     return reader;
                 }
-                catch (Exception e)
+                catch
                 {
-                    Debug.WriteLine(e.Message);
                 }
             return null;
         }

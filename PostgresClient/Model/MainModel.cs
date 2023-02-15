@@ -11,11 +11,16 @@ namespace PostgresClient.Model
     {
         public ISqlApi Api { get; }
 
-        public event EventHandler<bool> NewConnectStatus;
+        public event EventHandler<bool>? NewConnectStatus;
         public MainModel(ISqlApi api)
         {
             Api = api;
             api.ConnectionStatusChanged += (o, e) => NewConnectStatus?.Invoke(o, api.IsConnected);
+        }
+
+        public async Task Disconnect()
+        {
+            await Api.DisconnectAsync();
         }
 
     }

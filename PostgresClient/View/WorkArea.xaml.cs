@@ -1,5 +1,4 @@
 ﻿using PostgresClient.ViewModel;
-using PsqlSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +17,14 @@ using System.Windows.Shapes;
 namespace PostgresClient.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для WorkArea.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WorkArea : Page
     {
-
-        public MainWindow()
+        public WorkArea()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(App.Api);
+            DataContext = new WorkAreaViewModel(App.Api);
         }
-
     }
 }

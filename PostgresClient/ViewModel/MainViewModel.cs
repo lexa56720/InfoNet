@@ -1,4 +1,5 @@
 ﻿using PostgresClient.Model;
+using PostgresClient.Utils;
 using PostgresClient.View;
 using PsqlSharp;
 using System;
@@ -9,18 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
     class MainViewModel : INotifyPropertyChanged
     {
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private MainModel Model { get; set; }
-
-        public bool IsConnected 
-        { 
+        public ICommand DisconnectClick{ get => new Command(async () => { await Disconnect(); }); }
+        public bool IsConnected
+        {
             get => isConnected;
             set
             {
@@ -30,6 +28,21 @@ namespace PostgresClient.ViewModel
         }
         private bool isConnected;
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private MainModel Model { get; set; }
+
+
+        public Page MainFrame
+        {
+            get => mainFrame;
+            set
+            {
+                mainFrame = value;
+                OnPropertyChanged(nameof(SidePanel));
+            }
+        }
+        private Page mainFrame;
 
         public Page SidePanel
         {
@@ -48,6 +61,12 @@ namespace PostgresClient.ViewModel
             Model = new MainModel(api);
             Model.NewConnectStatus += NewConnectStatus;
             SidePanel = new ConnectView();
+            MainFrame =new  WorkArea();
+        }
+
+        private async Task Disconnect()
+        {
+            await Model.Disconnect();
         }
 
         private void NewConnectStatus(object? sender, bool e)

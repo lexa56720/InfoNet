@@ -7,21 +7,16 @@ using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    internal class ConnectModel
+    class WorkAreaModel
     {
-        private ISqlApi Api { get; }
-
+        public ISqlApi Api { get; }
         public event EventHandler<bool>? NewConnectStatus;
 
-        public ConnectModel(ISqlApi api)
+        public WorkAreaModel(ISqlApi api)
         {
             Api = api; 
             api.ConnectionStatusChanged += (o, e) => NewConnectStatus?.Invoke(o, api.IsConnected);
         }
 
-        public async Task<bool> Connect(string database,string username,string password,string server,string port)
-        {
-           return await Api.ConnectAsync(database, username, password, server, port);
-        }
     }
 }

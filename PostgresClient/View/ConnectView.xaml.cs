@@ -27,4 +27,6 @@ namespace PostgresClient.View
             DataContext =new ConnectViewModel(App.Api);
         }
     }
+
+
 }

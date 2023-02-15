@@ -3,12 +3,18 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:PostgresClient.View"
+      xmlns:local="clr-namespace:PostgresClient.View" 
+      xmlns:src="clr-namespace:PostgresClient.Utils"
       mc:Ignorable="d" 
+      
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConnectView">
 
     <StackPanel >
+        <StackPanel.Resources>
+            <src:InverseBooleanConverter x:Key="boolConverter"/>
+        </StackPanel.Resources>
+       
         <Label Content="Данные для подключения:" FontSize="20" HorizontalAlignment="Center"/>
         <Grid>
             <Grid.Resources>
@@ -40,6 +46,6 @@
             <Label FontSize="15" Content="Порт:" Grid.Row="4" Grid.Column="0"/>
             <TextBox FontSize="15" Grid.Row="4" Grid.Column="1"  Text="{Binding Port}" />
         </Grid>
-        <Button Content="Подключиться" FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}"  Style="{StaticResource BaseButton}"/>
+        <Button Content="Подключиться" FontSize="20" HorizontalAlignment="Center" Margin="10" IsEnabled="{Binding IsConnected,Converter={StaticResource boolConverter}}" Command="{Binding ConnectClick}"  Style="{StaticResource BaseButton}"/>
     </StackPanel>
 </Page>
