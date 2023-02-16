@@ -23,7 +23,7 @@
 
 
 
-        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#212121"  BorderThickness="0"  Padding="5"  >
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#141414"  BorderThickness="0"  Padding="5"  >
             <TabItem Header="Выполнить комманду" >
                 <Frame   Content="{Binding WorkFrame}"    BorderThickness="0"  />
             </TabItem>

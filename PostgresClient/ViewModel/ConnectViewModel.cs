@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
-    internal class ConnectViewModel : INotifyPropertyChanged
+    internal class ConnectViewModel : BaseViewModel
     {
       
         public ICommand ConnectClick { get => new Command(async () => { await Connect(); }); }
@@ -37,7 +37,6 @@ namespace PostgresClient.ViewModel
 
         public string DataBase { get; set; } = "carsdb";
 
-        public event PropertyChangedEventHandler? PropertyChanged;
         private ConnectModel Model { get; }
         public ConnectViewModel(ISqlApi api)
         {
@@ -53,10 +52,6 @@ namespace PostgresClient.ViewModel
         public async Task Connect()
         {
            await Model.Connect(DataBase, Username, Password, Server, Port);       
-        }
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));          
         }
 
     }

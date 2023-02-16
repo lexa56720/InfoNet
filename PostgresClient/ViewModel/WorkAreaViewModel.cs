@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PostgresClient.ViewModel
 {
-    class WorkAreaViewModel:INotifyPropertyChanged
+    class WorkAreaViewModel: BaseViewModel
     {
         public WorkAreaModel Model { get; }
 
@@ -25,7 +25,6 @@ namespace PostgresClient.ViewModel
         private bool isConnected;
 
 
-        public event PropertyChangedEventHandler? PropertyChanged;
         public WorkAreaViewModel(ISqlApi api)
         {
             Model=new WorkAreaModel(api);
@@ -36,9 +35,5 @@ namespace PostgresClient.ViewModel
             IsConnected = e;
         }
 
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

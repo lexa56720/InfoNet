@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostgresClient.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace PostgresClient.View
         public TableViewer()
         {
             InitializeComponent();
+            DataContext = new TableViewerViewModel(App.Api);
         }
     }
 }

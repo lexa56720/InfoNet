@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:PostgresClient.View"
+      xmlns:local="clr-namespace:PostgresClient.View" xmlns:controls="clr-namespace:PostgresClient.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TableViewer">
@@ -16,15 +16,10 @@
 
         <StackPanel Orientation="Horizontal"   >
             <Label Content="Таблица:" FontSize="15"/>
-            <ComboBox FontSize="15"   MaxWidth="120" BorderThickness="0" Margin="5">
-                <TextBlock>Tom</TextBlock>
-                <TextBlock>Bob</TextBlock>
-                <TextBlock>Sam</TextBlock>
-                <TextBlock>Alice</TextBlock>
-            </ComboBox>
-            <Button Content="Показать" FontSize="20" Style="{StaticResource BaseButton}" IsEnabled="{Binding IsConnected}"  Margin="5"/>
+            <ComboBox FontSize="15" IsDropDownOpen="{Binding IsDropDownOpened}" SelectedValue="{Binding SelectedTable}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="5"/>
+            <Button Content="Показать" FontSize="20" Style="{StaticResource BaseButton}" IsEnabled="{Binding IsConnected}" Command="{Binding ShowTable}"  Margin="5"/>
         </StackPanel>
 
-        <RichTextBox Grid.Row="1" Padding="5" BorderThickness="2" IsReadOnly="True" />
+        <controls:ExtendedRichTextBox Grid.Row="1" Padding="5" BorderThickness="2" IsReadOnly="True"  Content="{Binding TableContent}"/>
     </Grid>
 </Page>

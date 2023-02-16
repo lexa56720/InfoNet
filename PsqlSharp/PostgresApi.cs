@@ -3,9 +3,12 @@ using Npgsql;
 using Npgsql.Internal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PsqlSharp
@@ -31,38 +34,6 @@ namespace PsqlSharp
         private bool isConnected;
         private NpgsqlConnection? Connection { get; set; }
 
-
-        private class A : ILogger
-        {
-            public IDisposable? BeginScope<TState>(TState state) where TState : notnull
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool IsEnabled(LogLevel logLevel)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public class B : ILoggerProvider
-        {
-            public ILogger CreateLogger(string categoryName)
-            {
-                return new A();
-            }
-
-            public void Dispose()
-            {
-       
-            }
-        }
-
         public async Task<bool> ConnectAsync(string database, string username, string password, string server, string port = "5432")
         {
             if (!IsConnected)
@@ -70,7 +41,7 @@ namespace PsqlSharp
                 {
                     var connectionString = $"Host={server};Username={username};Password={password};Database={database.ToLower()};Port={port}";
                     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-                  
+
                     dataSourceBuilder.UseLoggerFactory(LoggerFactory.Create(builder =>
                     {
                         builder
@@ -91,33 +62,56 @@ namespace PsqlSharp
 
         public async Task<bool> DisconnectAsync()
         {
-            if (Connection != null)
-                try
-                {
-                    await Connection.CloseAsync();
-                    IsConnected = false;
-                    return true;
-                }
-                catch
-                {
+            if (IsConnected)
+            {
+                await Connection.CloseAsync();
+                IsConnected = false;
+                return true;
+            }
 
-                }
+
             return false;
         }
 
-        public async Task<NpgsqlDataReader?> ExecuteCommand(string command)
+        public async Task<string[,]?> ExecuteCommand(string command)
         {
-            if (Connection != null)
-                try
-                {
-                    await using var commandObj = new NpgsqlCommand(command, Connection);
-                    await using var reader = await commandObj.ExecuteReaderAsync();
-                    return reader;
-                }
-                catch
-                {
-                }
+            if (IsConnected)
+            {
+                await using var commandObj = new NpgsqlCommand(command, Connection);
+                await using var reader = await commandObj.ExecuteReaderAsync();
+
+                var columnsInfo = await reader.GetColumnSchemaAsync();
+
+                if (columnsInfo.Count != 0)
+                    return await CopyCommandResult(reader, columnsInfo.Count());
+            }
             return null;
+        }
+
+        private async Task<string[,]> CopyCommandResult(NpgsqlDataReader reader, int columns)
+        {
+            var resultList = new List<string[]>();
+            var column = new string[columns];
+            while (await reader.ReadAsync())
+            {
+                for (int i = 0; i < columns; i++)
+                {
+                    var a = reader.GetValue(i);
+                    if (a == null)
+                        column[i] = string.Empty;
+                    else
+                        column[i] = a.ToString();
+                }
+                resultList.Add(column.ToArray());
+            }
+
+            var arr = new string[resultList.Count, resultList[0].Length];
+            for (int i = 0; i < resultList.Count; i++)
+                for (int j = 0; j < resultList[i].Length; j++)
+                    arr[i, j] = resultList[i][j];
+
+
+            return arr;
         }
 
         public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters)
@@ -125,14 +119,67 @@ namespace PsqlSharp
             throw new NotImplementedException();
         }
 
-        public Task<string[]?> GetTables()
+        public async Task<string[]?> GetTables()
         {
-            throw new NotImplementedException();
+            if (IsConnected)
+            {
+
+                var tables = await ExecuteCommand(@"select * from pg_tables;");
+
+                var result = new List<string>();
+                for (int i = 0; i < tables.GetLength(0); i++)
+                    if (tables[i, 0] == "public")
+                        result.Add(tables[i, 1]);
+
+                return result.ToArray();
+            }
+
+            return null;
         }
 
-        public Task<string[,]?> GetTableContent()
+        public async Task<string[,]?> GetTableContent(string tableName)
         {
-            throw new NotImplementedException();
+            return await ExecuteCommand($"select * from {tableName}"); ;
+        }
+
+        public async Task<TableInfo?> GetTableInfo(string tableName)
+        {
+            if (IsConnected)
+            {
+
+                var table = await ExecuteCommand(
+                "select table_name, count(*) as column_count" +
+                "from information_schema.\"columns\"" +
+                $"where table_schema = 'public' && tablename={tableName}" +
+                "GROUP by table_name order by column_count desc;");
+
+                // await table.ReadAsync();
+                // int collumns = int.Parse(table.GetString(1));
+
+                table = await ExecuteCommand($"select  count(*) from{tableName}");
+                // await table.ReadAsync();
+                //int rows = int.Parse(table.GetString(0));
+
+                return new TableInfo(tableName, 0, 1);
+            }
+
+            return null;
+        }
+    }
+
+    public class TableInfo
+    {
+        public string Name { get; }
+
+        public int Rows { get; }
+
+        public int Collumns { get; }
+
+        public TableInfo(string name, int rows, int collumns)
+        {
+            Name = name;
+            Rows = rows;
+            Collumns = collumns;
         }
     }
 }

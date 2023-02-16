@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
-    class MainViewModel : INotifyPropertyChanged
+    class MainViewModel : BaseViewModel
     {
         public ICommand DisconnectClick{ get => new Command(async () => { await Disconnect(); }); }
         public bool IsConnected
@@ -27,8 +27,6 @@ namespace PostgresClient.ViewModel
             }
         }
         private bool isConnected;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         private MainModel Model { get; set; }
 
@@ -83,11 +81,6 @@ namespace PostgresClient.ViewModel
         private void NewConnectStatus(object? sender, bool e)
         {
             IsConnected = e;
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
