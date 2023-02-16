@@ -11,28 +11,15 @@ namespace PostgresClient.ViewModel
 {
     class WorkAreaViewModel: BaseViewModel
     {
-        public WorkAreaModel Model { get; }
+        protected override WorkAreaModel Model { get=>(WorkAreaModel)base.Model; }
 
-        public bool IsConnected
+
+        public WorkAreaViewModel(ISqlApi api):base(api) 
         {
-            get => isConnected;
-            set
-            {
-                isConnected = value;
-                OnPropertyChanged(nameof(IsConnected));
-            }
         }
-        private bool isConnected;
-
-
-        public WorkAreaViewModel(ISqlApi api)
+        protected override BaseModel CreateModel(ISqlApi api)
         {
-            Model=new WorkAreaModel(api);
-            Model.NewConnectStatus += NewConnectStatus;
-        }
-        private void NewConnectStatus(object? sender, bool e)
-        {
-            IsConnected = e;
+            return new WorkAreaModel(api);
         }
 
     }

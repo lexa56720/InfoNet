@@ -12,20 +12,8 @@ using System.Windows.Input;
 namespace PostgresClient.ViewModel
 {
     internal class ConnectViewModel : BaseViewModel
-    {
-      
+    { 
         public ICommand ConnectClick { get => new Command(async () => { await Connect(); }); }
-
-        public bool IsConnected
-        { 
-            get => isConnected; 
-            set 
-            {
-                isConnected = value;
-                OnPropertyChanged(nameof(IsConnected));
-            }
-        }
-        private bool isConnected;
 
         public string Username { get; set; } = "postgres";
 
@@ -37,16 +25,15 @@ namespace PostgresClient.ViewModel
 
         public string DataBase { get; set; } = "carsdb";
 
-        private ConnectModel Model { get; }
-        public ConnectViewModel(ISqlApi api)
-        {
-            Model = new ConnectModel(api);
-            Model.NewConnectStatus += NewConnectStatus;
-        }
+        protected override ConnectModel Model { get=>(ConnectModel)base.Model; }
 
-        private void NewConnectStatus(object? sender, bool e)
+        public ConnectViewModel(ISqlApi api):base(api) 
         {
-            IsConnected=e;
+
+        }
+        protected override BaseModel CreateModel(ISqlApi api)
+        {
+            return new ConnectModel(api);
         }
 
         public async Task Connect()

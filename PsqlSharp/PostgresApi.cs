@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
 using Npgsql.Internal;
+using Npgsql.Schema;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -73,7 +74,7 @@ namespace PsqlSharp
             return false;
         }
 
-        public async Task<string[,]?> ExecuteCommand(string command)
+        public async Task<Table?> ExecuteCommand(string command)
         {
             if (IsConnected)
             {
@@ -83,18 +84,18 @@ namespace PsqlSharp
                 var columnsInfo = await reader.GetColumnSchemaAsync();
 
                 if (columnsInfo.Count != 0)
-                    return await CopyCommandResult(reader, columnsInfo.Count());
+                    return await CopyCommandResult(reader, columnsInfo.ToArray());
             }
             return null;
         }
 
-        private async Task<string[,]> CopyCommandResult(NpgsqlDataReader reader, int columns)
+        private async Task<Table> CopyCommandResult(NpgsqlDataReader reader, NpgsqlDbColumn[] columns)
         {
             var resultList = new List<string[]>();
-            var column = new string[columns];
+            var column = new string[columns.Length];
             while (await reader.ReadAsync())
             {
-                for (int i = 0; i < columns; i++)
+                for (int i = 0; i < columns.Length; i++)
                 {
                     var a = reader.GetValue(i);
                     if (a == null)
@@ -111,7 +112,7 @@ namespace PsqlSharp
                     arr[i, j] = resultList[i][j];
 
 
-            return arr;
+            return new Table(columns,arr);
         }
 
         public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters)
@@ -127,7 +128,7 @@ namespace PsqlSharp
                 var tables = await ExecuteCommand(@"select * from pg_tables;");
 
                 var result = new List<string>();
-                for (int i = 0; i < tables.GetLength(0); i++)
+                for (int i = 0; i < tables.ColumnCount; i++)
                     if (tables[i, 0] == "public")
                         result.Add(tables[i, 1]);
 
@@ -137,7 +138,7 @@ namespace PsqlSharp
             return null;
         }
 
-        public async Task<string[,]?> GetTableContent(string tableName)
+        public async Task<Table?> GetTableContent(string tableName)
         {
             return await ExecuteCommand($"select * from {tableName}"); ;
         }

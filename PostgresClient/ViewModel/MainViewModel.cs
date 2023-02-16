@@ -17,18 +17,6 @@ namespace PostgresClient.ViewModel
     class MainViewModel : BaseViewModel
     {
         public ICommand DisconnectClick{ get => new Command(async () => { await Disconnect(); }); }
-        public bool IsConnected
-        {
-            get => isConnected;
-            set
-            {
-                isConnected = value;
-                OnPropertyChanged(nameof(IsConnected));
-            }
-        }
-        private bool isConnected;
-
-        private MainModel Model { get; set; }
 
         public Page TableViewerFrame
         {
@@ -63,26 +51,21 @@ namespace PostgresClient.ViewModel
         }
         private Page sidePanel;
 
+        protected override MainModel Model { get => (MainModel)base.Model; }
 
-        public MainViewModel(ISqlApi api)
-        {
-            Model = new MainModel(api);
-            Model.NewConnectStatus += NewConnectStatus;
+        public MainViewModel(ISqlApi api):base(api)
+        {           
             SidePanel = new ConnectView();
             WorkFrame =new  WorkArea();
             TableViewerFrame = new TableViewer();
         }
-
+        protected override BaseModel CreateModel(ISqlApi api)
+        {
+            return new MainModel(api);
+        }
         private async Task Disconnect()
         {
             await Model.Disconnect();
-        }
-
-        private void NewConnectStatus(object? sender, bool e)
-        {
-            IsConnected = e;
-        }
-
-
+        }  
     }
 }

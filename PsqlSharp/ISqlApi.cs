@@ -22,13 +22,13 @@ namespace PsqlSharp
 
         public Task<bool> DisconnectAsync();
 
-        public Task<string[,]?> ExecuteCommand(string command);
+        public Task<Table?> ExecuteCommand(string command);
 
         public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters );
 
         public Task<string[]?> GetTables();
 
-        public Task<string[,]?> GetTableContent(string tableName);
+        public Task<Table?> GetTableContent(string tableName);
 
         public Task<TableInfo?> GetTableInfo(string tableName);
     }

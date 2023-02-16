@@ -1,5 +1,6 @@
 ﻿using PostgresClient.Model;
 using PostgresClient.Utils;
+using PostgresClient.View;
 using PsqlSharp;
 using System;
 using System.Collections.Generic;
@@ -50,13 +51,15 @@ namespace PostgresClient.ViewModel
         public ICommand ShowTable { get => new Command(async () => await ShowTableContent(SelectedTable)); }
         public ObservableCollection<string> Tables { get; set; }
 
-        public TableViewerModel Model { get; }
-        public TableViewerViewModel(ISqlApi api)
+        protected override TableViewerModel Model { get => (TableViewerModel)base.Model; }
+        public TableViewerViewModel(ISqlApi api):base(api)
         {
-            Model = new TableViewerModel(api);
             Tables = new ObservableCollection<string>(new string[] { "123", "432432", "4234234" });
         }
-
+        protected override BaseModel CreateModel(ISqlApi api)
+        {
+            return new TableViewerModel(api);
+        }
         public async Task UpdateTables()
         {
             Tables.Clear();
@@ -68,7 +71,9 @@ namespace PostgresClient.ViewModel
 
         public async Task ShowTableContent(string tableName)
         {
-            TableContent = string.Join('\n',await Model.GetTableContent(tableName));
+            TableContent = await Model.GetTableContent(tableName);
         }
+
+
     }
 }

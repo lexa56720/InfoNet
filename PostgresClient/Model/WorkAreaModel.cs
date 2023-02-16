@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    class WorkAreaModel
+    class WorkAreaModel:BaseModel
     {
-        public ISqlApi Api { get; }
-        public event EventHandler<bool>? NewConnectStatus;
 
-        public WorkAreaModel(ISqlApi api)
+        public WorkAreaModel(ISqlApi api):base(api)
         {
-            Api = api; 
-            api.ConnectionStatusChanged += (o, e) => NewConnectStatus?.Invoke(o, api.IsConnected);
         }
 
     }

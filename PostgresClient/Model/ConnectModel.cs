@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    internal class ConnectModel
+    internal class ConnectModel:BaseModel
     {
         private ISqlApi Api { get; }
 
         public event EventHandler<bool>? NewConnectStatus;
 
-        public ConnectModel(ISqlApi api)
+        public ConnectModel(ISqlApi api):base(api)
         {
             Api = api; 
             api.ConnectionStatusChanged += (o, e) => NewConnectStatus?.Invoke(o, api.IsConnected);
