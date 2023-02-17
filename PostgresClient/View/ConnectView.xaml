@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConnectView">
 
-    <StackPanel >
+    <StackPanel Background="Transparent">
         <StackPanel.Resources>
             <src:InverseBooleanConverter x:Key="boolConverter"/>
         </StackPanel.Resources>

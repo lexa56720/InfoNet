@@ -14,11 +14,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="5"  >
+        <StackPanel Orientation="Horizontal" Margin="5"   >
             <Button Content="Выполнить" FontSize="20" Style="{StaticResource BaseButton}" IsEnabled="{Binding IsConnected}" />
         </StackPanel>
 
 
-        <RichTextBox Grid.Row="1" Padding="5" BorderThickness="2" />
+        <RichTextBox Grid.Row="1" Padding="5" BorderThickness="0" />
     </Grid>
 </Page>
