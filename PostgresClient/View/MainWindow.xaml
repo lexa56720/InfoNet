@@ -13,12 +13,13 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
 
             <RowDefinition Height="12*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
 
@@ -30,32 +31,28 @@
             <TabItem Header="Вывести содержимое таблицы" IsEnabled="{Binding IsConnected}">
                 <Frame   Content="{Binding TableViewerFrame}"    BorderThickness="0"  />
             </TabItem>
+            <TabItem Header="Список функций" IsEnabled="{Binding IsConnected}">
+                <Frame   Content="{Binding FuncFrame}"    BorderThickness="0"  />
+            </TabItem>
         </TabControl>
 
 
-
-
-        <Grid Grid.Row="0" Grid.Column="1">
+        <GridSplitter Width="5" Margin="5" Grid.RowSpan="3" HorizontalAlignment="Center" Grid.Column="1"/>
+        
+        <Grid Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Padding="5" Margin="5" BorderThickness="1" BorderBrush="#707070">
-                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
-                    <StackPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}">
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="FontSize" Value="20"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <Button Content="Инициализировать соеденение"/>
-                    <Button Content="Закрыть сеанс связи" IsEnabled="{Binding IsConnected}" Command="{Binding DisconnectClick}"/>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
+                    <Button Content="Инициализировать соеденение" Margin="5"/>
+                <Button Content="Закрыть сеанс связи" Margin="5"  IsEnabled="{Binding IsConnected}" Padding="5" Command="{Binding DisconnectClick}"/>
                 </StackPanel>
-            </Border>
+            <GridSplitter Height="5" Padding="5" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-            <Border Grid.Row="1" Padding="5" Margin="5" BorderThickness="1" BorderBrush="#707070">
-                <Frame  Content="{Binding SidePanel}" />
-            </Border>
+            <Frame Padding="5" Grid.Row="2"  Content="{Binding SidePanel}" />
+
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" >
@@ -63,10 +60,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
                 <ColumnDefinition Width="6*"/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Viewbox Grid.Column="1" Grid.Row="1" MaxHeight="40" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Canvas Width="100" Height="100">
                     <Ellipse  Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="25">
                         <Ellipse.Style>
@@ -84,7 +81,7 @@
                     </Ellipse>
                 </Canvas>
             </Viewbox>
-            <Label  Grid.Row="2" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" >
+            <Label  Grid.Row="2" Grid.Column="0" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Right" >
                 <Label.Style>
                     <Style TargetType="Label">
                         <Style.Triggers>

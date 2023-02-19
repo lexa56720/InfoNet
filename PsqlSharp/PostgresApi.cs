@@ -76,6 +76,7 @@ namespace PsqlSharp
 
         public async Task<Table?> ExecuteCommand(string command)
         {
+
             if (IsConnected)
             {
                 await using var commandObj = new NpgsqlCommand(command, Connection);
@@ -86,10 +87,11 @@ namespace PsqlSharp
                 if (columnsInfo.Count != 0)
                     return await CopyCommandResult(reader, columnsInfo.ToArray());
             }
+
             return null;
         }
 
-        private async Task<Table> CopyCommandResult(NpgsqlDataReader reader, NpgsqlDbColumn[] columns)
+        private async Task<Table?> CopyCommandResult(NpgsqlDataReader reader, NpgsqlDbColumn[] columns)
         {
             var resultList = new List<string[]>();
             var column = new string[columns.Length];
@@ -105,14 +107,15 @@ namespace PsqlSharp
                 }
                 resultList.Add(column.ToArray());
             }
-
+            if(resultList.Count<0)
+                return null;
             var arr = new string[resultList.Count, resultList[0].Length];
             for (int i = 0; i < resultList.Count; i++)
                 for (int j = 0; j < resultList[i].Length; j++)
                     arr[i, j] = resultList[i][j];
 
 
-            return new Table(columns,arr);
+            return new Table(columns, arr);
         }
 
         public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters)
@@ -120,7 +123,7 @@ namespace PsqlSharp
             throw new NotImplementedException();
         }
 
-        public async Task<string[]?> GetTables()
+        public async Task<string[]?> GetAllTables()
         {
             if (IsConnected)
             {
@@ -143,44 +146,29 @@ namespace PsqlSharp
             return await ExecuteCommand($"select * from {tableName}"); ;
         }
 
-        public async Task<TableInfo?> GetTableInfo(string tableName)
+        public async Task<Function[]?> GetAllFunctions()
         {
-            if (IsConnected)
-            {
-
-                var table = await ExecuteCommand(
-                "select table_name, count(*) as column_count" +
-                "from information_schema.\"columns\"" +
-                $"where table_schema = 'public' && tablename={tableName}" +
-                "GROUP by table_name order by column_count desc;");
-
-                // await table.ReadAsync();
-                // int collumns = int.Parse(table.GetString(1));
-
-                table = await ExecuteCommand($"select  count(*) from{tableName}");
-                // await table.ReadAsync();
-                //int rows = int.Parse(table.GetString(0));
-
-                return new TableInfo(tableName, 0, 1);
-            }
-
+            var funcTable = await ExecuteCommand(@"select n.nspname as function_schema,
+                                           p.proname as function_name,
+                                           l.lanname as function_language,
+                                           case when l.lanname = 'internal' then p.prosrc
+                                                else pg_get_functiondef(p.oid)
+                                                end as definition,
+                                           pg_get_function_arguments(p.oid) as function_arguments,
+                                           t.typname as return_type
+                                    from pg_proc p
+                                    left
+                                    join pg_namespace n on p.pronamespace = n.oid
+                                    left
+                                    join pg_language l on p.prolang = l.oid
+                                    left
+                                    join pg_type t on t.oid = p.prorettype
+                                    where n.nspname not in ('pg_catalog', 'information_schema')
+                                    order by function_schema,
+                                             function_name; ");
+            if (funcTable != null)
+                return Function.Parse(funcTable);
             return null;
-        }
-    }
-
-    public class TableInfo
-    {
-        public string Name { get; }
-
-        public int Rows { get; }
-
-        public int Collumns { get; }
-
-        public TableInfo(string name, int rows, int collumns)
-        {
-            Name = name;
-            Rows = rows;
-            Collumns = collumns;
         }
     }
 }

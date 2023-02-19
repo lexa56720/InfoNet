@@ -46,6 +46,6 @@
             <Label FontSize="15" Content="Порт:" Grid.Row="4" Grid.Column="0"/>
             <TextBox FontSize="15" Grid.Row="4" Grid.Column="1"  Text="{Binding Port}" />
         </Grid>
-        <Button Content="Подключиться" FontSize="20" HorizontalAlignment="Center" Margin="10" IsEnabled="{Binding IsConnected,Converter={StaticResource boolConverter}}" Command="{Binding ConnectClick}"  Style="{StaticResource BaseButton}"/>
+        <Button Content="Подключиться" FontSize="20" HorizontalAlignment="Center" Margin="10" IsEnabled="{Binding IsConnected,Converter={StaticResource boolConverter}}" Command="{Binding ConnectClick}" />
     </StackPanel>
 </Page>

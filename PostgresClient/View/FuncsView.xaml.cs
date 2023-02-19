@@ -17,15 +17,23 @@ using System.Windows.Shapes;
 namespace PostgresClient.View
 {
     /// <summary>
-    /// Логика взаимодействия для WorkArea.xaml
+    /// Логика взаимодействия для FuncsView.xaml
     /// </summary>
-    public partial class WorkArea : Page
+    public partial class FuncsView : Page
     {
-        public WorkArea()
-        {
+        FuncsViewModel ViewModel { get; set; }
 
+        Action? Action = new Action(() => { });
+        public FuncsView()
+        {
             InitializeComponent();
-            DataContext = new WorkAreaViewModel(App.Api);
+            ViewModel = new FuncsViewModel(ref Action, App.Api);
+            DataContext = ViewModel;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Action.Invoke();
         }
     }
 }

@@ -7,11 +7,27 @@ using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    class WorkAreaModel:BaseModel
+    class WorkAreaModel : BaseModel
     {
 
-        public WorkAreaModel(ISqlApi api):base(api)
+        public WorkAreaModel(ISqlApi api) : base(api)
         {
+        }
+
+        public async Task<string?> ExecuteCommand(string commandText)
+        {
+
+            try
+            {
+                var result = await Api.ExecuteCommand(commandText);
+                if (result != null)
+                    return result.ToString();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
     }

@@ -14,12 +14,13 @@
             <Setter Property="Padding" Value="5" />
         </Style>
 
-        <Style TargetType="Button" x:Key="BaseButton">
+        <Style TargetType="Button">
             <Style.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5" />
                 </Style>
             </Style.Resources>
+            <Setter Property="Control.FontSize" Value="20" />
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
             <Setter Property="Control.Background" Value="#363636" />
             <Setter Property="Control.Foreground" Value="White" />
@@ -50,8 +51,27 @@
         
         <Style TargetType="Grid">
             <Setter Property="Control.Background" Value="#303030" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="0" />
+                </Style>
+            </Style.Resources>
         </Style>
-        
+        <Style TargetType="GridSplitter">
+            <Setter Property="Background" Value="#545454" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Border CornerRadius="2" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
             <Setter Property="Foreground" Value="White"/>
@@ -104,15 +124,12 @@
             <Setter Property="BorderThickness" Value="0" />
         </Style>
 
-        <Style TargetType="RichTextBox">
-            <Setter Property="Background" Value="#141414" />
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
-        </Style>
-
         <Style TargetType="controls:ExtendedRichTextBox">
+            <Style.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </Style.Resources>
             <Setter Property="Background" Value="#141414" />
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="15"/>
@@ -350,20 +367,17 @@
                   Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
                 />
             </Grid>
-            <!--<ControlTemplate.Triggers>
-            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="#808080" />
-            </Trigger>
-            <Trigger Property="ToggleButton.IsChecked" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+            <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#4a4a4a" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Border" Property="Background" Value="#121212" />
                 <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
                 <Setter Property="Foreground" Value="#888888"/>
                 <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
             </Trigger>
-        </ControlTemplate.Triggers>-->
+        </ControlTemplate.Triggers>
         </ControlTemplate>
 
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
@@ -443,9 +457,7 @@
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Foreground" Value="#888888"/>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="Azure" />
-                            </Trigger>
+
                             <Trigger Property="IsGrouping" Value="true">
                                 <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
                             </Trigger>
@@ -493,6 +505,51 @@
             </Setter>
         </Style>
         <!--#endregion-->
+       
+        <!--#region LISTVIEW-->
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="#242424"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Trun off default selection-->
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd" BorderBrush="Gray" BorderThickness="0"
+                            Margin="0"
+                            Background="{TemplateBinding Background}" 
+                            Padding="5" 
+                            SnapsToDevicePixels="true" >
+                            <ContentPresenter 
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter Property="Background" Value="#323232" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--#endregion-->
+        
         
     </Application.Resources>
 </Application>

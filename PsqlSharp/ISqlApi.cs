@@ -26,10 +26,10 @@ namespace PsqlSharp
 
         public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters );
 
-        public Task<string[]?> GetTables();
-
         public Task<Table?> GetTableContent(string tableName);
 
-        public Task<TableInfo?> GetTableInfo(string tableName);
+        public Task<string[]?> GetAllTables();
+
+        public Task<Function[]?> GetAllFunctions();
     }
 }

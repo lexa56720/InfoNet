@@ -6,59 +6,94 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
+using System.Windows.Data;
+using System.Buffers.Text;
+using System.Windows.Media.TextFormatting;
 
 namespace PostgresClient.Controls
 {
     public sealed class ExtendedRichTextBox : RichTextBox
     {
-        public static readonly DependencyProperty SourceProperty =
-                DependencyProperty.Register(nameof(Source),
-                typeof(Uri), typeof(ExtendedRichTextBox),
-                new PropertyMetadata(OnSourceChanged));
 
-        public Uri Source
+        private bool _preventDocumentUpdate;
+        private bool _preventTextUpdate;
+
+
+        public ExtendedRichTextBox()
         {
-            get => GetValue(SourceProperty) as Uri;
-            set => SetValue(SourceProperty, value);
         }
-        private static void OnSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+
+        public ExtendedRichTextBox(FlowDocument document)
+          : base(document)
         {
-            if (obj is ExtendedRichTextBox rtf && rtf.Source != null)
+        }
+
+
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register(
+                "Text",
+                typeof(string),
+                typeof(RichTextBox),
+                new FrameworkPropertyMetadata(
+                    String.Empty,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    OnTextPropertyChanged,
+                    CoerceTextProperty,
+                    true,
+                    UpdateSourceTrigger.LostFocus));
+        public string Text
+        {
+            get
             {
-                var stream = Application.GetResourceStream(rtf.Source);
-                if (stream != null)
-                {
-                    var range = new TextRange(rtf.Document.ContentStart, rtf.Document.ContentEnd);
-                    range.Load(stream.Stream, DataFormats.Rtf);
-                }
+                return (string)GetValue(TextProperty);
             }
-        }
-
-
-
-        public static readonly DependencyProperty ContentProperty =
-              DependencyProperty.Register(nameof(Content),
-              typeof(string), typeof(ExtendedRichTextBox),
-              new PropertyMetadata(string.Empty, ContentPropertyChanged));
-        public string Content
-        {
-            get => (string)new TextRange(Document.ContentStart, Document.ContentEnd).Text;
             set
             {
-                SetValue(ContentProperty, value);
+                SetValue(TextProperty, value);
             }
         }
-        private void ContentPropertyChanged(string text)
+
+        private static object CoerceTextProperty(DependencyObject d, object value)
         {
+            return value ?? "";
+        }
+
+
+        protected override void OnTextChanged(System.Windows.Controls.TextChangedEventArgs e)
+        {
+            UpdateTextFromDocument();
+            base.OnTextChanged(e);
+        }
+        private void UpdateTextFromDocument()
+        {
+            if (_preventTextUpdate)
+                return;
+
+            _preventDocumentUpdate = true;
+            this.SetCurrentValue(ExtendedRichTextBox.TextProperty, new TextRange(Document.ContentStart, Document.ContentEnd).Text);
+            _preventDocumentUpdate = false;
+        }
+        private static void OnTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ExtendedRichTextBox)d).UpdateDocumentFromText();
+        }
+        private void UpdateDocumentFromText()
+        {
+            if (_preventDocumentUpdate)
+                return;
+
+            _preventTextUpdate = true;
             Document.Blocks.Clear();
-            Document.Blocks.Add(new Paragraph(new Run(text)));
+            Document.Blocks.Add(new Paragraph(new Run(Text)));
+            _preventTextUpdate = false;
         }
 
-        private static void ContentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        public void Clear()
         {
-            ((ExtendedRichTextBox)d).ContentPropertyChanged((string)e.NewValue);
+            this.Document.Blocks.Clear();
         }
-
 
     }
+
 }

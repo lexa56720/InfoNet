@@ -51,6 +51,19 @@ namespace PostgresClient.ViewModel
         }
         private Page sidePanel;
 
+
+        public Page FuncFrame
+        {
+            get => funcFrame;
+            set
+            {
+                funcFrame = value;
+                OnPropertyChanged(nameof(FuncFrame));
+            }
+        }
+        private Page funcFrame;
+       
+
         protected override MainModel Model { get => (MainModel)base.Model; }
 
         public MainViewModel(ISqlApi api):base(api)
@@ -58,6 +71,7 @@ namespace PostgresClient.ViewModel
             SidePanel = new ConnectView();
             WorkFrame =new  WorkArea();
             TableViewerFrame = new TableViewer();
+            FuncFrame = new FuncsView();
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {

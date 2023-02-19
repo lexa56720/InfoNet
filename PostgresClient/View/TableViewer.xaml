@@ -17,9 +17,9 @@
         <StackPanel Orientation="Horizontal" Margin="5"   >
             <Label Content="Таблица:" FontSize="15"/>
             <ComboBox FontSize="15" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" SelectedValue="{Binding SelectedTable}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
-            <Button Content="Показать" FontSize="20" Style="{StaticResource BaseButton}" IsEnabled="{Binding IsConnected}" Command="{Binding ShowTable}" />
+            <Button Content="Показать" FontSize="20" IsEnabled="{Binding IsConnected}" Command="{Binding ShowTable}" />
         </StackPanel>
 
-        <controls:ExtendedRichTextBox Grid.Row="1" Padding="5" BorderThickness="0" IsReadOnly="True"  Content="{Binding TableContent}"/>
+        <controls:ExtendedRichTextBox Grid.Row="1" Padding="5" BorderThickness="0" IsReadOnly="True"  Text="{Binding TableContent, Mode=OneWay}"/>
     </Grid>
 </Page>
