@@ -24,9 +24,9 @@ namespace PostgresClient.Model
                 return new string[] { string.Empty };
         }
 
-        public async Task<string> GetTableContent(string table)
+        public async Task<Table?> GetTableContent(string table)
         {
-            return (await Api.GetTableContent(table)).ToString();
+            return (await Api.GetTableContent(table));
         }
     }
 }

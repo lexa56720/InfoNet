@@ -13,7 +13,7 @@ namespace PostgresClient.ViewModel
 {
     abstract class BaseViewModel : INotifyPropertyChanged
     {
-        public bool IsConnected
+        public virtual bool IsConnected
         {
             get => isConnected;
             set

@@ -70,7 +70,6 @@ namespace PsqlSharp
                 return true;
             }
 
-
             return false;
         }
 
@@ -118,10 +117,6 @@ namespace PsqlSharp
             return new Table(columns, arr);
         }
 
-        public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<string[]?> GetAllTables()
         {
@@ -169,6 +164,16 @@ namespace PsqlSharp
             if (funcTable != null)
                 return Function.Parse(funcTable);
             return null;
+        }
+
+        public Task<Table?> ExecuteFunction(string func, params string[] parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveFunction(string funcName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

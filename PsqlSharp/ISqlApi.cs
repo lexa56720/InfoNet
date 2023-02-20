@@ -24,12 +24,16 @@ namespace PsqlSharp
 
         public Task<Table?> ExecuteCommand(string command);
 
-        public Task<NpgsqlDataReader?> ExecuteFunction(string func, params string[] parameters );
+        public Task<Table?> ExecuteFunction(string func, params string[] parameters );
 
         public Task<Table?> GetTableContent(string tableName);
 
         public Task<string[]?> GetAllTables();
 
         public Task<Function[]?> GetAllFunctions();
+
+        public Task<bool> RemoveFunction(string funcName);
+
+
     }
 }

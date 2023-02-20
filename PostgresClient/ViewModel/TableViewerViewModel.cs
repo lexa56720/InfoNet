@@ -6,10 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace PostgresClient.ViewModel
 {
@@ -33,11 +36,27 @@ namespace PostgresClient.ViewModel
             set
             {
                 selectedTable = value;
+               OnPropertyChanged(nameof(IsCanShow));
             }
         }
         private string selectedTable;
 
-        public string TableContent
+        public bool IsCanShow
+        {
+            get => SelectedTable!=null&& IsConnected;
+        }
+
+        public override bool IsConnected
+        {
+            get => base.IsConnected;
+            set
+            {
+                base.IsConnected = value;
+                OnPropertyChanged(nameof(IsCanShow));
+            }
+        }
+
+        public string[,] TableContent
         {
             get => tableContent;
             set
@@ -46,15 +65,15 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(TableContent));
             }
         }
-        private string tableContent;
+        private string[,] tableContent;
+
 
         public ICommand ShowTable { get => new Command(async () => await ShowTableContent(SelectedTable)); }
-        public ObservableCollection<string> Tables { get; set; }
+        public ObservableCollection<string> Tables { get; set; } = new ObservableCollection<string>();
 
-        protected override TableViewerModel Model { get => (TableViewerModel)base.Model; }
-        public TableViewerViewModel(ISqlApi api):base(api)
+        protected override TableViewerModel Model => (TableViewerModel)base.Model;
+        public TableViewerViewModel(ISqlApi api) : base(api)
         {
-            Tables = new ObservableCollection<string>(new string[] { "123", "432432", "4234234" });
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -71,9 +90,21 @@ namespace PostgresClient.ViewModel
 
         public async Task ShowTableContent(string tableName)
         {
-            TableContent = await Model.GetTableContent(tableName);
+            var table = await Model.GetTableContent(tableName);
+            var tableArray = new string[table.RowCount + 1, table.ColumnCount];
+            for (int i = 0; i < tableArray.GetLength(1); i++)
+            {
+                tableArray[0, i] = table.ColumnNames[i];
+            }
+
+            for (int i = 1; i < tableArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < tableArray.GetLength(1); j++)
+                {
+                    tableArray[i, j] = table.Values[i - 1, j];
+                }
+            }
+            TableContent = tableArray;
         }
-
-
     }
 }

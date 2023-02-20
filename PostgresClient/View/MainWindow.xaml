@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PostgresClient.View"
         xmlns:src="clr-namespace:PostgresClient.Utils"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900"  Width="1500">
+        Title="MainWindow" Height="900"  Width="1500" Background="#282828">
     <Window.Resources>
         <src:InverseBooleanConverter x:Key="boolConverter"/>
     </Window.Resources>
