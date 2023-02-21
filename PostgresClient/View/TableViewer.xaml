@@ -17,13 +17,16 @@
 
         <StackPanel Orientation="Horizontal" Margin="5"   >
             <Label Content="Таблица:" FontSize="15"/>
-            <ComboBox FontSize="15" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" SelectedValue="{Binding SelectedTable}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
-            <Button Content="Показать" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" />
+            <ComboBox FontSize="15" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" 
+                      SelectedValue="{Binding SelectedTable}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
+            <Button Content="Показать" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" Margin="0,0,10,0" />
+            <Button Content="Сохранить" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" Margin="0,0,10,0"  />
+
         </StackPanel>
 
 
-        <controls:ExtendedDataGrid GridLinesVisibility="None" HorizontalScrollBarVisibility="Disabled"  Background="#202020" Margin="5"  FontSize="20" BorderThickness="0" Grid.Row="1"  ColumnWidth="*" VerticalAlignment="Stretch"   ArrayContent="{Binding TableContent}">
-       
+        <controls:ExtendedDataGrid HeadersVisibility="Column"  GridLinesVisibility="None" HorizontalScrollBarVisibility="Disabled" Background="#202020" Margin="5" Padding="5"
+                                   FontSize="20" BorderThickness="0" Grid.Row="1"  ColumnWidth="*" VerticalAlignment="Stretch" Visibility="Visible"   ItemsSource="{Binding TableContent}">
         </controls:ExtendedDataGrid>
 
 

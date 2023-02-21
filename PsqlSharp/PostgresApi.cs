@@ -75,48 +75,20 @@ namespace PsqlSharp
 
         public async Task<Table?> ExecuteCommand(string command)
         {
-
             if (IsConnected)
             {
                 await using var commandObj = new NpgsqlCommand(command, Connection);
-                await using var reader = await commandObj.ExecuteReaderAsync();
+              
+                using var adapter = new NpgsqlDataAdapter(commandObj);
 
-                var columnsInfo = await reader.GetColumnSchemaAsync();
-
-                if (columnsInfo.Count != 0)
-                    return await CopyCommandResult(reader, columnsInfo.ToArray());
+                var dataSet = new DataSet();
+                adapter.Fill(dataSet);
+                if(dataSet.Tables.Count>0)
+                    return new Table(dataSet.Tables[0]);
             }
 
             return null;
         }
-
-        private async Task<Table?> CopyCommandResult(NpgsqlDataReader reader, NpgsqlDbColumn[] columns)
-        {
-            var resultList = new List<string[]>();
-            var column = new string[columns.Length];
-            while (await reader.ReadAsync())
-            {
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    var a = reader.GetValue(i);
-                    if (a == null)
-                        column[i] = string.Empty;
-                    else
-                        column[i] = a.ToString();
-                }
-                resultList.Add(column.ToArray());
-            }
-            if(resultList.Count<0)
-                return null;
-            var arr = new string[resultList.Count, resultList[0].Length];
-            for (int i = 0; i < resultList.Count; i++)
-                for (int j = 0; j < resultList[i].Length; j++)
-                    arr[i, j] = resultList[i][j];
-
-
-            return new Table(columns, arr);
-        }
-
 
         public async Task<string[]?> GetAllTables()
         {

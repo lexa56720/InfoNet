@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -56,7 +57,7 @@ namespace PostgresClient.ViewModel
             }
         }
 
-        public string[,] TableContent
+        public DataTable TableContent
         {
             get => tableContent;
             set
@@ -65,7 +66,7 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(TableContent));
             }
         }
-        private string[,] tableContent;
+        private DataTable tableContent;
 
 
         public ICommand ShowTable { get => new Command(async () => await ShowTableContent(SelectedTable)); }
@@ -91,20 +92,8 @@ namespace PostgresClient.ViewModel
         public async Task ShowTableContent(string tableName)
         {
             var table = await Model.GetTableContent(tableName);
-            var tableArray = new string[table.RowCount + 1, table.ColumnCount];
-            for (int i = 0; i < tableArray.GetLength(1); i++)
-            {
-                tableArray[0, i] = table.ColumnNames[i];
-            }
 
-            for (int i = 1; i < tableArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < tableArray.GetLength(1); j++)
-                {
-                    tableArray[i, j] = table.Values[i - 1, j];
-                }
-            }
-            TableContent = tableArray;
+            TableContent = table.DataTable;
         }
     }
 }

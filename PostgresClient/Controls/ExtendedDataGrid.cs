@@ -6,86 +6,89 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PostgresClient.Controls
 {
-    internal class ExtendedDataGrid:DataGrid
+    internal class ExtendedDataGrid : DataGrid
     {
+        private string CellValue;
 
-        public static readonly DependencyProperty ArrayContentProperty =
-    DependencyProperty.Register(
-        nameof(ArrayContent),
-        typeof(string[,]),
-        typeof(DataGrid),
-        new FrameworkPropertyMetadata(
-            null,
-            FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-            OnArrayContentPropertyChanged,
-            CoerceArrayContentProperty,
-            true,
-            UpdateSourceTrigger.LostFocus));
-
-        private static object CoerceArrayContentProperty(DependencyObject d, object value)
+        private bool IsValueChanged;
+        protected override void OnPreparingCellForEdit(DataGridPreparingCellForEditEventArgs e)
         {
-            return value ?? null;
+            CellValue = (e.EditingElement as TextBox).Text;
+            base.OnPreparingCellForEdit(e);
         }
-
-        private static void OnArrayContentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected override void OnCellEditEnding(DataGridCellEditEndingEventArgs e)
         {
-            (d as ExtendedDataGrid).ArrayContentChanged((string[,])e.NewValue);
-        }
-
-        private void ArrayContentChanged(string[,] values)
-        {
-            Columns.Clear();
-            if(values != null)
+            base.OnCellEditEnding(e);
+            if ((e.EditingElement as TextBox).Text != CellValue)
             {
-                for (int i = 0; i < values.GetLength(1); i++)
+                IsValueChanged = true;
+                e.Row.Background = new SolidColorBrush(Color.FromRgb(198, 40, 40));
+            }
+        }
+
+        protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
+        {
+            base.OnRowEditEnding(e);
+            if(IsValueChanged)
+            {
+                e.Row.Background = new SolidColorBrush(Color.FromRgb(46, 125, 50));
+                IsValueChanged= false;
+            }
+           
+        }
+        protected override void OnCanExecuteCommitEdit(CanExecuteRoutedEventArgs e)
+        {
+            base.OnCanExecuteCommitEdit(e);
+        }
+
+        public static class Validator
+        {
+
+            public static bool IsValid(DependencyObject parent)
+            {
+                // Validate all the bindings on the parent
+                bool valid = true;
+                LocalValueEnumerator localValues = parent.GetLocalValueEnumerator();
+                while (localValues.MoveNext())
                 {
-                    var column = new DataGridTextColumn();
-                    column.Header = values[0, i];
-                    column.Binding = new Binding(string.Format("[{0}]", i));
-                    Columns.Add(column);
+                    LocalValueEntry entry = localValues.Current;
+                    if (BindingOperations.IsDataBound(parent, entry.Property))
+                    {
+                        Binding binding = BindingOperations.GetBinding(parent, entry.Property);
+                        foreach (ValidationRule rule in binding.ValidationRules)
+                        {
+                            ValidationResult result = rule.Validate(parent.GetValue(entry.Property), null);
+                            if (!result.IsValid)
+                            {
+                                BindingExpression expression = BindingOperations.GetBindingExpression(parent, entry.Property);
+                                System.Windows.Controls.Validation.MarkInvalid(expression, new ValidationError(rule, expression, result.ErrorContent, null));
+                                valid = false;
+                            }
+                        }
+                    }
                 }
-                this.ItemsSource = ToJaggedArray(values);
-                for (int i = 0; i < typeof(string[][]).GetProperties().Count(); i++)
-                    Columns.Remove(Columns.Last());
-            }
 
-        }
-
-        public string[,] ArrayContent
-        {
-            get
-            {
-                return (string[,])GetValue(ArrayContentProperty);
-            }
-            set
-            {
-                SetValue(ArrayContentProperty, value);
-            }
-        }
-        internal static T[][] ToJaggedArray<T>(T[,] twoDimensionalArray)
-        {
-            int rowsFirstIndex = twoDimensionalArray.GetLowerBound(0)+1;
-            int rowsLastIndex = twoDimensionalArray.GetUpperBound(0);
-            int numberOfRows = rowsLastIndex - rowsFirstIndex + 1;
-
-            int columnsFirstIndex = twoDimensionalArray.GetLowerBound(1);
-            int columnsLastIndex = twoDimensionalArray.GetUpperBound(1);
-            int numberOfColumns = columnsLastIndex - columnsFirstIndex + 1;
-
-            T[][] jaggedArray = new T[numberOfRows][];
-            for (int i = 0; i < numberOfRows; i++)
-            {
-                jaggedArray[i] = new T[numberOfColumns];
-
-                for (int j = 0; j < numberOfColumns; j++)
+                // Validate all the bindings on the children
+                for (int i = 0; i != VisualTreeHelper.GetChildrenCount(parent); ++i)
                 {
-                    jaggedArray[i][j] = twoDimensionalArray[i + rowsFirstIndex, j + columnsFirstIndex];
+                    DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                    if (!IsValid(child)) { valid = false; }
                 }
+
+                return valid;
             }
-            return jaggedArray;
+
         }
+        protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
+        {
+            base.OnExecutedCommitEdit(e);
+
+        }
+
     }
 }
