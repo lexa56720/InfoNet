@@ -11,37 +11,40 @@ namespace PsqlSharp
 {
     public class Table
     {
-        public int ColumnCount => Values.GetLength(1);
-        public int RowCount => Values.GetLength(0);
+        public int ColumnCount => DataTable.Columns.Count;
+        public int RowCount => DataTable.Rows.Count;
 
+        public string? TableName { get; internal set; }
         public string[] ColumnNames { get; private set; }
         public Type[] ColumnTypes { get; private set; }
-        public string[,] Values { get; private set; }
         public DataTable DataTable { get; }
+
+        public event EventHandler<string[]> RowAdded;
+
+        public event EventHandler<CellChangedEventArgs> CellChanged;
+
         public string this[int i, int j]
         {
-            get { return Values[i, j]; }
-            set { Values[i, j] = value; }
+            get
+            {
+                if (DataTable.Rows[i][j] == null)
+                    return string.Empty;
+                return DataTable.Rows[i][j].ToString();
+            }
         }
+
+        public Table()
+        {
+            DataTable = new DataTable();
+        }
+
         public Table(DataTable table)
         {
-            FillValues(table);
-
+            DataTable = table;
             ColumnsSetup(table);
 
-            DataTable = table;
-        }
-
-        private void FillValues(DataTable table)
-        {
-            Values = new string[table.Rows.Count, table.Columns.Count];
-            for (int i = 0; i < table.Rows.Count; i++)
-                for (int j = 0; j < table.Columns.Count; j++)
-                {
-                    Values[i, j] = table.Rows[i][j].ToString();
-                    if (Values[i, j] == null)
-                        Values[i, j] = string.Empty;
-                }
+            DataTable.ColumnChanged += TableColumnChanged;
+            DataTable.RowChanged += TableRowChanged;
         }
 
         private void ColumnsSetup(DataTable table)
@@ -54,6 +57,7 @@ namespace PsqlSharp
                 ColumnNames[i] = table.Columns[i].ColumnName;
             }
         }
+
         public override string ToString()
         {
             var separator = "\t";
@@ -69,13 +73,53 @@ namespace PsqlSharp
             {
                 for (int j = 0; j < ColumnCount; j++)
                 {
-                    builder.Append(Values[i, j]);
+                    builder.Append(this[i, j]);
                     if (j < ColumnCount - 1)
                         builder.Append(separator);
                 }
                 builder.Append('\n');
             }
             return builder.ToString();
+        }
+
+        private void TableColumnChanged(object sender, DataColumnChangeEventArgs e)
+        {
+            // throw new NotImplementedException();
+            var rowNumber = DataTable.Rows.IndexOf(e.Row);
+            if (rowNumber > 0)
+            {
+                var columnName = e.Column.ColumnName;
+                var value = e.ProposedValue;
+                CellChanged?.Invoke(this, new CellChangedEventArgs(columnName, rowNumber, value));
+            }
+
+        }
+
+        private void TableRowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            //throw new NotImplementedException();
+            if (e.Action == DataRowAction.Add)
+            {
+                var values = new string[ColumnCount];
+                for (int i = 0; i < ColumnCount; i++)
+                    values[i] = e.Row.ItemArray[i].ToString();
+                RowAdded?.Invoke(this, values);
+            }
+        }
+    }
+
+    public class CellChangedEventArgs : EventArgs
+    {
+        public int RowNumber { get; }
+
+        public string ColumnName { get; }
+
+        public object? Value { get; }
+        public CellChangedEventArgs(string columnName, int rowNumber, object? value)
+        {
+            ColumnName = columnName;
+            RowNumber = rowNumber;
+            Value = value;
         }
     }
 }

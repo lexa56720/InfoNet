@@ -20,14 +20,18 @@
             <ComboBox FontSize="15" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" 
                       SelectedValue="{Binding SelectedTable}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
             <Button Content="Показать" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" Margin="0,0,10,0" />
-            <Button Content="Сохранить" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" Margin="0,0,10,0"  />
-
         </StackPanel>
 
 
-        <controls:ExtendedDataGrid HeadersVisibility="Column"  GridLinesVisibility="None" HorizontalScrollBarVisibility="Disabled" Background="#202020" Margin="5" Padding="5"
-                                   FontSize="20" BorderThickness="0" Grid.Row="1"  ColumnWidth="*" VerticalAlignment="Stretch" Visibility="Visible"   ItemsSource="{Binding TableContent}">
-        </controls:ExtendedDataGrid>
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="1"    >
+            <controls:ExtendedDataGrid HeadersVisibility="Column" ColumnWidth="*" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Disabled" 
+                                       Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Path=ActualWidth}" 
+                                       GridLinesVisibility="None"  Background="#202020" Margin="5,10,0,0" Padding="5" FontSize="20" BorderThickness="0"
+                                       HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding TableContent}">
+                </controls:ExtendedDataGrid>
+
+        </ScrollViewer>
+    
 
 
 

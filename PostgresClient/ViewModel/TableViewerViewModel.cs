@@ -68,11 +68,12 @@ namespace PostgresClient.ViewModel
         }
         private DataTable tableContent;
 
+        public ICommand ShowTable => new Command(async () => await ShowTableContent(SelectedTable));
 
-        public ICommand ShowTable { get => new Command(async () => await ShowTableContent(SelectedTable)); }
         public ObservableCollection<string> Tables { get; set; } = new ObservableCollection<string>();
 
         protected override TableViewerModel Model => (TableViewerModel)base.Model;
+
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
         }
@@ -80,20 +81,18 @@ namespace PostgresClient.ViewModel
         {
             return new TableViewerModel(api);
         }
+
         public async Task UpdateTables()
         {
             Tables.Clear();
             var tables = await Model.GetTables();
             foreach (var table in tables)
                 Tables.Add(table);
-
         }
 
         public async Task ShowTableContent(string tableName)
         {
-            var table = await Model.GetTableContent(tableName);
-
-            TableContent = table.DataTable;
+            TableContent = (await Model.GetSelectedTable(tableName)).DataTable;
         }
     }
 }

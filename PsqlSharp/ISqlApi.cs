@@ -32,7 +32,13 @@ namespace PsqlSharp
 
         public Task<Function[]?> GetAllFunctions();
 
-        public Task<bool> RemoveFunction(string funcName);
+        public Task<bool> AddFunction(string funcCode);
+
+        public Task<bool> RemoveFunction(string funcHeader);
+
+        public Task<bool> SetColumnByRow(string tableName, string columnName,string cellValue,int rowCount);
+
+        public Task<bool> AddRow(Table table, string[] values);
 
 
     }

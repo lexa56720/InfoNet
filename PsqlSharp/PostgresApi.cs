@@ -2,6 +2,7 @@
 using Npgsql;
 using Npgsql.Internal;
 using Npgsql.Schema;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -78,12 +79,12 @@ namespace PsqlSharp
             if (IsConnected)
             {
                 await using var commandObj = new NpgsqlCommand(command, Connection);
-              
+
                 using var adapter = new NpgsqlDataAdapter(commandObj);
 
                 var dataSet = new DataSet();
                 adapter.Fill(dataSet);
-                if(dataSet.Tables.Count>0)
+                if (dataSet.Tables.Count > 0)
                     return new Table(dataSet.Tables[0]);
             }
 
@@ -110,42 +111,86 @@ namespace PsqlSharp
 
         public async Task<Table?> GetTableContent(string tableName)
         {
-            return await ExecuteCommand($"select * from {tableName}"); ;
+            var table = await ExecuteCommand($"select * from {tableName}");
+            if (table != null)
+            {
+                table.TableName = tableName;
+                return table;
+            }
+            return null;
         }
 
         public async Task<Function[]?> GetAllFunctions()
         {
-            var funcTable = await ExecuteCommand(@"select n.nspname as function_schema,
-                                           p.proname as function_name,
-                                           l.lanname as function_language,
-                                           case when l.lanname = 'internal' then p.prosrc
-                                                else pg_get_functiondef(p.oid)
-                                                end as definition,
-                                           pg_get_function_arguments(p.oid) as function_arguments,
-                                           t.typname as return_type
-                                    from pg_proc p
-                                    left
-                                    join pg_namespace n on p.pronamespace = n.oid
-                                    left
-                                    join pg_language l on p.prolang = l.oid
-                                    left
-                                    join pg_type t on t.oid = p.prorettype
-                                    where n.nspname not in ('pg_catalog', 'information_schema')
-                                    order by function_schema,
-                                             function_name; ");
+            var funcTable = await ExecuteCommand(
+                @"select n.nspname as function_schema,
+                p.proname as function_name,
+                l.lanname as function_language,
+                case when l.lanname = 'internal' then p.prosrc
+                    else pg_get_functiondef(p.oid)
+                    end as definition,
+                pg_get_function_arguments(p.oid) as function_arguments,
+                t.typname as return_type
+        from pg_proc p
+        left
+        join pg_namespace n on p.pronamespace = n.oid
+        left
+        join pg_language l on p.prolang = l.oid
+        left
+        join pg_type t on t.oid = p.prorettype
+        where n.nspname not in ('pg_catalog', 'information_schema')
+        order by function_schema,
+                    function_name; ");
             if (funcTable != null)
                 return Function.Parse(funcTable);
             return null;
         }
 
+
         public Task<Table?> ExecuteFunction(string func, params string[] parameters)
         {
             throw new NotImplementedException();
         }
-
+        public Task<bool> AddFunction(string funcCode)
+        {
+            throw new NotImplementedException();
+        }
         public Task<bool> RemoveFunction(string funcName)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowCount)
+        {
+            try
+            {
+                var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
+                var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowCount][0]).ToString();
+                await ExecuteCommand(
+                    @$"UPDATE {tableName}
+                    SET {columnName} = '{cellValue}'
+                    WHERE ctid='{ctid}';");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddRow(Table table, string[] values)
+        {
+            try
+            {
+                await ExecuteCommand(
+            @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
+            VALUES (${string.Join("", "", table.ColumnNames)})");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
