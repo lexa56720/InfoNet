@@ -24,7 +24,14 @@ namespace PostgresClient.Model
         }
         public async Task<bool> Connect(string database,string username,string password,string server,string port)
         {
-           return await Api.ConnectAsync(database, username, password, server, port);
+           return await Api.ConnectAsync(new ConnectionData() 
+           {
+               Database = database,
+               Username = username,
+               Password = password,
+               Host=server,
+               Port=port,
+           });
         }
     }
 }

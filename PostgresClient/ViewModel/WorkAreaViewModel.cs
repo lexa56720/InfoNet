@@ -39,11 +39,14 @@ namespace PostgresClient.ViewModel
 
         private async Task ExecuteCommand()
         {
-            var result = await Model.ExecuteCommand(CommandText);
-            if (result == null)
-                CommandResult = "Команда выполнена успешно";
-            else
-                CommandResult = result;
+            if(string.IsNullOrEmpty(CommandText) || string.IsNullOrWhiteSpace(CommandText))
+            {
+                var result = await Model.ExecuteCommand(CommandText);
+                if (result == null)
+                    CommandResult = "Команда выполнена успешно";
+                else
+                    CommandResult = result;
+            }
         }
 
     }

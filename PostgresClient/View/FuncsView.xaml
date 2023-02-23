@@ -25,8 +25,8 @@
                 <Button Content="Удалить" Margin="5"/>
 
             </StackPanel>
-         
-            <ListView  DockPanel.Dock="Top" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding FuncList}" SelectedIndex="{Binding Selected}"/>
+
+            <ListView Background="#202020" DockPanel.Dock="Top" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding FuncList}" SelectedIndex="{Binding Selected}"/>
          
         </DockPanel>
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Margin="5"/>

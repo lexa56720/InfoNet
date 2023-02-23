@@ -19,12 +19,12 @@
         <Grid.RowDefinitions>
 
             <RowDefinition Height="100*"/>
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.8*" />
         </Grid.RowDefinitions>
 
 
 
-        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" Background="Transparent" BorderThickness="0"  Padding="5"  >
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" Background="Transparent" BorderThickness="0"  Padding="5,5,0,5"  >
             <TabItem Header="Выполнить комманду" >
                 <Frame   Content="{Binding WorkFrame}"    BorderThickness="0"  />
             </TabItem>
@@ -37,7 +37,7 @@
         </TabControl>
 
 
-        <GridSplitter Width="5" Margin="5" Grid.RowSpan="3" HorizontalAlignment="Center" Grid.Column="1"/>
+        <GridSplitter Width="8"  Grid.RowSpan="3" HorizontalAlignment="Center" Grid.Column="1"/>
 
         <Grid Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
@@ -46,13 +46,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
-                <Button Content="Управление соеденением" Margin="5"/>
-                <Button Content="Сохранить дамп" Margin="5"/>
-                <Button Content="Загрузить дамп" Margin="5"/>
+                <Button Content="Управление соеденением" Margin="5" Command="{Binding ConnectionManager}"/>
+                <Button Content="Сохранить дамп" Margin="5" IsEnabled="{Binding IsConnected}"/>
+                <Button Content="Загрузить дамп" Margin="5" IsEnabled="{Binding IsConnected}"/>
+                <Button Content="Обзреватель базы данных" Margin="5" IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" />
             </StackPanel>
             <GridSplitter Height="5" Padding="5" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-            <Frame Padding="5" Grid.Row="2"  Content="{Binding SidePanel}" />
+            <Frame Padding="0,0,0,5" Grid.Row="2"  Content="{Binding SidePanel}" />
 
         </Grid>
 

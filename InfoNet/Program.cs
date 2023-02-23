@@ -9,11 +9,11 @@ namespace InfoNet
         {
             Console.WriteLine("Hello, World!");
             var api = new PostgresApi();
-            await api.ConnectAsync("carsdb", "postgres", "1234", "localhost", "5432");
-            var a = await api.GetAllTables();
+           // await api.ConnectAsync("carsdb", "postgres", "1234", "localhost", "5432");
+            var a = await api.GetAllTableNames();
             var b = await api.GetTableContent(a[0]);
             var c = await api.GetAllFunctions();
-            await api.ExecuteCommand("Insert into cars(id,name) Values(1,'LOL')");
+            var lol=await api.ExecuteCommand("select * from pg_tables where schemaname='public';");
             var ac = await api.ExecuteCommand("select ctid, * from cars;");
 
             var add = ac.DataTable.Rows[4][0];

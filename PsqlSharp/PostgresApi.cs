@@ -17,11 +17,8 @@ namespace PsqlSharp
 {
     public class PostgresApi : ISqlApi
     {
-
-        static SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
-        public string UserName => throw new NotImplementedException();
-
-        public NpgsqlDatabaseInfo DatabaseInfo => throw new NotImplementedException();
+        public ConnectionData ConnectionData { get; private set; }
+        private NpgsqlConnection? Connection { get; set; }
 
         public event EventHandler? ConnectionStatusChanged;
         public bool IsConnected
@@ -34,14 +31,20 @@ namespace PsqlSharp
             }
         }
         private bool isConnected;
-        private NpgsqlConnection? Connection { get; set; }
 
-        public async Task<bool> ConnectAsync(string database, string username, string password, string server, string port = "5432")
+        private static SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
+
+        ~PostgresApi()
+        {
+            Connection.Close();
+        }
+
+        public async Task<bool> ConnectAsync(ConnectionData connectionData)
         {
             if (!IsConnected)
                 try
                 {
-                    var connectionString = $"Host={server};Username={username};Password={password};Database={database.ToLower()};Port={port}";
+                    var connectionString = connectionData.ToString();
                     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
 
                     dataSourceBuilder.UseLoggerFactory(LoggerFactory.Create(builder =>
@@ -53,6 +56,7 @@ namespace PsqlSharp
                     await using var dataSource = dataSourceBuilder.Build();
                     Connection = await dataSource.OpenConnectionAsync();
                     IsConnected = true;
+                    ConnectionData = connectionData;
                 }
                 catch (Exception e)
                 {
@@ -61,7 +65,6 @@ namespace PsqlSharp
 
             return IsConnected;
         }
-
         public async Task<bool> DisconnectAsync()
         {
             if (IsConnected)
@@ -82,12 +85,10 @@ namespace PsqlSharp
                 if (IsConnected)
                 {
                     await using var commandObj = new NpgsqlCommand(command, Connection);
-
                     using var adapter = new NpgsqlDataAdapter(commandObj);
-
-       
                     var dataSet = new DataSet();
                     adapter.Fill(dataSet);
+
                     if (dataSet.Tables.Count > 0)
                         return new Table(dataSet.Tables[0]);
                 }
@@ -99,11 +100,30 @@ namespace PsqlSharp
             return null;
         }
 
-        public async Task<string[]?> GetAllTables()
+        public async Task<string[]?> GetAllDataBaseNames()
         {
             if (IsConnected)
             {
+                var databases = await ExecuteCommand("SELECT datname FROM pg_database where datistemplate='f';");
+                var result = new string[databases.RowCount];
+                for (int i = 0; i < databases.RowCount; i++)
+                    result[i] = databases[i, 0];
+                return result;
+            }
+            return null;
+        }
+        public async Task<DataBase?> GetDataBaseContent(string dbName)
+        {
+            var tables = await GetAllTableNames(dbName);
+            var funcs = await GetAllFunctions(dbName);
+            return new DataBase(dbName, tables, funcs);
+        }
 
+
+        public async Task<string[]?> GetAllTableNames()
+        {
+            if (IsConnected)
+            {
                 var tables = await ExecuteCommand(@"select * from pg_tables;");
 
                 var result = new List<string>();
@@ -116,22 +136,49 @@ namespace PsqlSharp
 
             return null;
         }
+        public async Task<string[]?> GetAllTableNames(string dbName)
+        {
+            if (IsConnected)
+            {
+                var db = new PostgresApi();
+                await db.ConnectAsync(ConnectionData with { Database = dbName });
+                return await db.GetAllTableNames();
+            }
+            return null;
+        }
+      
 
         public async Task<Table?> GetTableContent(string tableName)
         {
-            var table = await ExecuteCommand($"select * from {tableName}");
-            if (table != null)
+            if (IsConnected)
             {
-                table.TableName = tableName;
-                return table;
+                var table = await ExecuteCommand($"select * from {tableName}");
+                if (table != null)
+                {
+                    table.TableName = tableName;
+                    return table;
+                }
+            }
+            return null;
+        }
+        public async Task<Table?> GetTableContent(string tableName, string dbName)
+        {
+            if (IsConnected)
+            {
+                var db = new PostgresApi();
+                await db.ConnectAsync(ConnectionData with { Database = dbName });
+                return await db.GetTableContent(tableName);
             }
             return null;
         }
 
+
         public async Task<Function[]?> GetAllFunctions()
         {
-            var funcTable = await ExecuteCommand(
-                @"select n.nspname as function_schema,
+            if (IsConnected)
+            {
+                var funcTable = await ExecuteCommand(
+                    @"select n.nspname as function_schema,
                 p.proname as function_name,
                 l.lanname as function_language,
                 case when l.lanname = 'internal' then p.prosrc
@@ -139,18 +186,29 @@ namespace PsqlSharp
                     end as definition,
                 pg_get_function_arguments(p.oid) as function_arguments,
                 t.typname as return_type
-        from pg_proc p
-        left
-        join pg_namespace n on p.pronamespace = n.oid
-        left
-        join pg_language l on p.prolang = l.oid
-        left
-        join pg_type t on t.oid = p.prorettype
-        where n.nspname not in ('pg_catalog', 'information_schema')
-        order by function_schema,
+                from pg_proc p
+                left
+                join pg_namespace n on p.pronamespace = n.oid
+                left
+                join pg_language l on p.prolang = l.oid
+                left
+                join pg_type t on t.oid = p.prorettype
+                where n.nspname not in ('pg_catalog', 'information_schema')
+                order by function_schema,
                     function_name; ");
-            if (funcTable != null)
-                return Function.Parse(funcTable);
+                if (funcTable != null)
+                    return Function.Parse(funcTable);
+            }
+            return null;
+        }
+        public async Task<Function[]?> GetAllFunctions(string dbName)
+        {
+            if (IsConnected)
+            {
+                var db = new PostgresApi();
+                await db.ConnectAsync(ConnectionData with { Database = dbName });
+                return await db.GetAllFunctions();
+            }
             return null;
         }
 
@@ -167,6 +225,7 @@ namespace PsqlSharp
         {
             throw new NotImplementedException();
         }
+
 
         public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowCount)
         {
@@ -185,7 +244,6 @@ namespace PsqlSharp
                 return false;
             }
         }
-
         public async Task<bool> AddRow(Table table, string[] values)
         {
             try
@@ -200,5 +258,6 @@ namespace PsqlSharp
                 return false;
             }
         }
+
     }
 }

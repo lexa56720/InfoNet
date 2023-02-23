@@ -1,4 +1,5 @@
-﻿using PostgresClient.Model;
+﻿using PostgresClient.MessageCentre;
+using PostgresClient.Model;
 using PostgresClient.Utils;
 using PostgresClient.View;
 using PsqlSharp;
@@ -50,7 +51,6 @@ namespace PostgresClient.ViewModel
         }
         private Page sidePanel;
 
-
         public Page FuncFrame
         {
             get => funcFrame;
@@ -61,13 +61,16 @@ namespace PostgresClient.ViewModel
             }
         }
         private Page funcFrame;
-       
 
+        public ICommand ConnectionManager => new Command(()=>Messenger.Send(new Message("ConnectionManager"),this));
+
+        public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
         protected override MainModel Model { get => (MainModel)base.Model; }
 
         public MainViewModel(ISqlApi api):base(api)
         {           
-            SidePanel = new ConnectView();
+            SidePanel = new SidePanel();
+
             WorkFrame =new  WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
