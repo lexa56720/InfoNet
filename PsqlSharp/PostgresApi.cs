@@ -18,7 +18,7 @@ namespace PsqlSharp
     public class PostgresApi : ISqlApi
     {
 
-
+        static SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
         public string UserName => throw new NotImplementedException();
 
         public NpgsqlDatabaseInfo DatabaseInfo => throw new NotImplementedException();
@@ -76,18 +76,26 @@ namespace PsqlSharp
 
         public async Task<Table?> ExecuteCommand(string command)
         {
-            if (IsConnected)
+            await Semaphore.WaitAsync();
+            try
             {
-                await using var commandObj = new NpgsqlCommand(command, Connection);
+                if (IsConnected)
+                {
+                    await using var commandObj = new NpgsqlCommand(command, Connection);
 
-                using var adapter = new NpgsqlDataAdapter(commandObj);
+                    using var adapter = new NpgsqlDataAdapter(commandObj);
 
-                var dataSet = new DataSet();
-                adapter.Fill(dataSet);
-                if (dataSet.Tables.Count > 0)
-                    return new Table(dataSet.Tables[0]);
+       
+                    var dataSet = new DataSet();
+                    adapter.Fill(dataSet);
+                    if (dataSet.Tables.Count > 0)
+                        return new Table(dataSet.Tables[0]);
+                }
             }
-
+            finally
+            {
+                Semaphore.Release();
+            }
             return null;
         }
 

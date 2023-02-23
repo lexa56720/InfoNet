@@ -22,7 +22,7 @@
             </Style.Resources>
             <Setter Property="Control.FontSize" Value="20" />
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
-            <Setter Property="Control.Background" Value="#424242" />
+            <Setter Property="Control.Background" Value="Transparent" />
             <Setter Property="Control.Foreground" Value="White" />
             <Setter Property="VerticalContentAlignment" Value="Top" />
             <Setter Property="BorderThickness" Value="0"/>
@@ -332,8 +332,8 @@
         <!--#endregion-->
     
         <!--#region TABS-->
-        <SolidColorBrush x:Key="RedBrush" Color="#424242"/>
-        <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+        <SolidColorBrush x:Key="RedBrush" Color="Transparent"/>
+        <SolidColorBrush x:Key="SolidBorderBrush" Color="Red" />
         <SolidColorBrush x:Key="GreenBrush" Color="#242424" />
         <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#121212" />
         <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
@@ -362,7 +362,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Panel.ZIndex" Value="100" />
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource GreenBrush}" />
+                                <Setter TargetName="Border" Property="Background" Value="#404040" />
                                 <Setter TargetName="Border" Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
@@ -371,7 +371,7 @@
                                 <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#4a4a4a"/>
+                                <Setter  TargetName="Border" Property="Background" Value="#404040"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -559,12 +559,14 @@
             <Setter Property="FontSize" Value="20"/>
         </Style>
         <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="#292929"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <!-- Trun off default selection-->
                     <ControlTemplate TargetType="{x:Type ListViewItem}">
-                        <Border x:Name="Bd" BorderBrush="Gray" BorderThickness="0"
-                            Margin="0"
+                        <Border x:Name="Bd" BorderThickness="0"
+                            Margin="0,10,0,0"
                             Background="{TemplateBinding Background}" 
                             Padding="5" 
                             SnapsToDevicePixels="true" >
@@ -588,7 +590,7 @@
                         <Condition Property="IsSelected" Value="True" />
                     </MultiTrigger.Conditions>
                     <MultiTrigger.Setters>
-                        <Setter Property="Background" Value="#323232" />
+                        <Setter Property="Background" Value="#363636" />
                     </MultiTrigger.Setters>
                 </MultiTrigger>
             </Style.Triggers>

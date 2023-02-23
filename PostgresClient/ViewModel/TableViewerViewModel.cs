@@ -37,15 +37,10 @@ namespace PostgresClient.ViewModel
             set
             {
                 selectedTable = value;
-               OnPropertyChanged(nameof(IsCanShow));
+                ShowTableContent(SelectedTable);
             }
         }
         private string selectedTable;
-
-        public bool IsCanShow
-        {
-            get => SelectedTable!=null&& IsConnected;
-        }
 
         public override bool IsConnected
         {
@@ -53,7 +48,6 @@ namespace PostgresClient.ViewModel
             set
             {
                 base.IsConnected = value;
-                OnPropertyChanged(nameof(IsCanShow));
             }
         }
 
@@ -67,8 +61,6 @@ namespace PostgresClient.ViewModel
             }
         }
         private DataTable tableContent;
-
-        public ICommand ShowTable => new Command(async () => await ShowTableContent(SelectedTable));
 
         public ObservableCollection<string> Tables { get; set; } = new ObservableCollection<string>();
 
@@ -92,7 +84,8 @@ namespace PostgresClient.ViewModel
 
         public async Task ShowTableContent(string tableName)
         {
-            TableContent = (await Model.GetSelectedTable(tableName)).DataTable;
+            if (tableName != null)
+                TableContent = (await Model.GetSelectedTable(tableName)).DataTable;
         }
     }
 }

@@ -86,7 +86,7 @@ namespace PsqlSharp
         {
             // throw new NotImplementedException();
             var rowNumber = DataTable.Rows.IndexOf(e.Row);
-            if (rowNumber > 0)
+            if (rowNumber >= 0)
             {
                 var columnName = e.Column.ColumnName;
                 var value = e.ProposedValue;

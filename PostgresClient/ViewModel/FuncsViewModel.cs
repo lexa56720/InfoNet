@@ -26,7 +26,6 @@ namespace PostgresClient.ViewModel
                 }
             }
         }
-
         private int selected;
         public string FuncBody
         {

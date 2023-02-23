@@ -33,7 +33,6 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Grid>
-            <Button Content="Показать" FontSize="20" IsEnabled="{Binding IsCanShow}" Command="{Binding ShowTable}" Margin="0,0,10,0" />
         </StackPanel>
 
 
