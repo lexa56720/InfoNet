@@ -12,8 +12,46 @@ using System.Windows.Input;
 namespace PostgresClient.ViewModel
 {
     internal class ConnectViewModel : BaseViewModel
-    { 
-        public ICommand ConnectClick { get => new Command(async () => { await Connect(); }); }
+    {
+
+        public ICommand ConnectClick
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    if (IsConnected)
+                        await Disconnect();
+                    else
+                        await Connect();
+                });
+            }
+        }
+
+        public string ButtonAction
+        {
+            get => buttonAction;
+            set
+            {
+                buttonAction = value;
+                OnPropertyChanged(nameof(ButtonAction));
+            }
+        }
+        private string buttonAction = "Подключиться";
+
+        public override bool IsConnected
+        {
+            get => base.IsConnected;
+            set
+            {
+                base.IsConnected = value;
+                if (IsConnected)
+                    ButtonAction = "Отключиться";
+                else
+                    ButtonAction = "Подключиться";
+            }
+        }
+
 
         public string Username { get; set; } = "postgres";
 
@@ -25,9 +63,9 @@ namespace PostgresClient.ViewModel
 
         public string DataBase { get; set; } = "carsdb";
 
-        protected override ConnectModel Model { get=>(ConnectModel)base.Model; }
+        protected override ConnectModel Model => (ConnectModel)base.Model;
 
-        public ConnectViewModel(ISqlApi api):base(api) 
+        public ConnectViewModel(ISqlApi api) : base(api)
         {
 
         }
@@ -38,7 +76,11 @@ namespace PostgresClient.ViewModel
 
         public async Task Connect()
         {
-           await Model.Connect(DataBase, Username, Password, Server, Port);       
+            await Model.Connect(DataBase, Username, Password, Server, Port);
+        }
+        private async Task Disconnect()
+        {
+            await Model.Disconnect();
         }
 
     }

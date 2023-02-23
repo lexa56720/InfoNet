@@ -14,10 +14,7 @@ namespace PostgresClient.Model
 
         }
 
-        public async Task Disconnect()
-        {
-            await Api.DisconnectAsync();
-        }
+
 
     }
 }

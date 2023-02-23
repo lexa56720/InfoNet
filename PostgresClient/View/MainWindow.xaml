@@ -18,13 +18,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
 
-            <RowDefinition Height="12*"/>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="0.5*" />
         </Grid.RowDefinitions>
 
 
 
-        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="Transparent" BorderThickness="0"  Padding="5"  >
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" Background="Transparent" BorderThickness="0"  Padding="5"  >
             <TabItem Header="Выполнить комманду" >
                 <Frame   Content="{Binding WorkFrame}"    BorderThickness="0"  />
             </TabItem>
@@ -38,64 +38,39 @@
 
 
         <GridSplitter Width="5" Margin="5" Grid.RowSpan="3" HorizontalAlignment="Center" Grid.Column="1"/>
-        
+
         <Grid Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
-                    <Button Content="Инициализировать соеденение" Margin="5"/>
-                <Button Content="Закрыть сеанс связи" Margin="5"  IsEnabled="{Binding IsConnected}" Padding="5" Command="{Binding DisconnectClick}"/>
-                </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
+                <Button Content="Управление соеденением" Margin="5"/>
+                <Button Content="Сохранить дамп" Margin="5"/>
+                <Button Content="Загрузить дамп" Margin="5"/>
+            </StackPanel>
             <GridSplitter Height="5" Padding="5" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
             <Frame Padding="5" Grid.Row="2"  Content="{Binding SidePanel}" />
 
         </Grid>
 
-        <Grid Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" >
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="1" Grid.Row="1" MaxHeight="40" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Canvas Width="100" Height="100">
-                    <Ellipse  Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="25">
-                        <Ellipse.Style>
-                            <Style TargetType="Ellipse">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                        <Setter Property="Fill" Value="Green"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsConnected}" Value="false">
-                                        <Setter Property="Fill" Value="Red"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Ellipse.Style>
-                    </Ellipse>
-                </Canvas>
-            </Viewbox>
-            <Label  Grid.Row="2" Grid.Column="0" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Right" >
-                <Label.Style>
-                    <Style TargetType="Label">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                <Setter Property="Content" Value="Подключено"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsConnected}" Value="false">
-                                <Setter Property="Content" Value="Не подключено"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Label.Style>
-            </Label>
-        </Grid>
+        <Rectangle  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                            <Setter Property="Fill" Value="#388e3c"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsConnected}" Value="false">
+                            <Setter Property="Fill" Value="#d32f2f"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
+
 
     </Grid>
 

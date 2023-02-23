@@ -16,7 +16,6 @@ namespace PostgresClient.ViewModel
 {
     class MainViewModel : BaseViewModel
     {
-        public ICommand DisconnectClick{ get => new Command(async () => { await Disconnect(); }); }
 
         public Page TableViewerFrame
         {
@@ -77,9 +76,5 @@ namespace PostgresClient.ViewModel
         {
             return new MainModel(api);
         }
-        private async Task Disconnect()
-        {
-            await Model.Disconnect();
-        }  
     }
 }
