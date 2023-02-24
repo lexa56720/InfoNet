@@ -24,14 +24,14 @@
 
 
 
-        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" Background="Transparent" BorderThickness="0"  Padding="5,5,0,5"  >
-            <TabItem Header="Выполнить комманду" >
-                <Frame   Content="{Binding WorkFrame}"    BorderThickness="0"  />
+        <TabControl Grid.Row="0" Grid.Column="0"  Grid.RowSpan="1" Background="Transparent" BorderThickness="0" SelectedIndex="{Binding CurrentTabIndex}" SelectedItem="{Binding CurrentTab}"  Padding="5,5,0,5"  >
+            <TabItem Header="Выполнить комманду" IsSelected="{Binding WorkFrameSelected,Mode=TwoWay}"  >
+                <Frame   Content="{Binding WorkFrame}" TabIndex="{Binding WorkTabIndex}"    BorderThickness="0"  />
             </TabItem>
-            <TabItem Header="Вывести содержимое таблицы" IsEnabled="{Binding IsConnected}">
+            <TabItem Header="Вывести содержимое таблицы" TabIndex="{Binding TableViewerTabIndex}" IsEnabled="{Binding IsConnected}">
                 <Frame   Content="{Binding TableViewerFrame}"    BorderThickness="0"  />
             </TabItem>
-            <TabItem Header="Список функций" IsEnabled="{Binding IsConnected}">
+            <TabItem Header="Список функций" TabIndex="{Binding FuncTabIndex,Mode=OneWayToSource}" IsEnabled="{Binding IsConnected}">
                 <Frame   Content="{Binding FuncFrame}"    BorderThickness="0"  />
             </TabItem>
         </TabControl>

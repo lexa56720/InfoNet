@@ -26,10 +26,5 @@ namespace PostgresClient.View
             InitializeComponent();
             DataContext = new DBExplorerViewModel(App.Api);
         }
-
-        private void TreeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
     }
 }

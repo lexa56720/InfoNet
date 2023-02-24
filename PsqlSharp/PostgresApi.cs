@@ -36,7 +36,8 @@ namespace PsqlSharp
 
         ~PostgresApi()
         {
-            Connection.Close();
+            if (Connection != null)
+                Connection.Close();
         }
 
         public async Task<bool> ConnectAsync(ConnectionData connectionData)
@@ -146,7 +147,7 @@ namespace PsqlSharp
             }
             return null;
         }
-      
+
 
         public async Task<Table?> GetTableContent(string tableName)
         {

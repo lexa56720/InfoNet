@@ -1,4 +1,5 @@
-﻿using PostgresClient.Model;
+﻿using PostgresClient.MessageCentre;
+using PostgresClient.Model;
 using PostgresClient.Utils;
 using PsqlSharp;
 using System;
@@ -104,7 +105,7 @@ namespace PostgresClient.ViewModel
         }
         private void TableSelected(string tableName, DataBase database)
         {
-
+           Messenger.Send(new Message("ShowTable"),Tuple.Create(tableName,database.Name));
         }
 
         private async Task Update()

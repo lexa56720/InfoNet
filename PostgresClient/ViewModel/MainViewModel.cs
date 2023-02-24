@@ -5,6 +5,7 @@ using PostgresClient.View;
 using PsqlSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -17,29 +18,6 @@ namespace PostgresClient.ViewModel
 {
     class MainViewModel : BaseViewModel
     {
-
-        public Page TableViewerFrame
-        {
-            get => tableViewerFrame;
-            set
-            {
-                tableViewerFrame = value;
-                OnPropertyChanged(nameof(SidePanel));
-            }
-        }
-        private Page tableViewerFrame;
-
-        public Page WorkFrame
-        {
-            get => workFrame;
-            set
-            {
-                workFrame = value;
-                OnPropertyChanged(nameof(SidePanel));
-            }
-        }
-        private Page workFrame;
-
         public Page SidePanel
         {
             get => sidePanel;
@@ -50,6 +28,63 @@ namespace PostgresClient.ViewModel
             }
         }
         private Page sidePanel;
+
+        public int CurrentTabIndex
+        {
+            get => currentTabIndex;
+            set
+            {
+                currentTabIndex = value;
+                OnPropertyChanged(nameof(CurrentTabIndex));
+            }
+        }
+        private int currentTabIndex;
+
+
+        public Page TableViewerFrame
+        {
+            get => tableViewerFrame;
+            set
+            {
+                tableViewerFrame = value;
+                OnPropertyChanged(nameof(TableViewerFrame));
+            }
+        }
+        private Page tableViewerFrame;
+
+        public int TableViewerTabIndex
+        {
+            get => tableViewerTabIndex;
+            set
+            {
+                tableViewerTabIndex = value;
+                OnPropertyChanged(nameof(TableViewerTabIndex));
+            }
+        }
+        private int tableViewerTabIndex;
+
+
+        public Page WorkFrame
+        {
+            get => workFrame;
+            set
+            {
+                workFrame = value;
+                OnPropertyChanged(nameof(WorkFrame));
+            }
+        }
+        private Page workFrame;
+
+        public int WorkTabIndex
+        {
+            get => workTabIndex;
+            set
+            {
+                workTabIndex = value;
+                OnPropertyChanged(nameof(WorkTabIndex));
+            }
+        }
+        private int workTabIndex;
 
         public Page FuncFrame
         {
@@ -62,22 +97,42 @@ namespace PostgresClient.ViewModel
         }
         private Page funcFrame;
 
-        public ICommand ConnectionManager => new Command(()=>Messenger.Send(new Message("ConnectionManager"),this));
+        public int FuncTabIndex
+        {
+            get => funcTabIndex;
+            set
+            {
+                funcTabIndex = value;
+                OnPropertyChanged(nameof(FuncTabIndex));
+            }
+        }
+        private int funcTabIndex;
+
+        public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
 
         public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
         protected override MainModel Model { get => (MainModel)base.Model; }
 
-        public MainViewModel(ISqlApi api):base(api)
-        {           
+        public MainViewModel(ISqlApi api) : base(api)
+        {
             SidePanel = new SidePanel();
-
-            WorkFrame =new  WorkArea();
+            WorkFrame = new WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
+            CurrentTabIndex = 0;
+            SubscribeToNavigation();
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
             return new MainModel(api);
         }
+        private void SubscribeToNavigation()
+        {
+            Messenger.Subscribe("ShowTable", (o, e) => CurrentTabIndex=TableViewerTabIndex);
+            Messenger.Subscribe("ShowFunc", (o, e) => CurrentTabIndex = FuncTabIndex);
+            Messenger.Subscribe("ShowWork", (o, e) => CurrentTabIndex = WorkTabIndex);
+        }
+
+
     }
 }

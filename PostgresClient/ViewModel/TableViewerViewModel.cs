@@ -68,6 +68,8 @@ namespace PostgresClient.ViewModel
 
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
+            MessageCentre.Messenger.Subscribe("ShowTable", 
+               async (o, e) => await ShowTableContent(o as Tuple<string, string>));
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -80,6 +82,12 @@ namespace PostgresClient.ViewModel
             var tables = await Model.GetTables();
             foreach (var table in tables)
                 Tables.Add(table);
+        }
+
+        private async Task ShowTableContent(Tuple<string,string> requestInfo)
+        {
+            if (requestInfo != null)
+                TableContent = (await Model.GetTable(requestInfo.Item1,requestInfo.Item2)).DataTable;
         }
 
         public async Task ShowTableContent(string tableName)

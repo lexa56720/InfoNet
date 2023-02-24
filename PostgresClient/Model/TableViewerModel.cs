@@ -10,7 +10,7 @@ namespace PostgresClient.Model
     class TableViewerModel : BaseModel
     {
       
-        private Table SelectedTable 
+        private Table? SelectedTable 
         { 
             get => selectedTable;
             set
@@ -23,11 +23,14 @@ namespace PostgresClient.Model
 
                 selectedTable = value;
 
-                selectedTable.CellChanged += SelectedTableCellChanged;
-                selectedTable.RowAdded += SelectedTableRowAdded; 
+                if (selectedTable != null)
+                {
+                    selectedTable.CellChanged += SelectedTableCellChanged;
+                    selectedTable.RowAdded += SelectedTableRowAdded;
+                }
             }
         }
-        private Table selectedTable;
+        private Table? selectedTable;
 
 
         public TableViewerModel(ISqlApi api) : base(api)
@@ -59,6 +62,14 @@ namespace PostgresClient.Model
             table ??= new Table();
             SelectedTable = table;
             return SelectedTable;
+        }
+
+        public async Task<Table> GetTable(string tableName,string dbName)
+        {
+            var table= await Api.GetTableContent(tableName, dbName); 
+            table ??= new Table();
+            SelectedTable = null;
+            return table;
         }
     }
 }
