@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace PostgresClient.Model
 {
     class TableViewerModel : BaseModel
-    {
-      
+    {    
         private Table? SelectedTable 
         { 
             get => selectedTable;
@@ -31,7 +30,6 @@ namespace PostgresClient.Model
             }
         }
         private Table? selectedTable;
-
 
         public TableViewerModel(ISqlApi api) : base(api)
         {
@@ -71,5 +69,6 @@ namespace PostgresClient.Model
             SelectedTable = null;
             return table;
         }
+
     }
 }

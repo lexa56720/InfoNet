@@ -37,10 +37,23 @@ namespace PostgresClient.ViewModel
             set
             {
                 selectedTable = value;
-                ShowTableContent(SelectedTable);
+                OnPropertyChanged(nameof(SelectedTable));
+                if (selectedTable != null)
+                    ShowTableContent(SelectedTable);
             }
         }
         private string selectedTable;
+
+        public bool IsNotEditable
+        {
+            get => isNotEditable || !IsConnected;
+            set
+            {
+                isNotEditable = value;
+                OnPropertyChanged(nameof(IsNotEditable));
+            }
+        }
+        private bool isNotEditable;
 
         public override bool IsConnected
         {
@@ -48,6 +61,7 @@ namespace PostgresClient.ViewModel
             set
             {
                 base.IsConnected = value;
+                OnPropertyChanged(nameof(IsNotEditable));
             }
         }
 
@@ -62,14 +76,24 @@ namespace PostgresClient.ViewModel
         }
         private DataTable tableContent;
 
-        public ObservableCollection<string> Tables { get; set; } = new ObservableCollection<string>();
+
+        public ObservableCollection<string> Tables
+        {
+            get => tables;
+            set
+            {
+                tables = value;
+                OnPropertyChanged(nameof(Tables));
+            }
+        }
+        private ObservableCollection<string> tables = new ObservableCollection<string>();
 
         protected override TableViewerModel Model => (TableViewerModel)base.Model;
 
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
-            MessageCentre.Messenger.Subscribe("ShowTable", 
-               async (o, e) => await ShowTableContent(o as Tuple<string, string>));
+            MessageCentre.Messenger.Subscribe("ShowTable",
+               async (o, e) => await ShowTableFromDB(o as Tuple<string, string>));
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -78,16 +102,24 @@ namespace PostgresClient.ViewModel
 
         public async Task UpdateTables()
         {
-            Tables.Clear();
             var tables = await Model.GetTables();
-            foreach (var table in tables)
-                Tables.Add(table);
+            Tables = new ObservableCollection<string>(tables);
         }
 
-        private async Task ShowTableContent(Tuple<string,string> requestInfo)
+        private async Task ShowTableFromDB(Tuple<string, string> requestInfo)
         {
-            if (requestInfo != null)
-                TableContent = (await Model.GetTable(requestInfo.Item1,requestInfo.Item2)).DataTable;
+            await UpdateTables();
+            if (Model.DataBaseNameIs(requestInfo.Item2))
+            {
+                SelectedTable = Tables.Where(t => t == requestInfo.Item1).First();
+                IsNotEditable = false;
+            }
+            else
+            {
+                SelectedTable = null;
+                TableContent = (await Model.GetTable(requestInfo.Item1, requestInfo.Item2)).DataTable;
+                IsNotEditable = true;
+            }
         }
 
         public async Task ShowTableContent(string tableName)

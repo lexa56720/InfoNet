@@ -14,7 +14,7 @@ namespace PostgresClient.Model
         {
         }
 
-        public async Task<string[]?> GetFunctions()
+        public async Task<string[]?> GetFunctionsHeader()
         {
             Functions = await Api.GetAllFunctions();
 
@@ -23,9 +23,12 @@ namespace PostgresClient.Model
             return null;
         }
 
-        public string GetFunctionCode(int index)
+        public async Task<string> GetFunctionCode(int index)
         {
-            return string.Join("", Functions[index].Defenition);
+            if (Functions == null)
+               await GetFunctionsHeader();
+
+            return Functions[index].Defenition;
         }
     }
 }

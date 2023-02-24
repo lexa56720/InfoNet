@@ -99,9 +99,9 @@ namespace PostgresClient.ViewModel
                 TableSelected(node.DataBase.Tables[node.Index], node.DataBase);
 
         }
-        private void FuncSelected(Function function, DataBase database)
+        private void FuncSelected(Function function,DataBase database)
         {
-
+            Messenger.Send(new Message("ShowFunc"), Tuple.Create(function, database.Name));
         }
         private void TableSelected(string tableName, DataBase database)
         {

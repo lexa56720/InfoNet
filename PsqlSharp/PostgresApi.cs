@@ -17,7 +17,7 @@ namespace PsqlSharp
 {
     public class PostgresApi : ISqlApi
     {
-        public ConnectionData ConnectionData { get; private set; }
+        public ConnectionData? ConnectionData { get; private set; }
         private NpgsqlConnection? Connection { get; set; }
 
         public event EventHandler? ConnectionStatusChanged;

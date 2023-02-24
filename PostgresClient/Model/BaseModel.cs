@@ -22,5 +22,11 @@ namespace PostgresClient.Model
         {
             NewConnectStatus?.Invoke(this, Api.IsConnected);
         }
+        public bool DataBaseNameIs(string dbName)
+        {
+            if(Api.ConnectionData==null)
+                return false;
+            return Api.ConnectionData.Database == dbName;
+        }
     }
 }

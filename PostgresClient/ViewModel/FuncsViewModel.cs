@@ -1,4 +1,6 @@
-﻿using PostgresClient.Model;
+﻿using PostgresClient.MessageCentre;
+using PostgresClient.Model;
+using PostgresClient.Utils;
 using PsqlSharp;
 using System;
 using System.Collections.Generic;
@@ -6,13 +8,23 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
     class FuncsViewModel : BaseViewModel
     {
-
-        public ObservableCollection<string> FuncList { get; set; }= new ObservableCollection<string>();
+        public ObservableCollection<string> FuncList
+        {
+            get => funcList;
+            set
+            {
+                funcList = value;
+                OnPropertyChanged(nameof(FuncList));
+            }
+        }
+        private ObservableCollection<string> funcList = new ObservableCollection<string>();
 
         public int Selected
         {
@@ -23,10 +35,12 @@ namespace PostgresClient.ViewModel
                 {
                     selected = value;
                     ShowFunc(Selected);
+                    OnPropertyChanged(nameof(Selected));
                 }
             }
         }
         private int selected;
+
         public string FuncBody
         {
             get => funcBody;
@@ -38,30 +52,64 @@ namespace PostgresClient.ViewModel
         }
         private string funcBody;
 
+        public bool IsEditable
+        {
+            get => isEditable && IsConnected;
+            set
+            {
+                isEditable = value;
+                OnPropertyChanged(nameof(IsEditable));
+            }
+        }
+        private bool isEditable;
 
+        public override bool IsConnected
+        {
+            get => base.IsConnected;
+            set
+            {
+                base.IsConnected = value;
+                OnPropertyChanged(nameof(IsEditable));
+            }
+        }
+
+        public ICommand PageLoaded => new Command(async (o) => await Update());
         protected override FuncsModel Model => (FuncsModel)base.Model;
 
-        public FuncsViewModel(ref Action updateFuncsList, ISqlApi api) : base(api)
+        public FuncsViewModel(ISqlApi api) : base(api)
         {
-            updateFuncsList = new Action(async () => await Update());
+            Messenger.Subscribe("ShowFunc", (m, o) => LoadFunc(m as Tuple<Function, string>));
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
             return new FuncsModel(api);
         }
-        private void ShowFunc(int index)
+        private async Task ShowFunc(int index)
         {
+            IsEditable = true;
             var code = Model.GetFunctionCode(index);
-            FuncBody = code;
+            FuncBody = await code;
         }
-
+        private async void LoadFunc(Tuple<Function, string> loadRequest)
+        {
+            await Update();
+            FuncBody = loadRequest.Item1.Defenition;
+            if (Model.DataBaseNameIs(loadRequest.Item2))
+            {
+                Selected = FuncList.IndexOf(loadRequest.Item1.ToString());
+                IsEditable = true;
+            }
+            else
+            {
+                Selected = -1;
+                IsEditable = false;
+            }
+        }
         private async Task Update()
         {
-            FuncList.Clear();
-            var funcs = await Model.GetFunctions();
+            var funcs = await Model.GetFunctionsHeader();
             if (funcs != null)
-                foreach (var func in funcs)
-                    FuncList.Add(func);
+                FuncList = new ObservableCollection<string>(funcs);
         }
     }
 }

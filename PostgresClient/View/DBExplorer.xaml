@@ -29,7 +29,7 @@
             </TreeView.ItemContainerStyle>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding NodeSelected}" 
+                    <i:InvokeCommandAction Command="{Binding NodeSelected, IsAsync=True}" 
                    CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>

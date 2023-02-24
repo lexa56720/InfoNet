@@ -23,17 +23,11 @@ namespace PostgresClient.View
     {
         FuncsViewModel ViewModel { get; set; }
 
-        Action? Action = new Action(() => { });
         public FuncsView()
         {
             InitializeComponent();
-            ViewModel = new FuncsViewModel(ref Action, App.Api);
+            ViewModel = new FuncsViewModel(App.Api);
             DataContext = ViewModel;
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            Action.Invoke();
         }
     }
 }

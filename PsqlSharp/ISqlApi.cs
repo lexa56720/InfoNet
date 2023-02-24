@@ -10,7 +10,7 @@ namespace PsqlSharp
 {
     public interface ISqlApi
     {
-        public ConnectionData ConnectionData { get; }
+        public ConnectionData? ConnectionData { get; }
         public bool IsConnected { get; }
 
         public event EventHandler ConnectionStatusChanged;

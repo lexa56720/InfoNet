@@ -29,88 +29,30 @@ namespace PostgresClient.ViewModel
         }
         private Page sidePanel;
 
-        public int CurrentTabIndex
+        public Page MainFrame
         {
-            get => currentTabIndex;
+            get => mainFrame;
             set
             {
-                currentTabIndex = value;
-                OnPropertyChanged(nameof(CurrentTabIndex));
+                mainFrame = value;
+                OnPropertyChanged(nameof(MainFrame));
             }
         }
-        private int currentTabIndex;
+        private Page mainFrame;
 
+        public Page WorkFrame { get;}
+        public ICommand NavigateToWork => new Command((o)=>NavigateTo(WorkFrame));
 
-        public Page TableViewerFrame
-        {
-            get => tableViewerFrame;
-            set
-            {
-                tableViewerFrame = value;
-                OnPropertyChanged(nameof(TableViewerFrame));
-            }
-        }
-        private Page tableViewerFrame;
+        public Page TableViewerFrame { get; }
+        public ICommand NavigateToTable => new Command((o) => NavigateTo(TableViewerFrame));
 
-        public int TableViewerTabIndex
-        {
-            get => tableViewerTabIndex;
-            set
-            {
-                tableViewerTabIndex = value;
-                OnPropertyChanged(nameof(TableViewerTabIndex));
-            }
-        }
-        private int tableViewerTabIndex;
+        public Page FuncFrame { get; }
+        public ICommand NavigateToFunc => new Command((o) => NavigateTo(FuncFrame));
 
-
-        public Page WorkFrame
-        {
-            get => workFrame;
-            set
-            {
-                workFrame = value;
-                OnPropertyChanged(nameof(WorkFrame));
-            }
-        }
-        private Page workFrame;
-
-        public int WorkTabIndex
-        {
-            get => workTabIndex;
-            set
-            {
-                workTabIndex = value;
-                OnPropertyChanged(nameof(WorkTabIndex));
-            }
-        }
-        private int workTabIndex;
-
-        public Page FuncFrame
-        {
-            get => funcFrame;
-            set
-            {
-                funcFrame = value;
-                OnPropertyChanged(nameof(FuncFrame));
-            }
-        }
-        private Page funcFrame;
-
-        public int FuncTabIndex
-        {
-            get => funcTabIndex;
-            set
-            {
-                funcTabIndex = value;
-                OnPropertyChanged(nameof(FuncTabIndex));
-            }
-        }
-        private int funcTabIndex;
 
         public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
-
         public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
+
         protected override MainModel Model { get => (MainModel)base.Model; }
 
         public MainViewModel(ISqlApi api) : base(api)
@@ -119,7 +61,6 @@ namespace PostgresClient.ViewModel
             WorkFrame = new WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
-            CurrentTabIndex = 0;
             SubscribeToNavigation();
         }
         protected override BaseModel CreateModel(ISqlApi api)
@@ -128,11 +69,15 @@ namespace PostgresClient.ViewModel
         }
         private void SubscribeToNavigation()
         {
-            Messenger.Subscribe("ShowTable", (o, e) => CurrentTabIndex=TableViewerTabIndex);
-            Messenger.Subscribe("ShowFunc", (o, e) => CurrentTabIndex = FuncTabIndex);
-            Messenger.Subscribe("ShowWork", (o, e) => CurrentTabIndex = WorkTabIndex);
+            Messenger.Subscribe("ShowTable", (o, e) => NavigateTo(TableViewerFrame));
+            Messenger.Subscribe("ShowFunc", (o, e) => NavigateTo(FuncFrame));
+            Messenger.Subscribe("ShowWork", (o, e) => NavigateTo(WorkFrame));
         }
 
+        private void NavigateTo(Page page)
+        {
+            MainFrame = page;
+        }
 
     }
 }
