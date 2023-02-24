@@ -20,7 +20,6 @@ namespace PsqlSharp
         public Task<bool> DisconnectAsync();
 
         public Task<Table?> ExecuteCommand(string command);
-        public Task<Table?> ExecuteFunction(string func, params string[] parameters );
 
 
         public Task<string[]?> GetAllDataBaseNames();
@@ -36,8 +35,8 @@ namespace PsqlSharp
         public Task<Function[]?> GetAllFunctions();
         public Task<Function[]?> GetAllFunctions(string dbName);
 
-        public Task<bool> AddFunction(string funcCode);
-        public Task<bool> RemoveFunction(string funcHeader);
+        public Task<bool> RemoveFunction(Function function);
+        public Task<bool> UpdateFunction(Function function, string newFuncCode);
 
         public Task<bool> SetColumnByRow(string tableName, string columnName,string cellValue,int rowCount);
         public Task<bool> AddRow(Table table, string[] values);

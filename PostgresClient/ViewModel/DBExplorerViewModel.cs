@@ -16,7 +16,6 @@ namespace PostgresClient.ViewModel
 {
     class DBExplorerViewModel : BaseViewModel
     {
-        private object aA;
 
         public class Node
         {
@@ -68,13 +67,18 @@ namespace PostgresClient.ViewModel
             }
         }
 
-        public ObservableCollection<Node> DataBases { get; set; } = new ObservableCollection<Node>();
-
-        public object AA
+        public ObservableCollection<Node> DataBases
         {
-            get => aA;
-            set => aA = value;
+            get => dataBases;
+            set
+            {
+                dataBases = value;
+                OnPropertyChanged(nameof(DataBases));
+            }
         }
+        private ObservableCollection<Node> dataBases = new ObservableCollection<Node>();
+
+
         public ICommand NodeSelected => new Command(Selected);
 
         public ICommand Loaded => new Command(async () => { await Update(); });
@@ -82,6 +86,7 @@ namespace PostgresClient.ViewModel
         protected override DBExplorerModel Model => (DBExplorerModel)base.Model;
         public DBExplorerViewModel(ISqlApi api) : base(api)
         {
+            Messenger.Subscribe("UpdateDB", async (o, m) => await Update());
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -99,26 +104,36 @@ namespace PostgresClient.ViewModel
                 TableSelected(node.DataBase.Tables[node.Index], node.DataBase);
 
         }
-        private void FuncSelected(Function function,DataBase database)
+        private void FuncSelected(Function function, DataBase database)
         {
             Messenger.Send(new Message("ShowFunc"), Tuple.Create(function, database.Name));
         }
         private void TableSelected(string tableName, DataBase database)
         {
-           Messenger.Send(new Message("ShowTable"),Tuple.Create(tableName,database.Name));
+            Messenger.Send(new Message("ShowTable"), Tuple.Create(tableName, database.Name));
         }
 
         private async Task Update()
         {
-            DataBases.Clear();
+         
             var dataBases = await Model.GetDataBases();
             if (dataBases != null)
             {
-                DataBases.Add(new Node("Базы данных") { Nodes = new ObservableCollection<Node>() });
+
+
+                var mainNode = new Node("Базы данных") 
+                { 
+                    Nodes = new ObservableCollection<Node>()
+                };
                 foreach (var database in dataBases)
                 {
-                    DataBases.First().Nodes.Add(new Node(database));
+                    mainNode.Nodes.Add(new Node(database));
                 }
+                DataBases = new ObservableCollection<Node>(new Node[] { mainNode });
+            }
+            else
+            {
+                DataBases = new ObservableCollection<Node>();
             }
         }
     }

@@ -26,9 +26,9 @@
 
         <DockPanel   Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch">
             <StackPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Center" Orientation="Horizontal" >
-                <Button Content="Сбросить" Margin="5"  IsEnabled="{Binding IsEditable}"/>
-                <Button Content="Сохранить" Margin="5" IsEnabled="{Binding IsEditable}"/>
-                <Button Content="Удалить" Margin="5"   IsEnabled="{Binding IsEditable}"/>
+                <Button Content="Сбросить" Margin="5"  Command="{Binding ResetCommand}" IsEnabled="{Binding IsEditable}"/>
+                <Button Content="Сохранить" Margin="5" Command="{Binding SaveCommand}" IsEnabled="{Binding IsEditable}"/>
+                <Button Content="Удалить" Margin="5"   Command="{Binding RemoveCommand}" IsEnabled="{Binding IsEditable}"/>
 
             </StackPanel>
 

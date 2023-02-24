@@ -36,8 +36,7 @@ namespace PsqlSharp
 
         ~PostgresApi()
         {
-            if (Connection != null)
-                Connection.Close();
+            Connection?.Close();
         }
 
         public async Task<bool> ConnectAsync(ConnectionData connectionData)
@@ -214,17 +213,28 @@ namespace PsqlSharp
         }
 
 
-        public Task<Table?> ExecuteFunction(string func, params string[] parameters)
+        public async Task<bool> RemoveFunction(Function function)
         {
-            throw new NotImplementedException();
+
+            if (IsConnected)
+            {
+                await ExecuteCommand($"drop function {function.Name}({string.Join(',',function.Arguments)})");
+
+                return true;
+            }
+
+            return false;
         }
-        public Task<bool> AddFunction(string funcCode)
+        public async Task<bool> UpdateFunction(Function function, string newFuncCode)
         {
-            throw new NotImplementedException();
-        }
-        public Task<bool> RemoveFunction(string funcName)
-        {
-            throw new NotImplementedException();
+            if (IsConnected)
+            {
+                await RemoveFunction(function);
+                await ExecuteCommand(newFuncCode);
+
+                return true;
+            }
+            return false;
         }
 
 

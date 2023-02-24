@@ -73,6 +73,10 @@ namespace PostgresClient.ViewModel
             }
         }
 
+        public ICommand SaveCommand => new Command(async (o) => await Save());
+        public ICommand ResetCommand => new Command(async (o) => await Reset());
+        public ICommand RemoveCommand => new Command(async (o) => await Remove());
+
         public ICommand PageLoaded => new Command(async (o) => await Update());
         protected override FuncsModel Model => (FuncsModel)base.Model;
 
@@ -110,6 +114,28 @@ namespace PostgresClient.ViewModel
             var funcs = await Model.GetFunctionsHeader();
             if (funcs != null)
                 FuncList = new ObservableCollection<string>(funcs);
+
+        }
+
+        private async Task Save()
+        {
+            await Model.UpdateFunction(Selected, FuncBody);
+            await Update();
+            Messenger.Send(new Message("UpdateDB"),this);
+        }
+
+        private async Task Reset()
+        {
+            FuncBody = await Model.GetFunctionCode(Selected); 
+            await Update();
+        }
+
+        private async Task Remove()
+        {
+            await Model.DeleteFunction(Selected);
+            await Update();
+            Selected = Selected == 0 ? -1 : 0;
+            Messenger.Send(new Message("UpdateDB"), this);
         }
     }
 }

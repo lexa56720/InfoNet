@@ -21,9 +21,14 @@ namespace PsqlSharp
         [Required]
         public string Defenition { get; set; }
 
+
+        public string GetHeader()
+        {
+            return ReturnType + " " + Name + $"({string.Join(", ", Arguments)})";
+        }
         public override string ToString()
         {
-            return ReturnType+ " " + Name+$"({string.Join(", ",Arguments)})";
+            return GetHeader();
         }
         public static Function[] Parse(Table funcTable)
         {

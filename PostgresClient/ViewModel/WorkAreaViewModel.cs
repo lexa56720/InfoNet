@@ -1,4 +1,5 @@
-﻿using PostgresClient.Model;
+﻿using PostgresClient.MessageCentre;
+using PostgresClient.Model;
 using PostgresClient.Utils;
 using PsqlSharp;
 using System;
@@ -27,7 +28,7 @@ namespace PostgresClient.ViewModel
             }
         }
         private string commandResult;
-        public ICommand Execute { get => new Command(async () => await ExecuteCommand()); }
+        public ICommand Execute => new Command(async () => await ExecuteCommand());
         protected override WorkAreaModel Model { get => (WorkAreaModel)base.Model; }
         public WorkAreaViewModel(ISqlApi api) : base(api)
         {
@@ -39,13 +40,15 @@ namespace PostgresClient.ViewModel
 
         private async Task ExecuteCommand()
         {
-            if(string.IsNullOrEmpty(CommandText) || string.IsNullOrWhiteSpace(CommandText))
+            if(!string.IsNullOrEmpty(CommandText) && !string.IsNullOrWhiteSpace(CommandText))
             {
                 var result = await Model.ExecuteCommand(CommandText);
+                CommandResult += "\n"+ DateTime.Now.ToString("HH:mm:ss")+": \t";
                 if (result == null)
-                    CommandResult = "Команда выполнена успешно";
+                    CommandResult += "Команда выполнена успешно";
                 else
-                    CommandResult = result;
+                    CommandResult +=  result; 
+                Messenger.Send(new Message("UpdateDB"), this);
             }
         }
 
