@@ -106,6 +106,7 @@ namespace PostgresClient.ViewModel
         public FuncsViewModel(ISqlApi api) : base(api)
         {
             Messenger.Subscribe("ShowFunc", (m, o) => LoadFunc(m as Tuple<Function, string>));
+            Messenger.Subscribe("UpdateFuncs",async (m, o) =>await Update());
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -132,6 +133,7 @@ namespace PostgresClient.ViewModel
                 IsEditable = false;
             }
         }
+
         private async Task Update()
         {
             var funcs = await Model.GetFunctionsHeader();

@@ -17,14 +17,14 @@ using System.Windows.Shapes;
 namespace PostgresClient.View
 {
     /// <summary>
-    /// Логика взаимодействия для SidePanel.xaml
+    /// Логика взаимодействия для DumpManager.xaml
     /// </summary>
-    public partial class SidePanel : Page
+    public partial class DumpManager : Page
     {
-        public SidePanel()
+        public DumpManager()
         {
             InitializeComponent();
-            DataContext = new SidePanelViewModel();
+            DataContext = new DumpManagerViewModel(App.Api);
         }
     }
 }

@@ -8,11 +8,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Win32;
+using System.Windows;
 
 namespace PostgresClient.ViewModel
 {
@@ -61,7 +64,7 @@ namespace PostgresClient.ViewModel
         public Page FuncFrame { get; }
         public ICommand NavigateToFunc => new Command((o) => NavigateTo(FuncFrame));
 
-
+        public ICommand DumpManager => new Command(() => Messenger.Send(new Message("DumpManager"), this));
         public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
         public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
 
@@ -73,8 +76,8 @@ namespace PostgresClient.ViewModel
             WorkFrame = new WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
-            Debugger=new Debugger();
-            SubscribeToNavigation();
+            Debugger=new View.Debugger();
+            SubscribeToNavigation();       
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {

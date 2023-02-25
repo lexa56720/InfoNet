@@ -218,7 +218,7 @@ namespace PsqlSharp
 
             if (IsConnected)
             {
-                await ExecuteCommand($"drop function {function.Name}({string.Join(',',function.Arguments)})");
+                await ExecuteCommand($"drop function {function.Name}({string.Join(',', function.Arguments)})");
 
                 return true;
             }
@@ -283,30 +283,57 @@ namespace PsqlSharp
             }
         }
 
-        public Task<bool> ExportDataBase(string outputPath)
+        public async Task<bool> ExportDataBase(string outputPath)
         {
+            if(IsConnected)
+            {
+                var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+                var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
+                Process cmd = new Process();
+                cmd.StartInfo.FileName = "cmd.exe";
+
+                cmd.StartInfo.RedirectStandardInput = true;
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.Start();
+
+                await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
+                await cmd.StandardInput.WriteLineAsync($"\"{dumExe}\" -h {ConnectionData.Host} -U {ConnectionData.Username} -d{ConnectionData.Database} -F tar -f {outputPath}");
+                cmd.StandardInput.Close();
+
+                await cmd.WaitForExitAsync();
+                return true;
+            }
+            return false;
         }
 
-        public Task<bool> ImportDataBase(string inputPath)
+        public async Task<bool> ImportDataBase(string inputPath)
         {
-            var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
-            var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
+            if (IsConnected)
+            {
+                var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+                var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
 
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
+                Process cmd = new Process();
+                cmd.StartInfo.FileName = "cmd.exe";
 
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.CreateNoWindow = false;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
+                cmd.StartInfo.RedirectStandardError= true;
+                cmd.StartInfo.RedirectStandardInput = true;
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.Start();
 
-            await cmd.StandardInput.WriteLineAsync($"set pgpassword={connection.Password}");
-            await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {connection.Host} -U {connection.Username} -d {connection.Database} {inputPath}");
-            cmd.StandardInput.Close();
+                await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
+                await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {ConnectionData.Host} -U {ConnectionData.Username} -d {ConnectionData.Database} {inputPath}");
+                cmd.StandardInput.Close();
 
-            await cmd.WaitForExitAsync();
-            return true;
+                await cmd.WaitForExitAsync();
+                return true;
+
+            }
+            return false;
+
         }
     }
 }

@@ -29,6 +29,7 @@ namespace PostgresClient.ViewModel
 
         private Page ConnectionManager { get; set; }
 
+        private Page DumpManager { get; set; }
 
         private void OnPropertyChanged(string? name)
         {
@@ -36,13 +37,16 @@ namespace PostgresClient.ViewModel
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public SidePanelViewModel(ISqlApi api)
+        public SidePanelViewModel()
         {
             DBExplorer = new DBExplorer();
+            DumpManager = new DumpManager();
             Content = ConnectionManager = new ConnectView();
+
 
             Messenger.Subscribe("DBExplorer", (o, e) => Content = DBExplorer);
             Messenger.Subscribe("ConnectionManager", (o, e) => Content = ConnectionManager);
+            Messenger.Subscribe("DumpManager", (o, e) => Content = DumpManager);
         }
     }
 }

@@ -60,8 +60,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
                 <Button Content="Управление соеденением" Margin="5" Command="{Binding ConnectionManager}"/>
-                <Button Content="Сохранить дамп" Margin="5" IsEnabled="{Binding IsConnected}"/>
-                <Button Content="Загрузить дамп" Margin="5" IsEnabled="{Binding IsConnected}"/>
+                <Button Content="Управление дампами" Margin="5" IsEnabled="{Binding IsConnected}"  Command="{Binding DumpManager}"/>
                 <Button Content="Обозреватель базы данных" Margin="5" IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" />
             </StackPanel>
             <GridSplitter Height="5" Padding="5" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
