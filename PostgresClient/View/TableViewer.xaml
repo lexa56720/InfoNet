@@ -45,7 +45,5 @@
 
         </ScrollViewer>
     
-       
-        <!--<controls:ExtendedRichTextBox Grid.Row="1" Padding="5" BorderThickness="0" IsReadOnly="True"  Text="{Binding TableContent, Mode=OneWay}"/>-->
     </Grid>
 </Page>

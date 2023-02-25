@@ -26,7 +26,9 @@ namespace PostgresClient.View
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(App.Api);
+            DataContext = new MainViewModel(App.Api); 
+            StateChanged += MainWindowStateChangeRaised;
+
         }
         // Can execute
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -38,12 +40,15 @@ namespace PostgresClient.View
         private void CommandBinding_Executed_Minimize(object sender, ExecutedRoutedEventArgs e)
         {
             SystemCommands.MinimizeWindow(this);
+            AppArea.Margin = new Thickness(0);
+            Chrome.Margin = new Thickness(0);
         }
 
         // Maximize
         private void CommandBinding_Executed_Maximize(object sender, ExecutedRoutedEventArgs e)
         {
             SystemCommands.MaximizeWindow(this);
+
         }
 
         // Restore

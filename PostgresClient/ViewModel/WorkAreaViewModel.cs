@@ -13,9 +13,7 @@ using System.Windows.Input;
 namespace PostgresClient.ViewModel
 {
     class WorkAreaViewModel : BaseViewModel
-    {
-    
-
+    {    
         public string CommandText { get; set; }
 
         public string CommandResult 
@@ -43,11 +41,8 @@ namespace PostgresClient.ViewModel
             if(!string.IsNullOrEmpty(CommandText) && !string.IsNullOrWhiteSpace(CommandText))
             {
                 var result = await Model.ExecuteCommand(CommandText);
-                CommandResult += "\n"+ DateTime.Now.ToString("HH:mm:ss")+": \t";
-                if (result == null)
-                    CommandResult += "Команда выполнена успешно";
-                else
-                    CommandResult +=  result; 
+                if (result != null)
+                    CommandResult += '\n'+result; 
                 Messenger.Send(new Message("UpdateDB"), this);
             }
         }

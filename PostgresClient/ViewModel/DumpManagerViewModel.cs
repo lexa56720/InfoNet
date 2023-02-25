@@ -60,12 +60,15 @@ namespace PostgresClient.ViewModel
 
         public async Task Load()
         {
-            var path = Path.Combine(DumpDirectory, DumpFile);
-            if (Path.Exists(path) && await Model.Load(path))
-            {          
-                Messenger.Send(new Message("UpdateDB"), this);
-                Messenger.Send(new Message("UpdateFuncs"), this);
-                Messenger.Send(new Message("UpdateTables"), this);
+            if (!string.IsNullOrEmpty(DumpDirectory) && !string.IsNullOrEmpty(DumpFile))
+            {
+                var path = Path.Combine(DumpDirectory, DumpFile);
+                if (Path.Exists(path) && await Model.Load(path))
+                {
+                    Messenger.Send(new Message("UpdateDB"), this);
+                    Messenger.Send(new Message("UpdateFuncs"), this);
+                    Messenger.Send(new Message("UpdateTables"), this);
+                }
             }
         }
         private void OnFocus()
