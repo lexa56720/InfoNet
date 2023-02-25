@@ -16,7 +16,7 @@
             </i:EventTrigger>
         </i:Interaction.Triggers>
         
-        <TreeView BorderThickness="0" FontSize="20" ItemsSource="{Binding DataBases}" SelectedValuePath="{Binding AA,Mode=TwoWay}">
+        <TreeView BorderThickness="0" FontSize="20" ItemsSource="{Binding DataBases}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
                     <TextBlock Text="{Binding Name}" />

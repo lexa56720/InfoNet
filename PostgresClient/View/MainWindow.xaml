@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostgresClient.View"
-        xmlns:src="clr-namespace:PostgresClient.Utils"
+        xmlns:src="clr-namespace:PostgresClient.Utils" xmlns:shell="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         mc:Ignorable="d"
         Title="Postgres Client" Height="900"  Width="1500" Background="#282828">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
