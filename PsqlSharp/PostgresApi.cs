@@ -283,5 +283,30 @@ namespace PsqlSharp
             }
         }
 
+        public Task<bool> ExportDataBase(string outputPath)
+        {
+
+        }
+
+        public Task<bool> ImportDataBase(string inputPath)
+        {
+            var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+            var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
+
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "cmd.exe";
+
+            cmd.StartInfo.RedirectStandardInput = true;
+            cmd.StartInfo.CreateNoWindow = false;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.Start();
+
+            await cmd.StandardInput.WriteLineAsync($"set pgpassword={connection.Password}");
+            await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {connection.Host} -U {connection.Username} -d {connection.Database} {inputPath}");
+            cmd.StandardInput.Close();
+
+            await cmd.WaitForExitAsync();
+            return true;
+        }
     }
 }

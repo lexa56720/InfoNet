@@ -46,7 +46,7 @@ namespace PostgresClient.Utils
             {
                 var result = await SqlApi.AddRow(table, values);
                 OnSuccssesExecution();
-                return result;   
+                return result;
             }
             catch (Exception e)
             {
@@ -228,6 +228,27 @@ namespace PostgresClient.Utils
             }
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
+        public async Task<bool> ExportDataBase(string outputPath)
+        {
+            try
+            {
+                var result = await SqlApi.ExportDataBase(outputPath);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e) { OnExceprionOccured(e); return false; }
+        }
+
+        public async Task<bool> ImportDataBase(string inputPath)
+        {
+            try
+            {
+                var result = await SqlApi.ImportDataBase(inputPath); 
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e) { OnExceprionOccured(e); return false; }
+        }
 
         private void OnExceprionOccured(Exception exception)
         {
@@ -238,5 +259,7 @@ namespace PostgresClient.Utils
         {
             SuccesExecution?.Invoke(this, callerName);
         }
+
+
     }
 }

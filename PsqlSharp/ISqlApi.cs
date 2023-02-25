@@ -41,5 +41,8 @@ namespace PsqlSharp
         public Task<bool> SetColumnByRow(string tableName, string columnName,string cellValue,int rowCount);
         public Task<bool> AddRow(Table table, string[] values);
 
+        public Task<bool> ExportDataBase(string outputPath);
+
+        public Task<bool> ImportDataBase(string inputPath);
     }
 }
