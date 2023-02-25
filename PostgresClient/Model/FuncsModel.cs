@@ -31,9 +31,9 @@ namespace PostgresClient.Model
             return Functions[index].Defenition;
         }
 
-        public async Task UpdateFunction(int index, string code)
+        public async Task<bool> UpdateFunction(int index, string code)
         {
-            await Api.UpdateFunction(Functions[index], code);
+           return await Api.UpdateFunction(Functions[index], code);
         }
 
         public async Task DeleteFunction(int index)

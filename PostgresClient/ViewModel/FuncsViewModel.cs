@@ -63,6 +63,29 @@ namespace PostgresClient.ViewModel
         }
         private bool isEditable;
 
+
+        public bool SuccssesSave
+        {
+            get => SuccssesSave;
+            set
+            {
+                succssesSave = value;
+                OnPropertyChanged(nameof(SuccssesSave));
+            }
+        }
+        private bool succssesSave;
+
+
+        public bool FailedSave
+        {
+            get => FailSave;
+            set
+            {
+                failedSave = value;
+                OnPropertyChanged(nameof(FailSave));
+            }
+        }
+        private bool failedSave;
         public override bool IsConnected
         {
             get => base.IsConnected;
@@ -119,14 +142,18 @@ namespace PostgresClient.ViewModel
 
         private async Task Save()
         {
-            await Model.UpdateFunction(Selected, FuncBody);
+            var result = await Model.UpdateFunction(Selected, FuncBody);
             await Update();
-            Messenger.Send(new Message("UpdateDB"),this);
+            Messenger.Send(new Message("UpdateDB"), this);
+            if (result)
+                SuccssesSave = true;
+            else
+                FailedSave=true;
         }
 
         private async Task Reset()
         {
-            FuncBody = await Model.GetFunctionCode(Selected); 
+            FuncBody = await Model.GetFunctionCode(Selected);
             await Update();
         }
 

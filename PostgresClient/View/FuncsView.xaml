@@ -9,13 +9,42 @@
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       Title="FuncsView" >
 
+
+    <Page.Resources>
+        <Storyboard x:Key="Succsses" TargetProperty="Background.(SolidColorBrush.Color)" TargetName="RichBox">
+            <ColorAnimation 
+                    To="#004f04"  
+                    AutoReverse="True"
+                    FillBehavior="Stop" 
+                    Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard x:Key="Fail" TargetProperty="Background.(SolidColorBrush.Color)" TargetName="RichBox">
+            <ColorAnimation 
+                    To="#b71c1c"  
+                    AutoReverse="True"
+                    FillBehavior="Stop" 
+                    Duration="0:0:0.2"/>
+        </Storyboard>
+    </Page.Resources>
+
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding PageLoaded, IsAsync=True}"/>
         </i:EventTrigger>
+        <i:DataTrigger Binding="{Binding SuccssesSaved, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+            <i:ControlStoryboardAction Storyboard="{StaticResource Succsses}"     
+                                       ControlStoryboardOption="Play"/>
+        </i:DataTrigger>
+        <i:DataTrigger Binding="{Binding SuccssesSaved, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Value="False">
+            <i:ControlStoryboardAction Storyboard="{StaticResource Fail}"     
+                                       ControlStoryboardOption="Play"/>
+        </i:DataTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
+
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="auto"/>
@@ -23,11 +52,10 @@
         </Grid.ColumnDefinitions>
 
 
-
         <DockPanel   Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch">
             <StackPanel DockPanel.Dock="Bottom"  HorizontalAlignment="Center" Orientation="Horizontal" >
-                <Button Content="Сбросить" Margin="5"  Command="{Binding ResetCommand}" IsEnabled="{Binding IsEditable}"/>
-                <Button Content="Сохранить" Margin="5" Command="{Binding SaveCommand}" IsEnabled="{Binding IsEditable}"/>
+                <Button  Content="Сбросить" Margin="5"  Command="{Binding ResetCommand}" IsEnabled="{Binding IsEditable}"/>
+                <Button x:Name="Save" Content="Сохранить" Margin="5" Command="{Binding SaveCommand}" IsEnabled="{Binding IsEditable}"/>
                 <Button Content="Удалить" Margin="5"   Command="{Binding RemoveCommand}" IsEnabled="{Binding IsEditable}"/>
 
             </StackPanel>
@@ -36,6 +64,6 @@
 
         </DockPanel>
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Margin="5"/>
-        <controls:ExtendedRichTextBox Grid.Column="2" Grid.Row="1" Text="{Binding FuncBody}" />
+        <controls:ExtendedRichTextBox x:Name="RichBox" Grid.Column="2" Grid.Row="1" Text="{Binding FuncBody}"/>
     </Grid>
 </Page>
