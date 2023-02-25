@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PostgresClient.View"
         xmlns:src="clr-namespace:PostgresClient.Utils"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900"  Width="1500" Background="#282828">
+        Title="Postgres Client" Height="900"  Width="1500" Background="#282828">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
