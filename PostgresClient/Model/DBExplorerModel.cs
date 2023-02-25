@@ -1,13 +1,10 @@
 ﻿using PsqlSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    class DBExplorerModel : BaseModel
+    internal class DBExplorerModel : BaseModel
     {
         public DBExplorerModel(ISqlApi api) : base(api)
         {

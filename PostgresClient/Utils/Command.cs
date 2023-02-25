@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PostgresClient.Utils
@@ -23,9 +19,9 @@ namespace PostgresClient.Utils
             this.execute = execute;
             this.canExecute = canExecute;
         }
-        public Command(Action execute,Func<object, bool> canExecute = null)
+        public Command(Action execute, Func<object, bool> canExecute = null)
         {
-            this.execute = new Action<object>(o=>execute());
+            this.execute = new Action<object>(o => execute());
             this.canExecute = null;
         }
 

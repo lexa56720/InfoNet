@@ -131,7 +131,7 @@
                 </Grid>
                 <GridSplitter Width="8"  Grid.RowSpan="3" Grid.Row="1" HorizontalAlignment="Center" Grid.Column="1"/>
 
-                <Label Content="Добро пожаловать в PostgresClient !" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-100,0,0" Grid.Row="1" Grid.Column="0"  >
+                <Label Content="Добро пожаловать в Postgres Client" FontSize="40" Opacity="0.7" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-300,0,0" Grid.Row="1" Grid.Column="0"  >
                     <Label.Style>
                         <Style TargetType="Label">
                             <Setter Property="Visibility" Value="Hidden"/>

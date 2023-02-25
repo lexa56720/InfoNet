@@ -1,13 +1,13 @@
-﻿using NpgsqlTypes;
-using PsqlSharp;
+﻿using PsqlSharp;
 using System.Diagnostics;
 
 namespace InfoNet
 {
     internal class Program
     {
-        static ISqlApi Api;
-        static async Task Main(string[] args)
+        private static ISqlApi Api;
+
+        private static async Task Main(string[] args)
         {
             Api = new PostgresApi();
             await Api.ConnectAsync(new ConnectionData()
@@ -16,12 +16,12 @@ namespace InfoNet
                 Username = "postgres",
                 Password = "1234"
             });
-            var dump = await CreateDump(Api.ConnectionData,@"D:\7.sql");
+            var dump = await CreateDump(Api.ConnectionData, @"D:\7.sql");
             dump = await LoadDump(Api.ConnectionData, @"D:\7.sql");
             Console.ReadLine();
         }
 
-        static async Task<bool> LoadDump(ConnectionData connection, string inputPath)
+        private static async Task<bool> LoadDump(ConnectionData connection, string inputPath)
         {
             var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
@@ -42,14 +42,14 @@ namespace InfoNet
             return true;
         }
 
-        static async Task<bool> CreateDump(ConnectionData connection,string outputPath)
+        private static async Task<bool> CreateDump(ConnectionData connection, string outputPath)
         {
             var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
             Process cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
-    
+
             cmd.StartInfo.RedirectStandardInput = true;
             cmd.StartInfo.CreateNoWindow = false;
             cmd.StartInfo.UseShellExecute = false;

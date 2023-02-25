@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -34,12 +29,12 @@ namespace PostgresClient.Controls
         protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
         {
             base.OnRowEditEnding(e);
-            if(IsValueChanged)
+            if (IsValueChanged)
             {
                 e.Row.Background = new SolidColorBrush(Color.FromRgb(46, 125, 50));
-                IsValueChanged= false;
+                IsValueChanged = false;
             }
-           
+
         }
         protected override void OnCanExecuteCommitEdit(CanExecuteRoutedEventArgs e)
         {

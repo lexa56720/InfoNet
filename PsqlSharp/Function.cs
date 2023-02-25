@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PsqlSharp
 {
@@ -33,7 +28,7 @@ namespace PsqlSharp
         public static Function[] Parse(Table funcTable)
         {
             Function[] funcs = new Function[funcTable.RowCount];
-            for(int i=0;i<funcTable.RowCount;i++)
+            for (int i = 0; i < funcTable.RowCount; i++)
             {
                 funcs[i] = new Function()
                 {

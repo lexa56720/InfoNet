@@ -3,18 +3,14 @@ using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml;
 
 namespace PostgresClient.ViewModel
 {
-    class DBExplorerViewModel : BaseViewModel
+    internal class DBExplorerViewModel : BaseViewModel
     {
 
         public class Node
@@ -115,14 +111,14 @@ namespace PostgresClient.ViewModel
 
         private async Task Update()
         {
-         
+
             var dataBases = await Model.GetDataBases();
             if (dataBases != null)
             {
 
 
-                var mainNode = new Node("Базы данных") 
-                { 
+                var mainNode = new Node("Базы данных")
+                {
                     Nodes = new ObservableCollection<Node>()
                 };
                 foreach (var database in dataBases)

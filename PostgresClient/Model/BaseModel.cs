@@ -1,13 +1,9 @@
 ﻿using PsqlSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    abstract class BaseModel
+    internal abstract class BaseModel
     {
         protected ISqlApi Api { get; }
 
@@ -24,7 +20,7 @@ namespace PostgresClient.Model
         }
         public bool DataBaseNameIs(string dbName)
         {
-            if(Api.ConnectionData==null)
+            if (Api.ConnectionData == null)
                 return false;
             return Api.ConnectionData.Database == dbName;
         }

@@ -1,17 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
-using Npgsql.Internal;
-using Npgsql.Schema;
 using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PsqlSharp
 {
@@ -270,22 +261,17 @@ namespace PsqlSharp
         }
         public async Task<bool> AddRow(Table table, string[] values)
         {
-            try
-            {
+
                 await ExecuteCommand(
             @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
             VALUES (${string.Join("", "", table.ColumnNames)})");
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+
         }
 
         public async Task<bool> ExportDataBase(string outputPath)
         {
-            if(IsConnected)
+            if (IsConnected)
             {
                 var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
                 var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
@@ -318,7 +304,7 @@ namespace PsqlSharp
                 Process cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
-                cmd.StartInfo.RedirectStandardError= true;
+                cmd.StartInfo.RedirectStandardError = true;
                 cmd.StartInfo.RedirectStandardInput = true;
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;

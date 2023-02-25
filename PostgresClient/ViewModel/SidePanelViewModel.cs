@@ -1,20 +1,14 @@
 ﻿using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
-using PsqlSharp;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace PostgresClient.ViewModel
 {
-    class SidePanelViewModel : INotifyPropertyChanged
-    {  
+    internal class SidePanelViewModel : INotifyPropertyChanged
+    {
         public Page Content
-        { 
+        {
             get => content;
             set
             {

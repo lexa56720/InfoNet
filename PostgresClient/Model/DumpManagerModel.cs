@@ -1,8 +1,4 @@
 ﻿using PsqlSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PostgresClient.Model
@@ -15,7 +11,7 @@ namespace PostgresClient.Model
 
         public async Task Save(string path)
         {
-           await Api.ExportDataBase(path);
+            await Api.ExportDataBase(path);
         }
 
         public async Task<bool> Load(string path)

@@ -3,23 +3,12 @@ using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
 using PsqlSharp;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Win32;
-using System.Windows;
 
 namespace PostgresClient.ViewModel
 {
-    class MainViewModel : BaseViewModel
+    internal class MainViewModel : BaseViewModel
     {
         public Page SidePanel
         {
@@ -53,7 +42,7 @@ namespace PostgresClient.ViewModel
             }
         }
         private Page mainFrame;
-      
+
 
         public Page WorkFrame { get; }
         public ICommand NavigateToWork => new Command((o) => NavigateTo(WorkFrame));
@@ -76,8 +65,8 @@ namespace PostgresClient.ViewModel
             WorkFrame = new WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
-            Debugger=new View.Debugger();
-            SubscribeToNavigation();       
+            Debugger = new View.Debugger();
+            SubscribeToNavigation();
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {

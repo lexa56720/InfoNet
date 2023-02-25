@@ -1,13 +1,10 @@
 ﻿using PsqlSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    class FuncsModel : BaseModel
+    internal class FuncsModel : BaseModel
     {
         private Function[]? Functions { get; set; }
         public FuncsModel(ISqlApi api) : base(api)
@@ -33,7 +30,7 @@ namespace PostgresClient.Model
 
         public async Task<bool> UpdateFunction(int index, string code)
         {
-           return await Api.UpdateFunction(Functions[index], code);
+            return await Api.UpdateFunction(Functions[index], code);
         }
 
         public async Task DeleteFunction(int index)

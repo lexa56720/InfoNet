@@ -1,12 +1,4 @@
-﻿using System;
-using Npgsql;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Npgsql.Internal;
-
-namespace PsqlSharp
+﻿namespace PsqlSharp
 {
     public interface ISqlApi
     {
@@ -26,7 +18,7 @@ namespace PsqlSharp
         public Task<DataBase?> GetDataBaseContent(string dbName);
 
         public Task<Table?> GetTableContent(string tableName);
-        public Task<Table?> GetTableContent(string tableName,string dbName);
+        public Task<Table?> GetTableContent(string tableName, string dbName);
 
 
         public Task<string[]?> GetAllTableNames();
@@ -38,7 +30,7 @@ namespace PsqlSharp
         public Task<bool> RemoveFunction(Function function);
         public Task<bool> UpdateFunction(Function function, string newFuncCode);
 
-        public Task<bool> SetColumnByRow(string tableName, string columnName,string cellValue,int rowCount);
+        public Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowCount);
         public Task<bool> AddRow(Table table, string[] values);
 
         public Task<bool> ExportDataBase(string outputPath);

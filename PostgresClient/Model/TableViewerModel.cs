@@ -1,24 +1,20 @@
 ﻿using PsqlSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
-    class TableViewerModel : BaseModel
-    {    
-        private Table? SelectedTable 
-        { 
+    internal class TableViewerModel : BaseModel
+    {
+        private Table? SelectedTable
+        {
             get => selectedTable;
             set
             {
-                if(selectedTable!=null)
+                if (selectedTable != null)
                 {
                     selectedTable.CellChanged -= SelectedTableCellChanged;
                     selectedTable.RowAdded -= SelectedTableRowAdded;
-                }       
+                }
 
                 selectedTable = value;
 
@@ -62,9 +58,9 @@ namespace PostgresClient.Model
             return SelectedTable;
         }
 
-        public async Task<Table> GetTable(string tableName,string dbName)
+        public async Task<Table> GetTable(string tableName, string dbName)
         {
-            var table= await Api.GetTableContent(tableName, dbName); 
+            var table = await Api.GetTableContent(tableName, dbName);
             table ??= new Table();
             SelectedTable = null;
             return table;

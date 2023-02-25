@@ -1,24 +1,15 @@
 ﻿using PostgresClient.Model;
-using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
-using PostgresClient.View;
 using PsqlSharp;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Xml.Linq;
 
 namespace PostgresClient.ViewModel
 {
-    class TableViewerViewModel : BaseViewModel
+    internal class TableViewerViewModel : BaseViewModel
     {
         public bool IsDropDownOpened
         {

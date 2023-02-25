@@ -2,22 +2,17 @@
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
-    class WorkAreaViewModel : BaseViewModel
-    {    
+    internal class WorkAreaViewModel : BaseViewModel
+    {
         public string CommandText { get; set; }
 
-        public string CommandResult 
-        { 
+        public string CommandResult
+        {
             get => commandResult;
             set
             {
@@ -38,11 +33,11 @@ namespace PostgresClient.ViewModel
 
         private async Task ExecuteCommand()
         {
-            if(!string.IsNullOrEmpty(CommandText) && !string.IsNullOrWhiteSpace(CommandText))
+            if (!string.IsNullOrEmpty(CommandText) && !string.IsNullOrWhiteSpace(CommandText))
             {
                 var result = await Model.ExecuteCommand(CommandText);
                 if (result != null)
-                    CommandResult += '\n'+result; 
+                    CommandResult += '\n' + result;
                 Messenger.Send(new Message("UpdateDB"), this);
             }
         }

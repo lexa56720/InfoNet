@@ -3,17 +3,13 @@ using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
-    class FuncsViewModel : BaseViewModel
+    internal class FuncsViewModel : BaseViewModel
     {
         public ObservableCollection<string> FuncList
         {
@@ -106,7 +102,7 @@ namespace PostgresClient.ViewModel
         public FuncsViewModel(ISqlApi api) : base(api)
         {
             Messenger.Subscribe("ShowFunc", (m, o) => LoadFunc(m as Tuple<Function, string>));
-            Messenger.Subscribe("UpdateFuncs",async (m, o) =>await Update());
+            Messenger.Subscribe("UpdateFuncs", async (m, o) => await Update());
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -145,16 +141,16 @@ namespace PostgresClient.ViewModel
         private async Task Save()
         {
             var result = await Model.UpdateFunction(Selected, FuncBody);
-            
+
             if (result)
             {
                 Messenger.Send(new Message("UpdateDB"), this);
-                await Update(); 
+                await Update();
                 SuccssesSave = true;
             }
-             
+
             else
-                FailedSave=true;
+                FailedSave = true;
         }
 
         private async Task Reset()

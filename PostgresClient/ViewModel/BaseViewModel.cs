@@ -1,17 +1,10 @@
 ﻿using PostgresClient.Model;
 using PsqlSharp;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace PostgresClient.ViewModel
 {
-    abstract class BaseViewModel : INotifyPropertyChanged
+    internal abstract class BaseViewModel : INotifyPropertyChanged
     {
         public virtual bool IsConnected
         {
@@ -23,13 +16,13 @@ namespace PostgresClient.ViewModel
             }
         }
         private bool isConnected;
-   
-        protected virtual BaseModel Model { get=>model;  }
+
+        protected virtual BaseModel Model { get => model; }
         private BaseModel model;
 
         public BaseViewModel(ISqlApi api)
         {
-            model =CreateModel(api);
+            model = CreateModel(api);
             model.NewConnectStatus += NewConnectStatus;
         }
         protected abstract BaseModel CreateModel(ISqlApi api);

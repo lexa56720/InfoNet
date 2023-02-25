@@ -1,12 +1,6 @@
 ﻿using PostgresClient.Model;
 using PostgresClient.Utils;
 using PsqlSharp;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PostgresClient.ViewModel
 {
@@ -35,7 +29,7 @@ namespace PostgresClient.ViewModel
 
         private void Model_NewLogLine(object? sender, string e)
         {
-            DebugLog+= e;
+            DebugLog += e;
         }
     }
 }
