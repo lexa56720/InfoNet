@@ -1,4 +1,5 @@
-﻿using PsqlSharp;
+﻿using PostgresClient.Utils;
+using PsqlSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,11 +16,11 @@ namespace PostgresClient
 
     public partial class App : Application
     {
-        public static ISqlApi Api { get; private set; }
+        public static ClientApi Api { get; private set; }
 
         public App()
         {
-            Api = new PostgresApi();
+            Api = new ClientApi(new PostgresApi());
         }
 
     }

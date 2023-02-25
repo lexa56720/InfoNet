@@ -1,6 +1,6 @@
-﻿using PostgresClient.MessageCentre;
-using PostgresClient.Model;
+﻿using PostgresClient.Model;
 using PostgresClient.Utils;
+using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
 using PsqlSharp;
 using System;
@@ -29,6 +29,17 @@ namespace PostgresClient.ViewModel
         }
         private Page sidePanel;
 
+        public Page Debugger
+        {
+            get => debugger;
+            set
+            {
+                debugger = value;
+                OnPropertyChanged(nameof(Debugger));
+            }
+        }
+        private Page debugger;
+
         public Page MainFrame
         {
             get => mainFrame;
@@ -39,9 +50,10 @@ namespace PostgresClient.ViewModel
             }
         }
         private Page mainFrame;
+      
 
-        public Page WorkFrame { get;}
-        public ICommand NavigateToWork => new Command((o)=>NavigateTo(WorkFrame));
+        public Page WorkFrame { get; }
+        public ICommand NavigateToWork => new Command((o) => NavigateTo(WorkFrame));
 
         public Page TableViewerFrame { get; }
         public ICommand NavigateToTable => new Command((o) => NavigateTo(TableViewerFrame));
@@ -61,6 +73,7 @@ namespace PostgresClient.ViewModel
             WorkFrame = new WorkArea();
             TableViewerFrame = new TableViewer();
             FuncFrame = new FuncsView();
+            Debugger=new Debugger();
             SubscribeToNavigation();
         }
         protected override BaseModel CreateModel(ISqlApi api)

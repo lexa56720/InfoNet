@@ -44,7 +44,7 @@
                     <Setter Property="Background" Value="#242424"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#121212"/>
+                    <Setter Property="Opacity" Value="0.5"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -325,55 +325,6 @@
                             <ScrollBar x:Name="PART_HorizontalScrollBar" Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Value="{TemplateBinding HorizontalOffset}" Maximum="{TemplateBinding ScrollableWidth}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
                             <!--<Rectangle Grid.Row="1" Grid.Column="1" Fill="Red"/>-->
                         </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--#endregion-->
-    
-        <!--#region TABS-->
-        <SolidColorBrush x:Key="RedBrush" Color="Transparent"/>
-        <SolidColorBrush x:Key="SolidBorderBrush" Color="Red" />
-        <SolidColorBrush x:Key="GreenBrush" Color="#242424" />
-        <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#121212" />
-        <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
-
-        <Style TargetType="TabItem">
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid>
-                            <Border 
-                                Name="Border"
-                                Margin="5" 
-                                Background="{StaticResource RedBrush}"
-                                BorderBrush="{StaticResource  SolidBorderBrush}" 
-                                BorderThickness="0" 
-                                CornerRadius="5,5,5,5" >
-                                <ContentPresenter x:Name="ContentSite"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    ContentSource="Header"
-                                    Margin="0"
-                                    RecognizesAccessKey="True"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Panel.ZIndex" Value="100" />
-                                <Setter TargetName="Border" Property="Background" Value="#404040" />
-                                <Setter TargetName="Border" Property="BorderThickness" Value="0" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
-                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
-                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter  TargetName="Border" Property="Background" Value="#404040"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -735,9 +686,6 @@
         </Style>
 
         <!-- DataGridRow -->
-
-
- 
 
         <Style x:Key="{x:Type DataGridRow}" TargetType="{x:Type DataGridRow}">
             <Setter Property="Background" Value="#202020" />

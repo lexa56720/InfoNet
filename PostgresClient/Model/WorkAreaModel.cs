@@ -16,18 +16,10 @@ namespace PostgresClient.Model
 
         public async Task<string?> ExecuteCommand(string commandText)
         {
-
-            try
-            {
-                var result = await Api.ExecuteCommand(commandText);
-                if (result != null)
-                    return result.ToString();
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
+            var result = await Api.ExecuteCommand(commandText);
+            if (result != null)
+                return result.ToString();
+            return null;
         }
 
     }

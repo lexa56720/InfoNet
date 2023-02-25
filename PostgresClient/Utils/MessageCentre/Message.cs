@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostgresClient.MessageCentre
+namespace PostgresClient.Utils.MessageCentre
 {
     public class Message
     {
@@ -13,6 +13,6 @@ namespace PostgresClient.MessageCentre
         public Message(string message)
         {
             MessageText = message;
-        }      
+        }
     }
 }

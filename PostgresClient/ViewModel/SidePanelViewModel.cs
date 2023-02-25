@@ -1,4 +1,4 @@
-﻿using PostgresClient.MessageCentre;
+﻿using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
 using PsqlSharp;
 using System;

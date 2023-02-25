@@ -1,6 +1,6 @@
-﻿using PostgresClient.MessageCentre;
-using PostgresClient.Model;
+﻿using PostgresClient.Model;
 using PostgresClient.Utils;
+using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
 using System;
 using System.Collections.Generic;

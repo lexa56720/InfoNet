@@ -7,9 +7,6 @@
         xmlns:src="clr-namespace:PostgresClient.Utils"
         mc:Ignorable="d"
         Title="MainWindow" Height="900"  Width="1500" Background="#282828">
-    <Window.Resources>
-        <src:InverseBooleanConverter x:Key="boolConverter"/>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
@@ -27,6 +24,8 @@
         <Grid Grid.Row="0" Grid.Column="0"  Grid.RowSpan="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -36,10 +35,12 @@
                 <Button Margin="5" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Список функций"  />
             </StackPanel>
             <Frame x:Name="MainFrame" Grid.Row="1" Content="{Binding MainFrame}" BorderThickness="0"  />
+            <GridSplitter Grid.Row="2" Height="6" Margin="5,0,5,5" HorizontalAlignment="Stretch"/>
+            <Frame  Grid.Row="3" Content="{Binding Debugger}"  />
         </Grid>
         <GridSplitter Width="8"  Grid.RowSpan="3" HorizontalAlignment="Center" Grid.Column="1"/>
-        
-        <Label Content="Добро пожаловать в PostgresClient !" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="1">
+     
+        <Label Content="Добро пожаловать в PostgresClient !" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-100,0,0" Grid.Row="0" Grid.Column="0"  >
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Visibility" Value="Hidden"/>

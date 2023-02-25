@@ -229,9 +229,22 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-                await RemoveFunction(function);
-                await ExecuteCommand(newFuncCode);
+                await ExecuteCommand("Begin;");
 
+                await RemoveFunction(function);
+
+                try
+                {
+                    await ExecuteCommand(newFuncCode);
+                }
+                catch
+                {
+
+                    await ExecuteCommand("rollback;");
+                    throw;
+                }
+
+                await ExecuteCommand("commit;");
                 return true;
             }
             return false;

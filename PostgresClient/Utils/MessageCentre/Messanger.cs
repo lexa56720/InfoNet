@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostgresClient.MessageCentre
+namespace PostgresClient.Utils.MessageCentre
 {
     public static class Messenger
     {

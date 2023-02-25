@@ -1,6 +1,6 @@
-﻿using PostgresClient.MessageCentre;
-using PostgresClient.Model;
+﻿using PostgresClient.Model;
 using PostgresClient.Utils;
+using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
 using System;
 using System.Collections.Generic;
@@ -66,7 +66,7 @@ namespace PostgresClient.ViewModel
 
         public bool SuccssesSave
         {
-            get => SuccssesSave;
+            get => succssesSave;
             set
             {
                 succssesSave = value;
@@ -75,17 +75,17 @@ namespace PostgresClient.ViewModel
         }
         private bool succssesSave;
 
-
         public bool FailedSave
         {
-            get => FailSave;
+            get => failedSave;
             set
             {
                 failedSave = value;
-                OnPropertyChanged(nameof(FailSave));
+                OnPropertyChanged(nameof(FailedSave));
             }
         }
         private bool failedSave;
+
         public override bool IsConnected
         {
             get => base.IsConnected;
@@ -143,10 +143,14 @@ namespace PostgresClient.ViewModel
         private async Task Save()
         {
             var result = await Model.UpdateFunction(Selected, FuncBody);
-            await Update();
-            Messenger.Send(new Message("UpdateDB"), this);
+            
             if (result)
+            {
+                Messenger.Send(new Message("UpdateDB"), this);
+                await Update(); 
                 SuccssesSave = true;
+            }
+             
             else
                 FailedSave=true;
         }

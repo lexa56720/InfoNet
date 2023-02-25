@@ -1,5 +1,6 @@
 ﻿using PostgresClient.Model;
 using PostgresClient.Utils;
+using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
 using PsqlSharp;
 using System;
@@ -92,7 +93,7 @@ namespace PostgresClient.ViewModel
 
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
-            MessageCentre.Messenger.Subscribe("ShowTable",
+            Messenger.Subscribe("ShowTable",
                async (o, e) => await ShowTableFromDB(o as Tuple<string, string>));
         }
         protected override BaseModel CreateModel(ISqlApi api)

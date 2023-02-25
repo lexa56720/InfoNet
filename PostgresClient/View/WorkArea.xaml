@@ -12,8 +12,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition />
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5"   >
@@ -21,11 +19,8 @@
         </StackPanel>
 
         <controls:ExtendedRichTextBox Grid.Row="1" Foreground="White" Padding="5" BorderThickness="0" Text="{Binding CommandText, Mode=TwoWay}"/>
-        <GridSplitter Grid.Row="2" Grid.Column="0"  Margin="5,5,5,00" VerticalAlignment="Stretch" Height="5" HorizontalAlignment="Stretch" />
 
-        <ScrollViewer Grid.Row="3" >
-            <controls:ExtendedRichTextBox IsEnabled="False" VerticalScrollBarVisibility="Disabled" Padding="5" BorderThickness="0" IsReadOnly="True" Text="{Binding CommandResult}" />
-        </ScrollViewer>
+  
 
     </Grid>
 </Page>

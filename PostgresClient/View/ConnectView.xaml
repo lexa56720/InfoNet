@@ -11,9 +11,7 @@
       Title="ConnectView">
 
     <StackPanel Background="Transparent">
-        <StackPanel.Resources>
-            <src:InverseBooleanConverter x:Key="boolConverter"/>
-        </StackPanel.Resources>
+        
        
         <Label Content="Данные для подключения:" FontSize="20" HorizontalAlignment="Center"/>
         <Grid>

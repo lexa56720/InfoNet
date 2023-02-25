@@ -63,6 +63,7 @@ namespace PostgresClient.Controls
         {
             UpdateTextFromDocument();
             base.OnTextChanged(e);
+            ScrollToEnd();
         }
         private void UpdateTextFromDocument()
         {
