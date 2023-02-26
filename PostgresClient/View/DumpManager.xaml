@@ -21,17 +21,26 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Label FontSize="15" Content="Расположение:" Grid.Row="0" Grid.Column="0" />
-            <TextBox Margin="10" FontSize="15" Grid.Row="0" Text="{Binding DumpDirectory}" Grid.Column="1" >
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewMouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding GotFocus}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-            <Label FontSize="15" Content="Имя файла:" Grid.Row="1" Grid.Column="0" />
-            <TextBox Margin="10" FontSize="15" Grid.Row="1" Grid.Column="1" Text="{Binding DumpFile}" />
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Margin="10" FontSize="15" Grid.Column="0" DockPanel.Dock="Left" VerticalAlignment="Stretch"  Text="{Binding DumpDirectory}"  >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding GotFocus}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Button Content="↑" VerticalContentAlignment="Center"  Grid.Column="1" HorizontalAlignment="Center"/>
+            </Grid>
+     
+            <Label FontSize="15" Content="Имя файла:" Grid.Row="2" Grid.Column="0" />
+            <TextBox Margin="10" FontSize="15" Grid.Row="2" Grid.Column="1" Text="{Binding DumpFile}" />
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Content="Создать дамп" FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding SaveCommand,IsAsync=True}" />

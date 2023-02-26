@@ -9,9 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="AppIcon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Compile Remove="AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AppIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="AppIcon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon.png" />
+    <Resource Include="AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>

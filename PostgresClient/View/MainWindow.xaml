@@ -81,7 +81,8 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <!--App icon-->
 
-                    <Image Source="/AppIcon.ico" Width="30" Margin="5,5,5,-5" VerticalAlignment="Center" Height="42" />
+                    <Image Source="/PostgresClient;component/AppIcon.png" VerticalAlignment="Top" Width="35" Margin="5,-2,5,0"  Height="32" >
+                    </Image>
                     <TextBlock Text="Postgres Client" FontFamily="Segoe UI" Margin="5,5,5,-5" VerticalAlignment="Center" FontSize="15" />
                 </StackPanel>
 
@@ -101,20 +102,20 @@
             <!--App content-->
             <Grid Grid.Row="1" x:Name="AppArea">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="6*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="5*" />
+                    <RowDefinition Height="4*" />
                     <RowDefinition Height="100*"/>
                     <RowDefinition Height="0.8*" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Background="#222222" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3"  >
-                    <Button Margin="5" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Выполнить комманду" />
-                    <Button Margin="5" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Вывести содержимое таблицы" />
-                    <Button Margin="5" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Список функций"  />
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Команды" />
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Таблицы" />
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Функции"  />
                 </StackPanel>
 
                 <Grid Grid.Row="1" Grid.Column="0"  Grid.RowSpan="1">

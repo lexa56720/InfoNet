@@ -13,7 +13,7 @@
     <StackPanel Background="Transparent">
         
        
-        <Label Content="Данные для подключения:" FontSize="20" HorizontalAlignment="Center"/>
+        <Label Content="Данные для подключения:" Margin="5,5,5,15" FontSize="20" HorizontalAlignment="Center"/>
         <Grid>
             <Grid.Resources>
 
