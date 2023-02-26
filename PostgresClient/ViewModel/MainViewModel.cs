@@ -53,6 +53,8 @@ namespace PostgresClient.ViewModel
         public Page FuncFrame { get; }
         public ICommand NavigateToFunc => new Command((o) => NavigateTo(FuncFrame));
 
+
+        public ICommand About => new Command((o) => (new AbouWindow()).Show());
         public ICommand DumpManager => new Command(() => Messenger.Send(new Message("DumpManager"), this));
         public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
         public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));

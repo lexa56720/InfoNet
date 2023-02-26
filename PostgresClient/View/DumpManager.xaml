@@ -36,7 +36,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <Button Content="↑" VerticalContentAlignment="Center"  Grid.Column="1" HorizontalAlignment="Center"/>
+                <Button Content=" ↑ " VerticalContentAlignment="Center" Command="{Binding GotFocus}" Grid.Column="1" HorizontalAlignment="Center"/>
             </Grid>
      
             <Label FontSize="15" Content="Имя файла:" Grid.Row="2" Grid.Column="0" />

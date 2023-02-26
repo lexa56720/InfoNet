@@ -88,13 +88,13 @@
 
                 <!--Caption buttons-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
+                    <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True"
                             Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
                     <Button x:Name="RestoreButton" Visibility="Collapsed" Style="{StaticResource RestoreButtonStyle}" 
-                            Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Restore"/>
+                            Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" />
                     <Button x:Name="MaximizeButton" Visibility="Visible" Style="{StaticResource MaximizeButtonStyle}" 
-                            Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Maximize" />
-                    <Button Style="{StaticResource CloseButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"
+                            Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" />
+                    <Button Style="{StaticResource CloseButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" 
                             Command="{x:Static SystemCommands.CloseWindowCommand}"/>
                 </StackPanel>
             </Grid>
@@ -107,7 +107,7 @@
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="4.5*" />
                     <RowDefinition Height="100*"/>
                     <RowDefinition Height="0.8*" />
                 </Grid.RowDefinitions>
@@ -116,6 +116,7 @@
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Команды" />
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Таблицы" />
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Функции"  />
+                    <Button Margin="15,0,10,0" Command="{Binding About, IsAsync=True}" Content="О программе"  />
                 </StackPanel>
 
                 <Grid Grid.Row="1" Grid.Column="0"  Grid.RowSpan="1">
@@ -126,7 +127,7 @@
                     </Grid.RowDefinitions>
 
                    
-                    <Frame x:Name="MainFrame" Grid.Row="0" Content="{Binding MainFrame}" BorderThickness="0"  />
+                    <Frame x:Name="MainFrame" Grid.Row="0" Content="{Binding MainFrame}" Padding="0,5,0,0" BorderThickness="0"  />
                     <GridSplitter Grid.Row="1" Height="6" Margin="5,0,5,5" HorizontalAlignment="Stretch"/>
                     <Frame  Grid.Row="2" Content="{Binding Debugger}"  />
                 </Grid>
