@@ -49,9 +49,10 @@ namespace PsqlSharp
                     IsConnected = true;
                     ConnectionData = connectionData;
                 }
-                catch (Exception e)
+                catch 
                 {
                     IsConnected = false;
+                    throw;
                 }
 
             return IsConnected;
@@ -97,7 +98,7 @@ namespace PsqlSharp
             {
                 var databases = await ExecuteCommand("SELECT datname FROM pg_database where datistemplate='f';");
                 var result = new string[databases.RowCount];
-                for (int i = 0; i < databases.RowCount; i++)
+                for (var i = 0; i < databases.RowCount; i++)
                     result[i] = databases[i, 0];
                 return result;
             }
@@ -118,7 +119,7 @@ namespace PsqlSharp
                 var tables = await ExecuteCommand(@"select * from pg_tables;");
 
                 var result = new List<string>();
-                for (int i = 0; i < tables.ColumnCount; i++)
+                for (var i = 0; i < tables.ColumnCount; i++)
                     if (tables[i, 0] == "public")
                         result.Add(tables[i, 1]);
 
@@ -254,7 +255,7 @@ namespace PsqlSharp
                     WHERE ctid='{ctid}';");
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -276,7 +277,7 @@ namespace PsqlSharp
                 var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
                 var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
-                Process cmd = new Process();
+                var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
                 cmd.StartInfo.RedirectStandardInput = true;
@@ -301,7 +302,7 @@ namespace PsqlSharp
                 var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
                 var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
 
-                Process cmd = new Process();
+                var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
                 cmd.StartInfo.RedirectStandardError = true;

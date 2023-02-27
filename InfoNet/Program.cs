@@ -26,7 +26,7 @@ namespace InfoNet
             var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
 
-            Process cmd = new Process();
+            var cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
 
             cmd.StartInfo.RedirectStandardInput = true;
@@ -47,7 +47,7 @@ namespace InfoNet
             var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
-            Process cmd = new Process();
+            var cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
 
             cmd.StartInfo.RedirectStandardInput = true;

@@ -44,10 +44,7 @@ namespace PostgresClient.Model
         public async Task<string[]> GetTables()
         {
             var tables = await Api.GetAllTableNames();
-            if (tables != null)
-                return tables;
-            else
-                return new string[] { string.Empty };
+            return tables ?? new[] { string.Empty };
         }
 
         public async Task<Table> GetSelectedTable(string tableName)

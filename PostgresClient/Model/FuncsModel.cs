@@ -15,9 +15,7 @@ namespace PostgresClient.Model
         {
             Functions = await Api.GetAllFunctions();
 
-            if (Functions != null)
-                return Array.ConvertAll(Functions, x => x.ToString());
-            return null;
+            return Functions != null ? Array.ConvertAll(Functions, x => x.ToString()) : null;
         }
 
         public async Task<string> GetFunctionCode(int index)

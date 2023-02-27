@@ -8,7 +8,8 @@ namespace PostgresClient.Model
         protected ISqlApi Api { get; }
 
         public event EventHandler<bool>? NewConnectStatus;
-        public BaseModel(ISqlApi api)
+
+        protected BaseModel(ISqlApi api)
         {
             Api = api;
             api.ConnectionStatusChanged += ConnectionStatusChanged;

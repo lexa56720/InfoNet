@@ -59,7 +59,7 @@ namespace PostgresClient.ViewModel
         public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
         public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
 
-        protected override MainModel Model { get => (MainModel)base.Model; }
+        protected override MainModel Model => (MainModel)base.Model;
 
         public MainViewModel(ISqlApi api) : base(api)
         {

@@ -23,7 +23,7 @@ namespace PostgresClient.ViewModel
         }
         private bool isDropDownOpened;
 
-        public string SelectedTable
+        public string? SelectedTable
         {
             get => selectedTable;
             set
@@ -34,7 +34,7 @@ namespace PostgresClient.ViewModel
                     ShowTableContent(SelectedTable);
             }
         }
-        private string selectedTable;
+        private string? selectedTable;
 
         public bool IsNotEditable
         {
@@ -105,7 +105,7 @@ namespace PostgresClient.ViewModel
             await UpdateTables();
             if (Model.DataBaseNameIs(requestInfo.Item2))
             {
-                SelectedTable = Tables.Where(t => t == requestInfo.Item1).First();
+                SelectedTable = Tables.First(t => t == requestInfo.Item1);
                 IsNotEditable = false;
             }
             else
@@ -116,7 +116,7 @@ namespace PostgresClient.ViewModel
             }
         }
 
-        public async Task ShowTableContent(string tableName)
+        public async Task ShowTableContent(string? tableName)
         {
             if (tableName != null)
                 TableContent = (await Model.GetSelectedTable(tableName)).DataTable;

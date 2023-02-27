@@ -17,7 +17,7 @@ namespace PostgresClient.ViewModel
         }
         private bool isConnected;
 
-        protected virtual BaseModel Model { get => model; }
+        protected virtual BaseModel Model => model;
         private BaseModel model;
 
         public BaseViewModel(ISqlApi api)

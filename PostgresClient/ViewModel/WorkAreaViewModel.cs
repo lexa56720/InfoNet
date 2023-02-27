@@ -22,7 +22,8 @@ namespace PostgresClient.ViewModel
         }
         private string commandResult;
         public ICommand Execute => new Command(async () => await ExecuteCommand());
-        protected override WorkAreaModel Model { get => (WorkAreaModel)base.Model; }
+        protected override WorkAreaModel Model => (WorkAreaModel)base.Model;
+
         public WorkAreaViewModel(ISqlApi api) : base(api)
         {
         }

@@ -20,7 +20,7 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(DumpDirectory));
             }
         }
-        private string dumpDirectory;
+        private string dumpDirectory = string.Empty;
 
         public string DumpFile
         {
@@ -31,7 +31,7 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(DumpFile));
             }
         }
-        private string dumpFile;
+        private string dumpFile=string.Empty;
 
         public ICommand SaveCommand => new Command(async o => await Save());
         public ICommand LoadCommand => new Command(async o => await Load());
@@ -50,7 +50,13 @@ namespace PostgresClient.ViewModel
 
         public async Task Save()
         {
-            await Model.Save(Path.Combine(DumpDirectory, DumpFile));
+            if (!string.IsNullOrEmpty(DumpDirectory) && !string.IsNullOrEmpty(DumpFile))
+            {
+                var path = Path.Combine(DumpDirectory, DumpFile);
+                if (Path.Exists(path) && await Model.Load(path))
+                    await Model.Save(Path.Combine(DumpDirectory, DumpFile));
+            }
+
         }
 
 
@@ -69,8 +75,10 @@ namespace PostgresClient.ViewModel
         }
         private void OnFocus()
         {
-            var folderPicker = new FolderPicker();
-            folderPicker.InputPath = $"{AppContext.BaseDirectory}";
+            var folderPicker = new FolderPicker
+            {
+                InputPath = $"{AppContext.BaseDirectory}"
+            };
             if (folderPicker.ShowDialog() == true)
             {
                 DumpDirectory = folderPicker.ResultPath;

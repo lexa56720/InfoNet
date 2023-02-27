@@ -10,8 +10,8 @@ namespace PostgresClient.Utils
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public Command(Action<object> execute, Func<object, bool> canExecute = null)

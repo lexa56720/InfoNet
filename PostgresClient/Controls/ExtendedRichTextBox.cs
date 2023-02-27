@@ -9,13 +9,13 @@ namespace PostgresClient.Controls
     public sealed class ExtendedRichTextBox : RichTextBox
     {
 
-        private bool _preventDocumentUpdate;
-        private bool _preventTextUpdate;
+        private bool preventDocumentUpdate;
+        private bool preventTextUpdate;
 
 
         public ExtendedRichTextBox()
         {
-            this.Document.PageWidth = 1000;
+            Document.PageWidth = 1000;
         }
 
         public ExtendedRichTextBox(FlowDocument document)
@@ -26,7 +26,7 @@ namespace PostgresClient.Controls
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
-                "Text",
+                nameof(Text),
                 typeof(string),
                 typeof(RichTextBox),
                 new FrameworkPropertyMetadata(
@@ -38,19 +38,13 @@ namespace PostgresClient.Controls
                     UpdateSourceTrigger.LostFocus));
         public string Text
         {
-            get
-            {
-                return (string)GetValue(TextProperty);
-            }
-            set
-            {
-                SetValue(TextProperty, value);
-            }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         private static object CoerceTextProperty(DependencyObject d, object value)
         {
-            return value ?? "";
+            return value ?? string.Empty;
         }
 
 
@@ -62,12 +56,12 @@ namespace PostgresClient.Controls
         }
         private void UpdateTextFromDocument()
         {
-            if (_preventTextUpdate)
+            if (preventTextUpdate)
                 return;
 
-            _preventDocumentUpdate = true;
+            preventDocumentUpdate = true;
             this.SetCurrentValue(ExtendedRichTextBox.TextProperty, new TextRange(Document.ContentStart, Document.ContentEnd).Text);
-            _preventDocumentUpdate = false;
+            preventDocumentUpdate = false;
         }
         private static void OnTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -75,19 +69,19 @@ namespace PostgresClient.Controls
         }
         private void UpdateDocumentFromText()
         {
-            if (_preventDocumentUpdate)
+            if (preventDocumentUpdate)
                 return;
 
-            _preventTextUpdate = true;
+            preventTextUpdate = true;
             Document.Blocks.Clear();
             Document.Blocks.Add(new Paragraph(new Run(Text)));
-            _preventTextUpdate = false;
+            preventTextUpdate = false;
         }
 
 
         public void Clear()
         {
-            this.Document.Blocks.Clear();
+            Document.Blocks.Clear();
         }
 
     }

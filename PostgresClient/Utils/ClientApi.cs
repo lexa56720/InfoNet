@@ -25,15 +25,9 @@ namespace PostgresClient.Utils
 
         public event EventHandler ConnectionStatusChanged
         {
-            add
-            {
-                SqlApi.ConnectionStatusChanged += value;
-            }
+            add => SqlApi.ConnectionStatusChanged += value;
 
-            remove
-            {
-                SqlApi.ConnectionStatusChanged -= value;
-            }
+            remove => SqlApi.ConnectionStatusChanged -= value;
         }
 
         public async Task<bool> AddRow(Table table, string[] values)

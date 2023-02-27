@@ -5,11 +5,11 @@ namespace PostgresClient.Model
 {
     internal class DebuggerModel : BaseModel
     {
-        public event EventHandler<string> NewLogLine;
+        public event EventHandler<string>? NewLogLine;
         public DebuggerModel(ClientApi api) : base(api)
         {
             api.ExceptionOccured += Api_ExceptionOccured;
-            api.SuccesExecution += Api_SuccesExecution;
+            api.SuccesExecution += Api_SuccessExecution;
         }
 
         private void OnNewLogLine(string message)
@@ -17,7 +17,7 @@ namespace PostgresClient.Model
             NewLogLine?.Invoke(this, $"\n{DateTime.Now:HH:mm:ss} :\t {message}");
         }
 
-        private void Api_SuccesExecution(object? sender, string e)
+        private void Api_SuccessExecution(object? sender, string e)
         {
             OnNewLogLine($"Комманда {e} выполнена успешно");
         }

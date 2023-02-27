@@ -28,7 +28,7 @@ namespace PsqlSharp
         public static Function[] Parse(Table funcTable)
         {
             Function[] funcs = new Function[funcTable.RowCount];
-            for (int i = 0; i < funcTable.RowCount; i++)
+            for (var i = 0; i < funcTable.RowCount; i++)
             {
                 funcs[i] = new Function()
                 {
