@@ -19,12 +19,21 @@
         <TreeView BorderThickness="0" FontSize="20" ItemsSource="{Binding DataBases}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
-                    <TextBlock Text="{Binding Name}" />
+                    <Border  >
+                        <TextBlock x:Name="Text" Text="{Binding Name}" ></TextBlock>
+                    </Border>
+                   
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
+
                     <Setter Property="IsExpanded" Value="True"/>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Style.Resources>
                 </Style>
             </TreeView.ItemContainerStyle>
             <i:Interaction.Triggers>

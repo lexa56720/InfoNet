@@ -39,7 +39,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#4a4a4a"/>
+                    <Setter Property="Background" Value="#323232"/>
                 </Trigger>
                   <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background" Value="#242424"/>
@@ -827,6 +827,23 @@
         
         <!--#region TreeView-->
         <Style TargetType="{x:Type TreeView}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeView">
+                        <Border 
+                              Name="Border" 
+                              CornerRadius="5" 
+                              BorderThickness="1" >
+                            <ScrollViewer 
+            Focusable="False"
+            CanContentScroll="False"
+            Padding="4">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#363636" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#303030" />
@@ -836,6 +853,7 @@
         </Style>
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="BorderThickness" Value="0" />
+           
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="BorderBrush" Value="Red" />

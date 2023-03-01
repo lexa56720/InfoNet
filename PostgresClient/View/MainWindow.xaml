@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostgresClient.View"
         xmlns:src="clr-namespace:PostgresClient.Utils" xmlns:shell="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="Postgres Client" Height="900"  Width="1500" Background="#282828">
 
     <!--Add the WindowChrome object-->
@@ -21,15 +21,16 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Grid x:Name="LayoutRoot" Background="Transparent" Width="44" Height="30">
-                                <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe MDL2 Assets" FontSize="10" 
+                            <Grid Background="Transparent" Width="44" Height="30">
+                                <Border  x:Name="LayoutRoot" CornerRadius="5">
+                                    <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe MDL2 Assets" FontSize="10" 
                                    Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display"/>
+                                </Border>
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="LayoutRoot" Property="Background" Value="#323232"/>
-                                    <Setter TargetName="txt" Property="Foreground" Value="#000000"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -126,7 +127,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                   
+
                     <Frame x:Name="MainFrame" Grid.Row="0" Content="{Binding MainFrame}" Padding="0,5,0,0" BorderThickness="0"  />
                     <GridSplitter Grid.Row="1" Height="6" Margin="5,0,5,5" HorizontalAlignment="Stretch"/>
                     <Frame  Grid.Row="2" Content="{Binding Debugger}"  />
