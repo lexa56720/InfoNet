@@ -49,7 +49,7 @@ namespace PsqlSharp
                     IsConnected = true;
                     ConnectionData = connectionData;
                 }
-                catch 
+                catch
                 {
                     IsConnected = false;
                     throw;
@@ -242,31 +242,32 @@ namespace PsqlSharp
             return false;
         }
 
-
-        public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowCount)
+        public async Task<bool> RemoveRow(string tableName, int rowIndex)
         {
-            try
-            {
-                var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
-                var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowCount][0]).ToString();
-                await ExecuteCommand(
-                    @$"UPDATE {tableName}
+            var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
+            var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
+            await ExecuteCommand(
+                @$"Delete from {tableName}
+                    WHERE ctid='{ctid}';");
+            return true;
+        }
+        public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowIndex)
+        {
+            var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
+            var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
+            await ExecuteCommand(
+                @$"UPDATE {tableName}
                     SET {columnName} = '{cellValue}'
                     WHERE ctid='{ctid}';");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return true;
         }
         public async Task<bool> AddRow(Table table, string[] values)
         {
 
-                await ExecuteCommand(
-            @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
+            await ExecuteCommand(
+        @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
             VALUES (${string.Join("", "", table.ColumnNames)})");
-                return true;
+            return true;
 
         }
 

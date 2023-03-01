@@ -33,15 +33,16 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Grid>
+            <Button Content="Удалить текущую строку" Command="{Binding DeleteRowCommand}" IsEnabled="{Binding IsEditable}"/>
         </StackPanel>
 
 
         <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="1"    >
-            <controls:ExtendedDataGrid HeadersVisibility="Column" ColumnWidth="*" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Disabled" 
+            <controls:ExtendedDataGrid HeadersVisibility="Column" SelectedItem="{Binding SelectedRow}" ColumnWidth="*" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Disabled" 
                                        Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Path=ActualWidth}" 
                                        GridLinesVisibility="None"  Background="#202020" Margin="5,10,0,0" Padding="5" FontSize="20" BorderThickness="0"
                                        HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding TableContent}" IsEnabled="{Binding IsConnected}" IsReadOnly="{Binding IsNotEditable}">
-                </controls:ExtendedDataGrid>
+            </controls:ExtendedDataGrid>
 
         </ScrollViewer>
     

@@ -1,4 +1,5 @@
 ﻿using PostgresClient.Model;
+using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
 using System;
@@ -6,11 +7,14 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
 {
     internal class TableViewerViewModel : BaseViewModel
     {
+        public object? SelectedRow { get; set; }
+
         public bool IsDropDownOpened
         {
             get => isDropDownOpened;
@@ -36,6 +40,8 @@ namespace PostgresClient.ViewModel
         }
         private string? selectedTable;
 
+        public bool IsEditable => !isNotEditable;
+
         public bool IsNotEditable
         {
             get => isNotEditable || !IsConnected;
@@ -43,6 +49,7 @@ namespace PostgresClient.ViewModel
             {
                 isNotEditable = value;
                 OnPropertyChanged(nameof(IsNotEditable));
+                OnPropertyChanged(nameof(IsEditable));
             }
         }
         private bool isNotEditable;
@@ -54,6 +61,7 @@ namespace PostgresClient.ViewModel
             {
                 base.IsConnected = value;
                 OnPropertyChanged(nameof(IsNotEditable));
+                OnPropertyChanged(nameof(IsEditable));
             }
         }
 
@@ -68,7 +76,6 @@ namespace PostgresClient.ViewModel
         }
         private DataTable tableContent;
 
-
         public ObservableCollection<string> Tables
         {
             get => tables;
@@ -80,6 +87,7 @@ namespace PostgresClient.ViewModel
         }
         private ObservableCollection<string> tables = new ObservableCollection<string>();
 
+        public ICommand DeleteRowCommand => new Command(async o => await DeleteRow());
         protected override TableViewerModel Model => (TableViewerModel)base.Model;
 
         public TableViewerViewModel(ISqlApi api) : base(api)
@@ -114,6 +122,12 @@ namespace PostgresClient.ViewModel
                 TableContent = (await Model.GetTable(requestInfo.Item1, requestInfo.Item2)).DataTable;
                 IsNotEditable = true;
             }
+        }
+
+        private async Task DeleteRow()
+        {
+            if (SelectedRow is DataRowView row)
+                await Model.DeleteRow(row.Row);
         }
 
         public async Task ShowTableContent(string? tableName)

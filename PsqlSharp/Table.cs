@@ -43,6 +43,17 @@ namespace PsqlSharp
                 ColumnNames[i] = table.Columns[i].ColumnName;
             }
         }
+        public int IndexOfRow(DataRow row)
+        {
+            for (var i = 0; i < DataTable.Rows.Count; i++)
+                if (DataTable.Rows[i] == row)
+                    return i;
+            return -1;
+        }
+        public void RemoveRow(DataRow row)
+        {
+            DataTable.Rows.RemoveAt(IndexOfRow(row));
+        }
 
         public override string ToString()
         {

@@ -1,4 +1,5 @@
 ﻿using PsqlSharp;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace PostgresClient.Model
@@ -30,6 +31,14 @@ namespace PostgresClient.Model
         public TableViewerModel(ISqlApi api) : base(api)
         {
 
+        }
+        public async Task DeleteRow(DataRow row)
+        {
+            if(SelectedTable!= null)
+            {
+                await Api.RemoveRow(SelectedTable.TableName, SelectedTable.IndexOfRow(row));
+                SelectedTable.RemoveRow(row);
+            }
         }
 
         private void SelectedTableRowAdded(object? sender, string[] e)

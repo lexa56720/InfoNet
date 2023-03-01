@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PostgresClient.View
 {
     /// <summary>
-    /// Логика взаимодействия для AbouWindow.xaml
+    /// Логика взаимодействия для AboutWindow.xaml
     /// </summary>
-    public partial class AbouWindow : Window
+    public partial class AboutWindow : Window
     {
-        public AbouWindow()
+        public AboutWindow()
         {
             InitializeComponent();
         }

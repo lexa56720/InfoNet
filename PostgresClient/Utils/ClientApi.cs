@@ -240,6 +240,17 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
+        public async Task<bool> RemoveRow(string tableName, int rowIndex)
+        {
+            try
+            {
+                var result = await SqlApi.RemoveRow(tableName, rowIndex); ;
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e) { OnExceprionOccured(e); return false; }
+        }
+
         private void OnExceprionOccured(Exception exception)
         {
             ExceptionOccured?.Invoke(this, exception);
