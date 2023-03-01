@@ -13,7 +13,10 @@ namespace PostgresClient.Controls
         private bool IsValueChanged;
         protected override void OnPreparingCellForEdit(DataGridPreparingCellForEditEventArgs e)
         {
-            CellValue = (e.EditingElement as TextBox).Text;
+            var textBox= e.EditingElement as TextBox;
+            textBox.Foreground = this.Foreground;
+            textBox.Background= this.Background;
+            CellValue = (textBox).Text;
             base.OnPreparingCellForEdit(e);
         }
         protected override void OnCellEditEnding(DataGridCellEditEndingEventArgs e)
@@ -26,6 +29,12 @@ namespace PostgresClient.Controls
             }
         }
 
+        protected override void OnBeginningEdit(DataGridBeginningEditEventArgs e)
+        {
+            base.OnBeginningEdit(e);
+
+
+        }
         protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
         {
             base.OnRowEditEnding(e);

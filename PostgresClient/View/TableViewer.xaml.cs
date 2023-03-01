@@ -13,5 +13,10 @@ namespace PostgresClient.View
             InitializeComponent();
             DataContext = new TableViewerViewModel(App.Api);
         }
+
+        private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

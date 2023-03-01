@@ -263,10 +263,22 @@ namespace PsqlSharp
         }
         public async Task<bool> AddRow(Table table, string[] values)
         {
+            for (var i = 0; i < values.Length; i++)
+                if (string.IsNullOrEmpty(values[i]))
+                {
+                    var type = table.DataTable.Columns[i].DataType;
+                    var defaultValue = type.IsValueType ? Activator.CreateInstance(type) : "null";
+                    values[i] = defaultValue.ToString();
+                } 
+                else if(table.DataTable.Columns[i].DataType == typeof(string))
+                {
+                    values[i] = $"'{values[i]}'";
+                }
+                    
 
             await ExecuteCommand(
         @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
-            VALUES (${string.Join("", "", table.ColumnNames)})");
+            VALUES ({string.Join(", ", values)})");
             return true;
 
         }
