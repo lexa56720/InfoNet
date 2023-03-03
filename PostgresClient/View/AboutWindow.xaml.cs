@@ -23,5 +23,9 @@ namespace PostgresClient.View
         {
             InitializeComponent();
         }
+        private void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

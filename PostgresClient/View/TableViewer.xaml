@@ -15,7 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="5,5,0,0"   >
+        <StackPanel Orientation="Horizontal" Margin="10,3,0,-5"   >
             <Grid>
                 <ComboBox  x:Name="mybox" FontSize="20" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" 
                       SelectedValue="{Binding SelectedTable,IsAsync=True,Mode=TwoWay}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
@@ -33,7 +33,7 @@
                 </TextBlock>
             </Grid>
             <Button  Command="{Binding DeleteRowCommand}" IsEnabled="{Binding IsEditable}">
-                <StackPanel   Orientation="Horizontal">
+                <StackPanel Margin="2"   Orientation="Horizontal">
                     <TextBlock Text="&#xe74d;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
                     <TextBlock Text="Удалить строку" TextAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -41,16 +41,15 @@
         </StackPanel>
 
 
-        <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="1"    >
+
+        <ScrollViewer  HorizontalScrollBarVisibility="Visible" Grid.Row="1"   >
             <controls:ExtendedDataGrid HeadersVisibility="Column" SelectedItem="{Binding SelectedRow}" ColumnWidth="*" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Disabled" 
                                        Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Path=ActualWidth}" 
                                        GridLinesVisibility="None"  Background="#202020" Foreground="White" Margin="5,10,0,0" Padding="5" FontSize="20" BorderThickness="0"
                                        HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding TableContent}" IsEnabled="{Binding IsConnected}" IsReadOnly="{Binding IsNotEditable}">
-                <DataGrid.Resources>
-                </DataGrid.Resources>
             </controls:ExtendedDataGrid>
 
         </ScrollViewer>
-    
+       
     </Grid>
 </Page>

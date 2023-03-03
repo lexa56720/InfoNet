@@ -28,7 +28,7 @@
         public Task<Function[]?> GetAllFunctions(string dbName);
 
         public Task<bool> RemoveFunction(Function function);
-        public Task<bool> UpdateFunction(Function function, string newFuncCode);
+        public Task<bool> UpdateFunction(Function updatedFunction);
 
         public Task<bool> RemoveRow(string tableName, int rowIndex);
         public Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowIndex);

@@ -4,14 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostgresClient.View"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="Пару слов о программе.." Height="400" Width="600" ResizeMode="NoResize">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Title="Пару слов о программе.."    ResizeMode="NoResize"
+        Height="400"  Width="600" Background="#262626">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="34" />
+    </WindowChrome.WindowChrome>
+    
     <Grid Background="#202020">
-        <StackPanel>
-            <Label FontSize="30" Content="Postgres Client" HorizontalAlignment="Center"/>
-            <TextBlock  FontSize="30" Text="Программма была разработана студентами группы АВТ-010 специально для курса информационных систем. " TextWrapping="WrapWithOverflow"  HorizontalAlignment="Center"/>
-            <Image Source="/PostgresClient;component/cat.png" Width="200"  />
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel VerticalAlignment="Stretch">
+            <Label FontSize="25" Content="Postgres Client" HorizontalAlignment="Center"/>
+            <TextBlock  FontSize="22" Text="Программма была разработана студентами группы АВТ-010 специально для курса информационных систем. " TextWrapping="WrapWithOverflow"  HorizontalAlignment="Center"/>
+            <Image VerticalAlignment="Center" Source="/PostgresClient;component/cat.png" Width="220"  />
             <Label FontSize="15" Content="2023. Все права защищены." HorizontalAlignment="Center"/>
+            
+
         </StackPanel>
+        <Button Grid.Row="2" VerticalAlignment="Bottom"    Click="Ok_Click">
+            <StackPanel Margin="2"   Orientation="Horizontal">
+                <TextBlock Text="&#xe73e;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

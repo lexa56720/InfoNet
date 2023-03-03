@@ -1,4 +1,5 @@
-﻿using PostgresClient.Model;
+﻿using PostgresClient.Controls;
+using PostgresClient.Model;
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
@@ -35,7 +36,7 @@ namespace PostgresClient.ViewModel
                 }
             }
         }
-        private int selected=-1;
+        private int selected = -1;
 
         public string FuncBody
         {
@@ -91,7 +92,6 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(IsEditable));
             }
         }
-
         public ICommand SaveCommand => new Command(async (o) => await Save());
         public ICommand ResetCommand => new Command(async (o) => await Reset());
         public ICommand RemoveCommand => new Command(async (o) => await Remove());
@@ -117,7 +117,7 @@ namespace PostgresClient.ViewModel
         private async void LoadFunc(Tuple<Function, string> loadRequest)
         {
             await Update();
-            FuncBody = loadRequest.Item1.Defenition;
+            FuncBody = loadRequest.Item1.SourceCode;
             if (Model.DataBaseNameIs(loadRequest.Item2))
             {
                 Selected = FuncList.IndexOf(loadRequest.Item1.ToString());
@@ -166,5 +166,6 @@ namespace PostgresClient.ViewModel
             Selected = Selected == 0 ? -1 : 0;
             Messenger.Send(new Message("UpdateDB"), this);
         }
+
     }
 }

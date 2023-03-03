@@ -217,17 +217,17 @@ namespace PsqlSharp
 
             return false;
         }
-        public async Task<bool> UpdateFunction(Function function, string newFuncCode)
+        public async Task<bool> UpdateFunction(Function updatedFunction)
         {
             if (IsConnected)
             {
-                await ExecuteCommand("Begin;");
-
-                await RemoveFunction(function);
-
+             
                 try
                 {
-                    await ExecuteCommand(newFuncCode);
+                    await ExecuteCommand("Begin;");
+
+                    await RemoveFunction(updatedFunction);
+                    await ExecuteCommand(updatedFunction.SourceCode);
                 }
                 catch
                 {

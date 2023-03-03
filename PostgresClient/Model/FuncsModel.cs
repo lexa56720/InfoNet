@@ -23,12 +23,13 @@ namespace PostgresClient.Model
             if (Functions == null)
                 await GetFunctionsHeader();
 
-            return Functions[index].Defenition;
+            return Functions[index].UserCode;
         }
 
         public async Task<bool> UpdateFunction(int index, string code)
         {
-            return await Api.UpdateFunction(Functions[index], code);
+            Functions[index].UserCode= code;
+            return await Api.UpdateFunction(Functions[index]);
         }
 
         public async Task DeleteFunction(int index)

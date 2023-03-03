@@ -4,18 +4,38 @@ namespace PsqlSharp
 {
     public class Function
     {
-        [Required]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        [Required]
-        public string[] Arguments { get; set; }
+        public string[] Arguments { get; private set; }
 
-        [Required]
-        public string ReturnType { get; set; }
+        public string ReturnType { get; private set; }
 
-        [Required]
-        public string Defenition { get; set; }
+        public string SourceCode 
+        { 
+            get => sourceCode;
+            private set
+            {
+                sourceCode = value;
+                var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
+                var end = SourceCode.LastIndexOf("End;", StringComparison.OrdinalIgnoreCase)+4;
+                userCode = SourceCode.Substring(start,end-start);
+            }
+        }
+        private string sourceCode;
+        
 
+        public string? UserCode 
+        { 
+            get => userCode;
+            set  
+            {
+                userCode = value;
+                var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
+                var end = SourceCode.LastIndexOf("End;", StringComparison.OrdinalIgnoreCase)+4;
+                sourceCode = SourceCode.Remove(start, end - start).Insert(start,UserCode);
+            }
+        }
+        private string? userCode;
 
         public string GetHeader()
         {
@@ -35,7 +55,7 @@ namespace PsqlSharp
                     Name = funcTable[i, 1],
                     Arguments = funcTable[i, 4].Split(',', StringSplitOptions.RemoveEmptyEntries),
                     ReturnType = funcTable[i, 5],
-                    Defenition = funcTable[i, 3],
+                    SourceCode = funcTable[i, 3],
                 };
             }
             return funcs;

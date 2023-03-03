@@ -208,11 +208,11 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<bool> UpdateFunction(Function function, string newFuncCode)
+        public async Task<bool> UpdateFunction(Function updatedFunction)
         {
             try
             {
-                var result = await SqlApi.UpdateFunction(function, newFuncCode); ;
+                var result = await SqlApi.UpdateFunction(updatedFunction); ;
                 OnSuccssesExecution();
                 return result;
             }
