@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PostgresClient.ViewModel
 {
@@ -161,10 +162,14 @@ namespace PostgresClient.ViewModel
 
         private async Task Remove()
         {
-            await Model.DeleteFunction(Selected);
-            await Update();
-            Selected = Selected == 0 ? -1 : 0;
-            Messenger.Send(new Message("UpdateDB"), this);
+        Task.Run(async()=>
+            {
+                await Model.DeleteFunction(Selected);
+                await Update();
+                Selected = Selected == 0 ? -1 : 0;
+                Messenger.Send(new Message("UpdateDB"), this);
+            });
+
         }
 
     }

@@ -19,6 +19,7 @@ namespace PostgresClient.Model
                 var tasks = new Task<DataBase>[dbNames.Length];
 
                 for (var i = 0; i < dbNames.Length; i++)
+
                     tasks[i] = Api.GetDataBaseContent(dbNames[i]);
 
                 await Task.WhenAll(tasks);

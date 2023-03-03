@@ -56,7 +56,7 @@ namespace PostgresClient.ViewModel
                         Nodes = new ObservableCollection<Node>
                         (
                             database.Functions.Select(f =>
-                                new Node(f.Name, true, Array.IndexOf(database.Functions, f), database)
+                                new Node(f.Name + $" ({string.Join(", ", f.Arguments)})", true, Array.IndexOf(database.Functions, f), database)
                         ))
                     });
                 };
@@ -123,7 +123,8 @@ namespace PostgresClient.ViewModel
                 };
                 foreach (var database in dataBases)
                 {
-                    mainNode.Nodes.Add(new Node(database));
+                    if (database != null)
+                        mainNode.Nodes.Add(new Node(database));
                 }
                 DataBases = new ObservableCollection<Node>(new Node[] { mainNode });
             }

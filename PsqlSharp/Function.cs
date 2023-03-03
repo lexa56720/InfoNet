@@ -17,7 +17,7 @@ namespace PsqlSharp
             {
                 sourceCode = value;
                 var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
-                var end = SourceCode.LastIndexOf("End;", StringComparison.OrdinalIgnoreCase)+4;
+                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase)+3;
                 userCode = SourceCode.Substring(start,end-start);
             }
         }
@@ -31,7 +31,7 @@ namespace PsqlSharp
             {
                 userCode = value;
                 var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
-                var end = SourceCode.LastIndexOf("End;", StringComparison.OrdinalIgnoreCase)+4;
+                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase)+3;
                 sourceCode = SourceCode.Remove(start, end - start).Insert(start,UserCode);
             }
         }
