@@ -119,7 +119,7 @@ namespace PsqlSharp
                 var tables = await ExecuteCommand(@"select * from pg_tables;");
 
                 var result = new List<string>();
-                for (var i = 0; i < tables.ColumnCount; i++)
+                for (var i = 0; i < tables.RowCount; i++)
                     if (tables[i, 0] == "public")
                         result.Add(tables[i, 1]);
 

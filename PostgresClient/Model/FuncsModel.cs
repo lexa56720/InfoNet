@@ -28,13 +28,14 @@ namespace PostgresClient.Model
 
         public async Task<bool> UpdateFunction(int index, string code)
         {
-            Functions[index].UserCode= code;
+            Functions[index].UserCode = code;
             return await Api.UpdateFunction(Functions[index]);
         }
 
         public async Task DeleteFunction(int index)
         {
-            await Api.RemoveFunction(Functions[index]);
+            if (index<Functions.Length && index>=0 )
+                await Api.RemoveFunction(Functions[index]);
         }
     }
 }

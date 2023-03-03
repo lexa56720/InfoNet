@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:PostgresClient.View"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Title="Пару слов о программе.."    ResizeMode="NoResize"
-        Height="400"  Width="600" Background="#262626">
+        Height="400"  Width="600" Background="#303030">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />
     </WindowChrome.WindowChrome>
     
-    <Grid Background="#202020">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="auto"/>

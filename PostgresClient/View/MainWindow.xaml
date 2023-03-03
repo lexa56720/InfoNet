@@ -114,7 +114,7 @@
                     <RowDefinition Height="0.8*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Background="#222222" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3"  >
+                <StackPanel Background="#222222" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3"   >
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}">
                         <StackPanel  Orientation="Horizontal">
                             <TextBlock Text="&#xe756;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />

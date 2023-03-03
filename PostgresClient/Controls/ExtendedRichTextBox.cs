@@ -15,7 +15,7 @@ namespace PostgresClient.Controls
 
         public ExtendedRichTextBox()
         {
-            Document.PageWidth = 1000;
+            Document.PageWidth = 600;
         }
 
         public ExtendedRichTextBox(FlowDocument document)
