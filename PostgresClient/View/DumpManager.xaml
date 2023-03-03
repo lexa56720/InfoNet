@@ -12,7 +12,7 @@
     <StackPanel Background="Transparent">
 
 
-        <Label Content="Управление дампами" FontSize="20" HorizontalAlignment="Center" Margin="5,5,5,35"/>
+        <Label Content="Управление дампами" FontSize="22" HorizontalAlignment="Center" Margin="5,5,5,15"/>
         <Grid Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -36,15 +36,29 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <Button Content=" ↑ " VerticalContentAlignment="Center" Command="{Binding GotFocus}" Grid.Column="1" HorizontalAlignment="Center"/>
+                <Button VerticalContentAlignment="Center" Margin="0,5,0,5" Command="{Binding GotFocus}" Grid.Column="1" HorizontalAlignment="Center">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock Text="&#xe8a7;" TextAlignment="Center"  VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    </StackPanel>
+                </Button>
             </Grid>
      
             <Label FontSize="15" Content="Имя файла:" Grid.Row="2" Grid.Column="0" />
             <TextBox Margin="10" FontSize="15" Grid.Row="2" Grid.Column="1" Text="{Binding DumpFile}" />
         </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Создать дамп" FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding SaveCommand,IsAsync=True}" />
-            <Button Content="Загрузить дамп" FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding LoadCommand,IsAsync=True}" />
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
+            <Button  FontSize="20" HorizontalAlignment="Stretch" Margin="10" Command="{Binding SaveCommand,IsAsync=True}" >
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="&#xe78c;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="Сохранить дамп" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button  FontSize="20" HorizontalAlignment="Stretch" Margin="10" Command="{Binding LoadCommand,IsAsync=True}" >
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="&#xe8da;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="Загрузить дамп" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Page>

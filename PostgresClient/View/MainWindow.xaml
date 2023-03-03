@@ -23,7 +23,7 @@
                         <ControlTemplate TargetType="Button">
                             <Grid Background="Transparent" Width="44" Height="30">
                                 <Border  x:Name="LayoutRoot" CornerRadius="5">
-                                    <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe MDL2 Assets" FontSize="10" 
+                                    <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe Fluent Icons" FontSize="10" 
                                    Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display"/>
                                 </Border>
@@ -55,7 +55,8 @@
 
             <!--Close-->
             <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
-                <Setter Property="Content" Value="&#xE106;"/>
+                <Setter Property="Content" Value="&#xe8bb;"/>
+                <Setter Property="FontSize" Value="20"/>
             </Style>
 
         </ResourceDictionary>
@@ -114,10 +115,30 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Background="#222222" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3"  >
-                    <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Команды" />
-                    <Button Margin="15,0,10,0" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Таблицы" />
-                    <Button Margin="15,0,10,0" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" Content="Функции"  />
-                    <Button Margin="15,0,10,0" Command="{Binding About, IsAsync=True}" Content="О программе"  />
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}">
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock Text="&#xe756;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="Команды" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" >
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock Text="&#xf0e2;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="Таблицы" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="15,0,10,0" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" >
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock Text="&#xe713;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="Функции" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="15,0,10,0" Command="{Binding About, IsAsync=True}" >
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock Text="&#xe946;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="О программе" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <Grid Grid.Row="1" Grid.Column="0"  Grid.RowSpan="1">
@@ -153,9 +174,24 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
-                        <Button Content="Управление соеденением" Margin="5" Command="{Binding ConnectionManager}"/>
-                        <Button Content="Управление дампами" Margin="5" IsEnabled="{Binding IsConnected}"  Command="{Binding DumpManager}"/>
-                        <Button Content="Обозреватель базы данных" Margin="5" IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" />
+                        <Button Margin="5" Command="{Binding ConnectionManager}">
+                            <StackPanel  Orientation="Horizontal">
+                                <TextBlock Text="&#xe774;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Text="Управление соеденением" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="5" IsEnabled="{Binding IsConnected}"  Command="{Binding DumpManager}">
+                            <StackPanel  Orientation="Horizontal">
+                                <TextBlock Text="&#xec7a;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Text="Управление дампами" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="5" IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" >
+                            <StackPanel  Orientation="Horizontal">
+                                <TextBlock Text="&#xed25;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Text="Обозреватель базы данных" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                     <GridSplitter Height="5" Padding="5" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 

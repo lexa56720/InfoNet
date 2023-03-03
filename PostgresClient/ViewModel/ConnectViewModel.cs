@@ -48,15 +48,15 @@ namespace PostgresClient.ViewModel
         }
 
 
-        public string Username { get; set; } = string.Empty;
+        public string Username { get; set; } = "postgres";
 
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } = "1234";
 
         public string Server { get; set; } = "localhost";
 
         public string Port { get; set; } = "5432";
 
-        public string DataBase { get; set; } = string.Empty;
+        public string DataBase { get; set; } = "carsdb";
 
         protected override ConnectModel Model => (ConnectModel)base.Model;
 

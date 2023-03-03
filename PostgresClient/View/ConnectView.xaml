@@ -13,7 +13,7 @@
     <StackPanel Background="Transparent">
         
        
-        <Label Content="Данные для подключения:" Margin="5,5,5,15" FontSize="20" HorizontalAlignment="Center"/>
+        <Label Content="Данные для подключения:" Margin="5,5,5,15" FontSize="22" HorizontalAlignment="Center"/>
         <Grid>
             <Grid.Resources>
 
@@ -44,6 +44,24 @@
             <Label FontSize="15" Content="Порт:" Grid.Row="4" Grid.Column="0"/>
             <TextBox FontSize="15" Grid.Row="4" Grid.Column="1"  Text="{Binding Port}" />
         </Grid>
-        <Button Content="{Binding ButtonAction}" FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}" />
+        <Button FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}" >
+            <StackPanel  Orientation="Horizontal">
+                <TextBlock TextAlignment="Center" Padding="5" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" >
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsConnected}" Value="false">
+                                    <Setter Property="Text" Value="&#xe839;"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsConnected}" Value="true">
+                                    <Setter Property="Text" Value="&#xeb55;"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock  Text="{Binding ButtonAction}" TextAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
     </StackPanel>
 </Page>

@@ -19,8 +19,13 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="5"   >
-            <Button Content="Выполнить" FontSize="20"  IsEnabled="{Binding IsConnected}" Command="{Binding Execute}" />
+        <StackPanel Orientation="Horizontal" Margin="5,0,5,5"   >
+            <Button FontSize="20"  IsEnabled="{Binding IsConnected}" Command="{Binding Execute}" >
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="&#xf5b0;" Foreground="#2ECC71" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="Выполнить" TextAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <controls:ExtendedRichTextBox Grid.Row="1" Foreground="White" Padding="5" BorderThickness="0" Text="{Binding CommandText, Mode=TwoWay}"/>
