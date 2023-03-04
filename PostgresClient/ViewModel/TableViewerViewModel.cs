@@ -40,7 +40,7 @@ namespace PostgresClient.ViewModel
         }
         private string? selectedTable;
 
-        public bool IsEditable => !isNotEditable;
+        public bool IsEditable => !IsNotEditable;
 
         public bool IsNotEditable
         {

@@ -13,9 +13,21 @@ namespace PostgresClient.Controls
         private bool preventTextUpdate;
 
 
+        public bool AlwaysScrollToEnd { get; set; }
+
+        public int PageWidth
+        {
+            get => pageWidth;
+            set
+            {
+                pageWidth = value;
+                Document.PageWidth = value;
+            }
+        }
+        private int pageWidth;
         public ExtendedRichTextBox()
         {
-            Document.PageWidth = 600;
+           
         }
 
         public ExtendedRichTextBox(FlowDocument document)
@@ -52,7 +64,8 @@ namespace PostgresClient.Controls
         {
             UpdateTextFromDocument();
             base.OnTextChanged(e);
-            ScrollToEnd();
+            if (AlwaysScrollToEnd)
+                ScrollToEnd();
         }
         private void UpdateTextFromDocument()
         {

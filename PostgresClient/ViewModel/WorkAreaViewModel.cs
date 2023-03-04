@@ -38,7 +38,7 @@ namespace PostgresClient.ViewModel
             {
                 var result = await Model.ExecuteCommand(CommandText);
                 if (result != null)
-                    CommandResult += '\n' + result;
+                    CommandResult += new string('-', 20)+'\n' + result;
                 Messenger.Send(new Message("UpdateDB"), this);
             }
         }

@@ -3,6 +3,7 @@ using Npgsql;
 using NpgsqlTypes;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 
 namespace PsqlSharp
 {
@@ -44,8 +45,10 @@ namespace PsqlSharp
                         .AddDebug()
                         .SetMinimumLevel(LogLevel.Trace);
                     }));
+                    dataSourceBuilder.UseNodaTime();
                     await using var dataSource = dataSourceBuilder.Build();
                     Connection = await dataSource.OpenConnectionAsync();
+
                     IsConnected = true;
                     ConnectionData = connectionData;
                 }
@@ -69,7 +72,7 @@ namespace PsqlSharp
             return false;
         }
 
-        public async Task<Table?> ExecuteCommand(string command)
+        public async Task<Table[]?> ExecuteCommand(string command)
         {
             await Semaphore.WaitAsync();
             try
@@ -80,15 +83,22 @@ namespace PsqlSharp
                     using var adapter = new NpgsqlDataAdapter(commandObj);
                     var dataSet = new DataSet();
                     adapter.Fill(dataSet);
+                    if (dataSet.Tables.Count == 0)
+                        return null;
 
-                    if (dataSet.Tables.Count > 0)
-                        return new Table(dataSet.Tables[0]);
+                    var tables = new Table[dataSet.Tables.Count];
+                    for (var i = 0; i < dataSet.Tables.Count; i++)
+                        tables[i] = new Table(dataSet.Tables[i]);
+
+                    return tables;
                 }
             }
             finally
             {
                 Semaphore.Release();
             }
+
+
             return null;
         }
 
@@ -96,7 +106,7 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-                var databases = await ExecuteCommand("SELECT datname FROM pg_database where datistemplate='f';");
+                var databases = (await ExecuteCommand("SELECT datname FROM pg_database where datistemplate='f';"))[0];
                 var result = new string[databases.RowCount];
                 for (var i = 0; i < databases.RowCount; i++)
                     result[i] = databases[i, 0];
@@ -116,14 +126,15 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-                var tables = await ExecuteCommand(@"select * from pg_tables;");
+                var tables = (await ExecuteCommand(@"select * from pg_tables;"))[0];
 
                 var result = new List<string>();
                 for (var i = 0; i < tables.RowCount; i++)
                     if (tables[i, 0] == "public")
                         result.Add(tables[i, 1]);
 
-                return result.ToArray();
+                if (result.Count > 0)
+                    return result.ToArray();
             }
 
             return null;
@@ -144,7 +155,7 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-                var table = await ExecuteCommand($"select * from {tableName}");
+                var table = (await ExecuteCommand($"select * from {tableName}"))[0];
                 if (table != null)
                 {
                     table.TableName = tableName;
@@ -169,7 +180,7 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-                var funcTable = await ExecuteCommand(
+                var funcTable = (await ExecuteCommand(
                     @"select n.nspname as function_schema,
                 p.proname as function_name,
                 l.lanname as function_language,
@@ -187,7 +198,7 @@ namespace PsqlSharp
                 join pg_type t on t.oid = p.prorettype
                 where n.nspname not in ('pg_catalog', 'information_schema')
                 order by function_schema,
-                    function_name; ");
+                    function_name; "))[0];
                 if (funcTable != null)
                     return Function.Parse(funcTable);
             }
@@ -221,7 +232,7 @@ namespace PsqlSharp
         {
             if (IsConnected)
             {
-             
+
                 try
                 {
                     await ExecuteCommand("Begin;");
@@ -244,7 +255,7 @@ namespace PsqlSharp
 
         public async Task<bool> RemoveRow(string tableName, int rowIndex)
         {
-            var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
+            var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
             var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
             await ExecuteCommand(
                 @$"Delete from {tableName}
@@ -253,7 +264,7 @@ namespace PsqlSharp
         }
         public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowIndex)
         {
-            var rowNumbers = await ExecuteCommand($"select ctid, * from {tableName};");
+            var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
             var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
             await ExecuteCommand(
                 @$"UPDATE {tableName}
@@ -263,34 +274,35 @@ namespace PsqlSharp
         }
         public async Task<bool> AddRow(Table table, string[] values)
         {
+            values = ConvertValuesTypes(values, table);
+            await ExecuteCommand(
+               @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
+                    VALUES ({string.Join(", ", values)})");
+            return true;
+
+        }
+        private string[] ConvertValuesTypes(string[] values, Table table)
+        {
             for (var i = 0; i < values.Length; i++)
                 if (string.IsNullOrEmpty(values[i]))
                 {
                     var type = table.DataTable.Columns[i].DataType;
                     var defaultValue = type.IsValueType ? Activator.CreateInstance(type) : "null";
                     values[i] = defaultValue.ToString();
-                } 
-                else if(table.DataTable.Columns[i].DataType == typeof(string))
-                {
-                    values[i] = $"'{values[i]}'";
                 }
-                    
-
-            await ExecuteCommand(
-        @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
-            VALUES ({string.Join(", ", values)})");
-            return true;
-
+                else if (table.DataTable.Columns[i].DataType == typeof(string))
+                    values[i] = $"'{values[i]}'";
+            return values;
         }
 
         public async Task<bool> ExportDataBase(string outputPath)
         {
             if (IsConnected)
             {
-                var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+                var directory = (await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
                 var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
-                var cmd = new Process();
+                using var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
                 cmd.StartInfo.RedirectStandardInput = true;
@@ -300,22 +312,24 @@ namespace PsqlSharp
 
                 await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
                 await cmd.StandardInput.WriteLineAsync($"\"{dumExe}\" -h {ConnectionData.Host} -U {ConnectionData.Username} -d{ConnectionData.Database} -F tar -f {outputPath}");
+
                 cmd.StandardInput.Close();
+                cmd.StandardError.Close();
 
                 await cmd.WaitForExitAsync();
                 return true;
             }
             return false;
         }
-
         public async Task<bool> ImportDataBase(string inputPath)
         {
             if (IsConnected)
             {
-                var directory = await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+                var directory = (await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
                 var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
+                ClearDataBase();
 
-                var cmd = new Process();
+                using var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
                 cmd.StartInfo.RedirectStandardError = true;
@@ -326,7 +340,9 @@ namespace PsqlSharp
 
                 await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
                 await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {ConnectionData.Host} -U {ConnectionData.Username} -d {ConnectionData.Database} {inputPath}");
+
                 cmd.StandardInput.Close();
+                cmd.StandardError.Close();
 
                 await cmd.WaitForExitAsync();
                 return true;
@@ -335,5 +351,22 @@ namespace PsqlSharp
             return false;
 
         }
+
+        private async Task<bool> ClearDataBase()
+        {
+            var dropDBCommand = new StringBuilder();
+
+            var tables = await GetAllTableNames(); 
+            foreach (var table in tables)
+                dropDBCommand.Append($"Drop table {table} cascade;");
+            
+            var funcs = await GetAllFunctions();
+            foreach (var func in funcs)
+                dropDBCommand.Append($"drop function {func.Name}({string.Join(',', func.Arguments)});");
+
+            await ExecuteCommand(dropDBCommand.ToString());
+            return true;
+        }
+
     }
 }

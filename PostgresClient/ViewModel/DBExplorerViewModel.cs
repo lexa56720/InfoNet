@@ -111,12 +111,9 @@ namespace PostgresClient.ViewModel
 
         private async Task Update()
         {
-
             var dataBases = await Model.GetDataBases();
             if (dataBases != null)
             {
-
-
                 var mainNode = new Node("Базы данных")
                 {
                     Nodes = new ObservableCollection<Node>()

@@ -95,7 +95,7 @@ namespace PostgresClient.ViewModel
         }
         public ICommand SaveCommand => new Command(async (o) => await Save());
         public ICommand ResetCommand => new Command(async (o) => await Reset());
-        public ICommand RemoveCommand => new Command(async (o) => await Remove());
+        public ICommand RemoveCommand => new Command((o) => Remove());
 
         public ICommand PageLoaded => new Command(async (o) => await Update());
         protected override FuncsModel Model => (FuncsModel)base.Model;
@@ -162,13 +162,14 @@ namespace PostgresClient.ViewModel
 
         private async Task Remove()
         {
-        Task.Run(async()=>
-            {
-                await Model.DeleteFunction(Selected);
-                await Update();
-                Selected = Selected == 0 ? -1 : 0;
-                Messenger.Send(new Message("UpdateDB"), this);
-            });
+            if(Selected!=-1)
+                await Task.Run(async () =>
+                {
+                    await Model.DeleteFunction(Selected);
+                    await Update();
+                    Selected = -1;
+                    Messenger.Send(new Message("UpdateDB"), this);
+                });
 
         }
 

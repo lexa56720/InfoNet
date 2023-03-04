@@ -11,7 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.EventSource" Version="7.0.0" />
-    <PackageReference Include="Npgsql" Version="7.0.1" />
+    <PackageReference Include="Npgsql" Version="7.0.2" />
+    <PackageReference Include="Npgsql.NodaTime" Version="7.0.2" />
   </ItemGroup>
 
 </Project>

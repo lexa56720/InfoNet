@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 
 namespace PsqlSharp
@@ -58,24 +60,38 @@ namespace PsqlSharp
         public override string ToString()
         {
             const string separator = "\t";
-            var builder = new StringBuilder();
-            for (var i = 0; i < ColumnCount; i++)
+
+            var longestInColumn = new int[ColumnCount];
+            for (var j = 0; j < ColumnCount; j++)
             {
-                builder.Append(ColumnNames[i]);
-                if (i < ColumnCount - 1)
-                    builder.Append(separator);
+                longestInColumn[j] = ColumnNames[j].Length;
+                for (int i = 0; i < RowCount; i++)
+                {
+                    if (this[i, j].Length > longestInColumn[j])
+                        longestInColumn[j] = this[i, j].Length;
+                }
             }
+               
+
+
+            var builder = new StringBuilder();
+            var formater = new StringBuilder();
+            for (var j = 0; j < ColumnCount; j++)
+                formater.Append($"{{{j},{-longestInColumn[j]-1}}} ");
+
+            builder.Append(string.Format(formater.ToString(), ColumnNames));
             builder.Append("\n\n");
+
+
+            string[] columns=new string[ColumnCount];
             for (var i = 0; i < RowCount; i++)
             {
                 for (var j = 0; j < ColumnCount; j++)
-                {
-                    builder.Append(this[i, j]);
-                    if (j < ColumnCount - 1)
-                        builder.Append(separator);
-                }
+                    columns[j] = this[i, j];
+                builder.Append(string.Format(formater.ToString(), columns));
                 builder.Append('\n');
             }
+            Debug.WriteLine(builder.ToString());
             return builder.ToString();
         }
 

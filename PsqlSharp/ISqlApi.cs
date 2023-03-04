@@ -11,7 +11,7 @@
         public Task<bool> ConnectAsync(ConnectionData connectionData);
         public Task<bool> DisconnectAsync();
 
-        public Task<Table?> ExecuteCommand(string command);
+        public Task<Table[]?> ExecuteCommand(string command);
 
 
         public Task<string[]?> GetAllDataBaseNames();

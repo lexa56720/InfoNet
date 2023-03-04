@@ -378,7 +378,7 @@
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
             <Setter Property="MinWidth" Value="120"/>
             <Setter Property="MinHeight" Value="20"/>
@@ -619,8 +619,8 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="BackgroundBorder"  CornerRadius="5" Margin="12,5,10,5" BorderThickness="0" Background="#303030" BorderBrush="{StaticResource Brush_DataGridHeaderSortedBorder}" Grid.ColumnSpan="2" />
-                            <ContentPresenter Margin="20,8,-50,8"  VerticalAlignment="Center" />
+                            <Border x:Name="BackgroundBorder"  CornerRadius="5" Margin="10,5,10,5"  BorderThickness="0" Background="#303030" BorderBrush="{StaticResource Brush_DataGridHeaderSortedBorder}" Grid.ColumnSpan="2" />
+                            <ContentPresenter Margin="10,8,-50,8"  VerticalAlignment="Center" />
                             <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill" Grid.Column="1" Width="8" Height="6" Fill="White" Margin="0,0,20,0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.4" />
                             <Thumb
                                 Style="{StaticResource Style_HeaderGripper}"

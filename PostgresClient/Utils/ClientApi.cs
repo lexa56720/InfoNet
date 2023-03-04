@@ -71,7 +71,7 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<Table?> ExecuteCommand(string command)
+        public async Task<Table[]?> ExecuteCommand(string command)
         {
             try
             {

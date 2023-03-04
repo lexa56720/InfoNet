@@ -17,6 +17,7 @@
 
         <StackPanel Orientation="Horizontal" Margin="10,3,0,-5"   >
             <Grid>
+                
                 <ComboBox  x:Name="mybox" FontSize="20" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" 
                       SelectedValue="{Binding SelectedTable,IsAsync=True,Mode=TwoWay}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
                 <TextBlock Text="Таблица" FontSize="20" FontFamily="Segoe UI" Foreground="LightGray" VerticalAlignment="Center"  Padding="5" IsHitTestVisible="False">
@@ -42,11 +43,11 @@
 
 
 
-        <ScrollViewer  HorizontalScrollBarVisibility="Visible" Grid.Row="1"   >
-            <controls:ExtendedDataGrid HeadersVisibility="Column" SelectedItem="{Binding SelectedRow}" ColumnWidth="*" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Disabled" 
+        <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Grid.Row="1"   >
+            <controls:ExtendedDataGrid HeadersVisibility="Column" SelectedItem="{Binding SelectedRow}" ColumnWidth="*" VerticalAlignment="Stretch" 
                                        Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Path=ActualWidth}" 
                                        GridLinesVisibility="None"  Background="#202020" Foreground="White" Margin="5,10,0,0" Padding="5" FontSize="20" BorderThickness="0"
-                                       HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding TableContent}" IsEnabled="{Binding IsConnected}" IsReadOnly="{Binding IsNotEditable}">
+                                       HorizontalScrollBarVisibility="Auto" ItemsSource="{Binding TableContent}" IsEnabled="{Binding IsConnected}" IsReadOnly="{Binding IsNotEditable}">
             </controls:ExtendedDataGrid>
 
         </ScrollViewer>
