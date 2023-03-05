@@ -9,6 +9,6 @@
       Title="Debugger">
 
     <Grid>
-        <controls:ExtendedRichTextBox  Text="{Binding DebugLog}" AlwaysScrollToEnd="True"  IsReadOnly="True" Opacity="0.5"/>
+        <controls:ExtendedRichTextBox PageWidth="1000"  Text="{Binding DebugLog}" AlwaysScrollToEnd="True"  IsReadOnly="True" Opacity="0.7"/>
     </Grid>
 </Page>

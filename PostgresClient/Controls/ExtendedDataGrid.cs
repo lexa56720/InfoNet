@@ -29,12 +29,6 @@ namespace PostgresClient.Controls
             }
         }
 
-        protected override void OnBeginningEdit(DataGridBeginningEditEventArgs e)
-        {
-            base.OnBeginningEdit(e);
-
-
-        }
         protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
         {
             base.OnRowEditEnding(e);
@@ -53,8 +47,6 @@ namespace PostgresClient.Controls
         protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
         {
             base.OnExecutedCommitEdit(e);
-
         }
-
     }
 }

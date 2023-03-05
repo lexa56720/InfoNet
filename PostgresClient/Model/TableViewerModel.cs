@@ -41,14 +41,14 @@ namespace PostgresClient.Model
             }
         }
 
-        private void SelectedTableRowAdded(object? sender, string[] e)
+        private void SelectedTableRowAdded(object? sender, object[] e)
         {
             Api.AddRow(SelectedTable, e);
         }
 
         private void SelectedTableCellChanged(object? sender, CellChangedEventArgs e)
         {
-            Api.SetColumnByRow(SelectedTable.TableName, e.ColumnName, e.Value.ToString(), e.RowNumber);
+            Api.SetColumnByRow(SelectedTable, e.Value, e.ColumnIndex, e.RowIndex);
         }
         public async Task<string[]> GetTables()
         {

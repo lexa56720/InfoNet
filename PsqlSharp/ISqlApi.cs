@@ -31,8 +31,8 @@
         public Task<bool> UpdateFunction(Function updatedFunction);
 
         public Task<bool> RemoveRow(string tableName, int rowIndex);
-        public Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowIndex);
-        public Task<bool> AddRow(Table table, string[] values);
+        public Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex);
+        public Task<bool> AddRow(Table table, object[] values);
 
         public Task<bool> ExportDataBase(string outputPath);
 

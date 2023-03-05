@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using NodaTime;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
@@ -262,17 +263,18 @@ namespace PsqlSharp
                     WHERE ctid='{ctid}';");
             return true;
         }
-        public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowIndex)
+        public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex)
         {
-            var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
+            var value = ConvertValuesTypes(new object[] { cellValue }, table)[0];
+            var rowNumbers = (await ExecuteCommand($"select ctid, * from {table.TableName};"))[0];
             var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
             await ExecuteCommand(
-                @$"UPDATE {tableName}
-                    SET {columnName} = '{cellValue}'
+                @$"UPDATE {table.TableName}
+                    SET {table.DataTable.Columns[columnIndex].ColumnName} = {value}
                     WHERE ctid='{ctid}';");
             return true;
         }
-        public async Task<bool> AddRow(Table table, string[] values)
+        public async Task<bool> AddRow(Table table, object[] values)
         {
             values = ConvertValuesTypes(values, table);
             await ExecuteCommand(
@@ -281,18 +283,43 @@ namespace PsqlSharp
             return true;
 
         }
-        private string[] ConvertValuesTypes(string[] values, Table table)
+        private string[] ConvertValuesTypes(object[] values, Table table)
         {
+            var result = new string[values.Length];
+            var typeConverter = new Dictionary<Type, Func<object, string>>()
+            {
+                { typeof(string),o=>
+                    {
+                        return $"'{o}'";
+                    }
+                },
+                { typeof(LocalDate),o=>
+                    {
+                        var date=(LocalDate)o;
+                        return $"'{date.Year}-{date.Month}-{date.Day}'";
+                    }
+                },
+                { typeof(Period),o=>
+                    {
+                        var period=(Period)o;
+                        return $"'{period.ToString()}'";
+                    }
+                },
+            };
             for (var i = 0; i < values.Length; i++)
-                if (string.IsNullOrEmpty(values[i]))
+            {
+                if (values[i].GetType() == typeof(DBNull))
                 {
-                    var type = table.DataTable.Columns[i].DataType;
-                    var defaultValue = type.IsValueType ? Activator.CreateInstance(type) : "null";
-                    values[i] = defaultValue.ToString();
+                    result[i] = "null";
+                    continue;
                 }
-                else if (table.DataTable.Columns[i].DataType == typeof(string))
-                    values[i] = $"'{values[i]}'";
-            return values;
+                if (typeConverter.ContainsKey(table.ColumnTypes[i]))
+                    result[i] = typeConverter[table.ColumnTypes[i]](values[i]);
+                else
+                    result[i] = values[i].ToString();
+            }
+
+            return result;
         }
 
         public async Task<bool> ExportDataBase(string outputPath)
@@ -356,10 +383,10 @@ namespace PsqlSharp
         {
             var dropDBCommand = new StringBuilder();
 
-            var tables = await GetAllTableNames(); 
+            var tables = await GetAllTableNames();
             foreach (var table in tables)
                 dropDBCommand.Append($"Drop table {table} cascade;");
-            
+
             var funcs = await GetAllFunctions();
             foreach (var func in funcs)
                 dropDBCommand.Append($"drop function {func.Name}({string.Join(',', func.Arguments)});");

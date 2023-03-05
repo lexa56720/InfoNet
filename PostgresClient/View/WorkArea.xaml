@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="WorkArea">
 
-    <Grid  >
+    <Grid x:Name="Grid"  >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition />
@@ -16,7 +16,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,0,5,5"   >
@@ -34,8 +34,9 @@
 
         <GridSplitter Grid.Row="1" Grid.Column="1"   Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
-        <ScrollViewer Grid.Column="2" Grid.Row="0"  Grid.RowSpan="2" HorizontalScrollBarVisibility="Visible" >
-            <controls:ExtendedRichTextBox IsReadOnly="True" FontFamily="Cascadia Mono"  PageWidth="1500" Opacity="0.5"  VerticalScrollBarVisibility="Disabled" Padding="5" BorderThickness="0" Text="{Binding CommandResult}" />
+        <ScrollViewer x:Name="Result" Grid.Column="2" Grid.Row="0"  Grid.RowSpan="2" HorizontalScrollBarVisibility="Auto" >
+            <controls:ExtendedRichTextBox IsReadOnly="False" FontFamily="Cascadia Mono" Width="1000"
+            PageWidth="1500" Opacity="0.5" HorizontalScrollBarVisibility="Disabled"  VerticalScrollBarVisibility="Disabled" Padding="5" BorderThickness="0" Text="{Binding CommandResult}" />
         </ScrollViewer>
     </Grid>
 </Page>

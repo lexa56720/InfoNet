@@ -15,7 +15,7 @@ namespace PsqlSharp
         public Type[]? ColumnTypes { get; private set; }
         public DataTable DataTable { get; }
 
-        public event EventHandler<string[]>? RowAdded;
+        public event EventHandler<object[]>? RowAdded;
 
         public event EventHandler<CellChangedEventArgs>? CellChanged;
 
@@ -57,10 +57,8 @@ namespace PsqlSharp
             DataTable.Rows.RemoveAt(IndexOfRow(row));
         }
 
-        public override string ToString()
+        private string GetFormater()
         {
-            const string separator = "\t";
-
             var longestInColumn = new int[ColumnCount];
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -71,51 +69,47 @@ namespace PsqlSharp
                         longestInColumn[j] = this[i, j].Length;
                 }
             }
-               
-
-
-            var builder = new StringBuilder();
             var formater = new StringBuilder();
             for (var j = 0; j < ColumnCount; j++)
-                formater.Append($"{{{j},{-longestInColumn[j]-1}}} ");
+                formater.Append($"{{{j},{-longestInColumn[j] - 1}}} ");
+            return formater.ToString();
+        }
+        public override string ToString()
+        {
+            var formater = GetFormater();
 
-            builder.Append(string.Format(formater.ToString(), ColumnNames));
-            builder.Append("\n\n");
-
+            var builder = new StringBuilder();
+            builder.Append(string.Format(formater, ColumnNames)).Append("\n\n"); ;
 
             string[] columns=new string[ColumnCount];
             for (var i = 0; i < RowCount; i++)
             {
                 for (var j = 0; j < ColumnCount; j++)
                     columns[j] = this[i, j];
-                builder.Append(string.Format(formater.ToString(), columns));
-                builder.Append('\n');
+                builder.Append(string.Format(formater, columns)).Append('\n');
             }
-            Debug.WriteLine(builder.ToString());
             return builder.ToString();
         }
 
         private void TableColumnChanged(object sender, DataColumnChangeEventArgs e)
         {
-            // throw new NotImplementedException();
             var rowNumber = DataTable.Rows.IndexOf(e.Row);
             if (rowNumber >= 0)
             {
-                var columnName = e.Column.ColumnName;
+                var columnIndex = DataTable.Columns.IndexOf(e.Column);
                 var value = e.ProposedValue;
-                CellChanged?.Invoke(this, new CellChangedEventArgs(columnName, rowNumber, value));
+                CellChanged?.Invoke(this, new CellChangedEventArgs(columnIndex, rowNumber, value));
             }
 
         }
 
         private void TableRowChanged(object sender, DataRowChangeEventArgs e)
         {
-            //throw new NotImplementedException();
             if (e.Action == DataRowAction.Add)
             {
-                var values = new string[ColumnCount];
+                var values = new object[ColumnCount];
                 for (var i = 0; i < ColumnCount; i++)
-                    values[i] = e.Row.ItemArray[i].ToString();
+                    values[i] = e.Row.ItemArray[i];
                 RowAdded?.Invoke(this, values);
             }
         }
@@ -123,15 +117,15 @@ namespace PsqlSharp
 
     public class CellChangedEventArgs : EventArgs
     {
-        public int RowNumber { get; }
+        public int RowIndex { get; }
 
-        public string ColumnName { get; }
+        public int ColumnIndex { get; }
 
         public object? Value { get; }
-        public CellChangedEventArgs(string columnName, int rowNumber, object? value)
+        public CellChangedEventArgs(int columnIndex, int rowIndex, object? value)
         {
-            ColumnName = columnName;
-            RowNumber = rowNumber;
+            ColumnIndex = columnIndex;
+            RowIndex = rowIndex;
             Value = value;
         }
     }

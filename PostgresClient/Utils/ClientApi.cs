@@ -30,7 +30,7 @@ namespace PostgresClient.Utils
             remove => SqlApi.ConnectionStatusChanged -= value;
         }
 
-        public async Task<bool> AddRow(Table table, string[] values)
+        public async Task<bool> AddRow(Table table, object[] values)
         {
             try
             {
@@ -197,11 +197,11 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<bool> SetColumnByRow(string tableName, string columnName, string cellValue, int rowCount)
+        public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowCount)
         {
             try
             {
-                var result = await SqlApi.SetColumnByRow(tableName, columnName, cellValue, rowCount);
+                var result = await SqlApi.SetColumnByRow(table, cellValue, columnIndex, rowCount);
                 OnSuccssesExecution();
                 return result;
             }
