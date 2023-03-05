@@ -20,7 +20,7 @@
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
                     <Border  >
-                        <TextBlock x:Name="Text" Text="{Binding Name}" ></TextBlock>
+                        <TextBlock x:Name="Text" Text="{Binding Name}" Foreground="{Binding Color}" ></TextBlock>
                     </Border>
                    
                 </HierarchicalDataTemplate>

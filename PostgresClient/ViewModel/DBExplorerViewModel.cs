@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PostgresClient.ViewModel
 {
@@ -16,6 +17,8 @@ namespace PostgresClient.ViewModel
         public class Node
         {
             public string Name { get; set; }
+
+            public SolidColorBrush Color { get; set; }
             public ObservableCollection<Node> Nodes { get; set; }
 
             public DataBase DataBase { get; }
@@ -25,6 +28,7 @@ namespace PostgresClient.ViewModel
             public Node(string name)
             {
                 Name = name;
+                Color = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
             }
 
             public Node(string name, bool isFunc, int index, DataBase dataBase)
@@ -33,9 +37,15 @@ namespace PostgresClient.ViewModel
                 IsFunc = isFunc;
                 Index = index;
                 DataBase = dataBase;
+
+                if (IsFunc)
+                    Color = new SolidColorBrush(System.Windows.Media.Color.FromRgb(39, 174, 96));
+                else
+                    Color = new SolidColorBrush(System.Windows.Media.Color.FromRgb(41, 128, 185));
             }
             public Node(DataBase database)
             {
+                Color = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
                 Name = database.Name;
                 Nodes = new ObservableCollection<Node>();
                 if (database.Tables != null)
