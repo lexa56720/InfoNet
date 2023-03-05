@@ -71,7 +71,7 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<Table[]?> ExecuteCommand(string command)
+        public async Task<Table[]> ExecuteCommand(string command)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<string[]?> GetAllDataBaseNames()
+        public async Task<string[]> GetAllDataBaseNames()
         {
             try
             {
@@ -101,7 +101,7 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<Function[]?> GetAllFunctions()
+        public async Task<Function[]> GetAllFunctions()
         {
             try
             {
@@ -116,7 +116,7 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<Function[]?> GetAllFunctions(string dbName)
+        public async Task<Function[]> GetAllFunctions(string dbName)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<string[]?> GetAllTableNames()
+        public async Task<string[]> GetAllTableNames()
         {
             try
             {
@@ -142,7 +142,7 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return null; }
         }
 
-        public async Task<string[]?> GetAllTableNames(string dbName)
+        public async Task<string[]> GetAllTableNames(string dbName)
         {
             try
             {
@@ -260,7 +260,5 @@ namespace PostgresClient.Utils
         {
             SuccesExecution?.Invoke(this, callerName);
         }
-
-
     }
 }

@@ -100,7 +100,6 @@ namespace PsqlSharp
                 var value = e.ProposedValue;
                 CellChanged?.Invoke(this, new CellChangedEventArgs(columnIndex, rowNumber, value));
             }
-
         }
 
         private void TableRowChanged(object sender, DataRowChangeEventArgs e)
@@ -121,8 +120,9 @@ namespace PsqlSharp
 
         public int ColumnIndex { get; }
 
-        public object? Value { get; }
-        public CellChangedEventArgs(int columnIndex, int rowIndex, object? value)
+        public object Value { get; }
+
+        public CellChangedEventArgs(int columnIndex, int rowIndex, object value)
         {
             ColumnIndex = columnIndex;
             RowIndex = rowIndex;

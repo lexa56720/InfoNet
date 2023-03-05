@@ -1,4 +1,5 @@
 ﻿using PsqlSharp;
+using System;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -34,10 +35,10 @@ namespace PostgresClient.Model
         }
         public async Task DeleteRow(DataRow row)
         {
-            if(SelectedTable!= null)
+            if (SelectedTable != null)
             {
-                await Api.RemoveRow(SelectedTable.TableName, SelectedTable.IndexOfRow(row));
-                SelectedTable.RemoveRow(row);
+                if (await Api.RemoveRow(SelectedTable.TableName, SelectedTable.IndexOfRow(row)))
+                    SelectedTable.RemoveRow(row);
             }
         }
 
@@ -53,7 +54,7 @@ namespace PostgresClient.Model
         public async Task<string[]> GetTables()
         {
             var tables = await Api.GetAllTableNames();
-            return tables ?? new[] { string.Empty };
+            return tables ?? Array.Empty<string>();
         }
 
         public async Task<Table> GetSelectedTable(string tableName)

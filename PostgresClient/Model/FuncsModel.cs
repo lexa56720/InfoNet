@@ -6,44 +6,34 @@ namespace PostgresClient.Model
 {
     internal class FuncsModel : BaseModel
     {
-        private Function[]? Functions { get; set; }
+        private Function[] Functions { get; set; } = Array.Empty<Function>();
         public FuncsModel(ISqlApi api) : base(api)
         {
         }
 
-        public async Task<string[]?> GetFunctionsHeader()
+        public async Task<string[]> GetFunctionsHeader()
         {
             Functions = await Api.GetAllFunctions();
 
-            return Functions != null ? Array.ConvertAll(Functions, x => x.ToString()) : null;
+            return Array.ConvertAll(Functions, x => x.ToString());
         }
 
         public async Task<string> GetFunctionCode(int index)
         {
-            if (index < Functions.Length && index >= 0)
-            {
-                if (Functions == null)
-                    await GetFunctionsHeader();
-
-                return Functions[index].UserCode;
-            }
-            return string.Empty;
+            if (index < 0 || index > Functions.Length)
+                return string.Empty;
+            return Functions[index].UserCode;
         }
 
         public async Task<bool> UpdateFunction(int index, string code)
         {
-            if (index < Functions.Length && index >= 0)
-            {
-                Functions[index].UserCode = code;
-                return await Api.UpdateFunction(Functions[index]);
-            }
-            return false;
+            Functions[index].UserCode = code;
+            return await Api.UpdateFunction(Functions[index]);
         }
 
         public async Task DeleteFunction(int index)
         {
-            if (index<Functions.Length && index>=0 )
-                await Api.RemoveFunction(Functions[index]);
+            await Api.RemoveFunction(Functions[index]);
         }
     }
 }

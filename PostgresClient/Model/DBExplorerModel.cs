@@ -13,7 +13,7 @@ namespace PostgresClient.Model
         {
         }
 
-        private DataBase[]? Result
+        private DataBase[] Result
         {
             get => result;
             set
@@ -22,15 +22,16 @@ namespace PostgresClient.Model
                 ResultDate = DateTime.UtcNow;
             }
         }
-        private DataBase[]? result;
+        private DataBase[] result;
 
         private DateTime ResultDate { get; set; }
-        public async Task<DataBase[]?> GetDataBases()
+        public async Task<DataBase[]> GetDataBases()
         {
             await Task.Delay(Timeout);
             if (GetResultAgeInMs() > Timeout)
                 return await GetDataBasesRequest();
-            else return Result;
+            else 
+                return Result;
         }
 
         private double GetResultAgeInMs()
@@ -38,15 +39,9 @@ namespace PostgresClient.Model
             return (DateTime.UtcNow - ResultDate).TotalMilliseconds;
         }
 
-        private async Task<DataBase[]?> GetDataBasesRequest()
+        private async Task<DataBase[]> GetDataBasesRequest()
         {
-            if (!Api.IsConnected)
-                return Result = null;
-
             var dbNames = await Api.GetAllDataBaseNames();
-
-            if (dbNames == null)
-                return Result = null;
 
             var tasks = new Task<DataBase?>[dbNames.Length];
 
@@ -54,8 +49,7 @@ namespace PostgresClient.Model
                 tasks[i] = Api.GetDataBaseContent(dbNames[i]);
 
             await Task.WhenAll(tasks);
-            var dbs= tasks.Select(t => t.Result).Where(r => r != null).ToArray();
-            return Result = dbs.Count()==0 ? null : dbs;
+            return Result = tasks.Select(t => t.Result).Where(r => r != null).ToArray();          
         }
     }
 }

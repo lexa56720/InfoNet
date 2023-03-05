@@ -73,7 +73,7 @@ namespace PsqlSharp
             return false;
         }
 
-        public async Task<Table[]?> ExecuteCommand(string command)
+        public async Task<Table[]> ExecuteCommand(string command)
         {
             await Semaphore.WaitAsync();
             try
@@ -84,8 +84,6 @@ namespace PsqlSharp
                     using var adapter = new NpgsqlDataAdapter(commandObj);
                     var dataSet = new DataSet();
                     adapter.Fill(dataSet);
-                    if (dataSet.Tables.Count == 0)
-                        return null;
 
                     var tables = new Table[dataSet.Tables.Count];
                     for (var i = 0; i < dataSet.Tables.Count; i++)
@@ -98,12 +96,10 @@ namespace PsqlSharp
             {
                 Semaphore.Release();
             }
-
-
-            return null;
+            return Array.Empty<Table>();
         }
 
-        public async Task<string[]?> GetAllDataBaseNames()
+        public async Task<string[]> GetAllDataBaseNames()
         {
             if (IsConnected)
             {
@@ -113,7 +109,7 @@ namespace PsqlSharp
                     result[i] = databases[i, 0];
                 return result;
             }
-            return null;
+            return Array.Empty<string>();
         }
         public async Task<DataBase?> GetDataBaseContent(string dbName)
         {
@@ -123,7 +119,7 @@ namespace PsqlSharp
         }
 
 
-        public async Task<string[]?> GetAllTableNames()
+        public async Task<string[]> GetAllTableNames()
         {
             if (IsConnected)
             {
@@ -138,9 +134,9 @@ namespace PsqlSharp
                     return result.ToArray();
             }
 
-            return null;
+            return Array.Empty<string>();
         }
-        public async Task<string[]?> GetAllTableNames(string dbName)
+        public async Task<string[]> GetAllTableNames(string dbName)
         {
             if (IsConnected)
             {
@@ -148,7 +144,7 @@ namespace PsqlSharp
                 await db.ConnectAsync(ConnectionData with { Database = dbName });
                 return await db.GetAllTableNames();
             }
-            return null;
+            return Array.Empty<string>();
         }
 
 
@@ -177,7 +173,7 @@ namespace PsqlSharp
         }
 
 
-        public async Task<Function[]?> GetAllFunctions()
+        public async Task<Function[]> GetAllFunctions()
         {
             if (IsConnected)
             {
@@ -203,9 +199,9 @@ namespace PsqlSharp
                 if (funcTable != null)
                     return Function.Parse(funcTable);
             }
-            return null;
+            return Array.Empty<Function>();
         }
-        public async Task<Function[]?> GetAllFunctions(string dbName)
+        public async Task<Function[]> GetAllFunctions(string dbName)
         {
             if (IsConnected)
             {
@@ -213,7 +209,7 @@ namespace PsqlSharp
                 await db.ConnectAsync(ConnectionData with { Database = dbName });
                 return await db.GetAllFunctions();
             }
-            return null;
+            return Array.Empty<Function>();
         }
 
 
@@ -256,12 +252,20 @@ namespace PsqlSharp
 
         public async Task<bool> RemoveRow(string tableName, int rowIndex)
         {
-            var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
-            var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
-            await ExecuteCommand(
-                @$"Delete from {tableName}
+            try
+            {
+                var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
+                var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
+                await ExecuteCommand(
+                    @$"Delete from {tableName}
                     WHERE ctid='{ctid}';");
-            return true;
+                return true;
+            }
+            catch
+            {
+                throw;           
+            }
+
         }
         public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex)
         {

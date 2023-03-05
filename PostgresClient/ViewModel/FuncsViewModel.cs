@@ -134,9 +134,7 @@ namespace PostgresClient.ViewModel
         private async Task Update()
         {
             var funcs = await Model.GetFunctionsHeader();
-            if (funcs != null)
-                FuncList = new ObservableCollection<string>(funcs);
-
+            FuncList = new ObservableCollection<string>(funcs);
         }
 
         private async Task Save()
@@ -156,8 +154,12 @@ namespace PostgresClient.ViewModel
 
         private async Task Reset()
         {
-            FuncBody = await Model.GetFunctionCode(Selected);
-            await Update();
+            if (Selected != -1)
+            {
+                await Update();
+                FuncBody = await Model.GetFunctionCode(Selected);
+            }
+                
         }
 
         private async Task Remove()
@@ -170,7 +172,6 @@ namespace PostgresClient.ViewModel
                     Selected = -1;
                     Messenger.Send(new Message("UpdateDB"), this);
                 });
-
         }
 
     }

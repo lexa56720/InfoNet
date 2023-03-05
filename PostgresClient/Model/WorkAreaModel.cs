@@ -15,18 +15,14 @@ namespace PostgresClient.Model
         {
             var result = await Api.ExecuteCommand(commandText);
 
-            if (result != null)
+            var resultString = new StringBuilder();
+            foreach (var table in result)
             {
-                var resultString = new StringBuilder();
-                foreach (var table in result)
-                {
-                    resultString.Append(table.ToString());
-                    resultString.Append('\n');
-                }
-                   
-                return resultString.ToString();
+                resultString.Append(table.ToString());
+                resultString.Append('\n');
             }
-            return null;
+
+            return resultString.ToString();
         }
 
     }
