@@ -22,17 +22,6 @@ namespace PostgresClient.ViewModel
         }
         private string dumpDirectory = string.Empty;
 
-        public string DumpFile
-        {
-            get => dumpFile;
-            set
-            {
-                dumpFile = value;
-                OnPropertyChanged(nameof(DumpFile));
-            }
-        }
-        private string dumpFile=string.Empty;
-
         public ICommand SaveCommand => new Command(async o => await Save());
         public ICommand LoadCommand => new Command(async o => await Load());
 
@@ -50,26 +39,18 @@ namespace PostgresClient.ViewModel
 
         public async Task Save()
         {
-            if (!string.IsNullOrEmpty(DumpDirectory) && !string.IsNullOrEmpty(DumpFile))
-            {
-                if (Path.Exists(DumpDirectory))
-                    await Model.Save(Path.Combine(DumpDirectory, DumpFile));
-            }
-
+            if (!string.IsNullOrEmpty(DumpDirectory))
+                await Model.Save(DumpDirectory);
         }
 
 
         public async Task Load()
         {
-            if (!string.IsNullOrEmpty(DumpDirectory) && !string.IsNullOrEmpty(DumpFile))
+            if (!string.IsNullOrEmpty(DumpDirectory) && Path.Exists(DumpDirectory) && await Model.Load(DumpDirectory))
             {
-                var path = Path.Combine(DumpDirectory, DumpFile);
-                if (Path.Exists(path) && await Model.Load(path))
-                {
-                    Messenger.Send(new Message("UpdateDB"), this);
-                    Messenger.Send(new Message("UpdateFuncs"), this);
-                    Messenger.Send(new Message("UpdateTables"), this);
-                }
+                Messenger.Send(new Message("UpdateDB"), this);
+                Messenger.Send(new Message("UpdateFuncs"), this);
+                Messenger.Send(new Message("UpdateTables"), this);
             }
         }
         private void OnFocus()
@@ -79,9 +60,7 @@ namespace PostgresClient.ViewModel
                 InputPath = $"{AppContext.BaseDirectory}"
             };
             if (folderPicker.ShowDialog() == true)
-            {
                 DumpDirectory = folderPicker.ResultPath;
-            };
         }
     }
 }

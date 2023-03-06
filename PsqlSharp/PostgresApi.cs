@@ -84,7 +84,7 @@ namespace PsqlSharp
                     using var adapter = new NpgsqlDataAdapter(commandObj);
                     var dataSet = new DataSet();
                     adapter.Fill(dataSet);
-
+             
                     var tables = new Table[dataSet.Tables.Count];
                     for (var i = 0; i < dataSet.Tables.Count; i++)
                         tables[i] = new Table(dataSet.Tables[i]);
@@ -265,8 +265,8 @@ namespace PsqlSharp
             {
                 throw;
             }
-
         }
+
         public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex)
         {
             var value = ConvertValuesTypes(new object[] { cellValue }, table)[0];

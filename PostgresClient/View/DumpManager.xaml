@@ -42,9 +42,6 @@
                     </StackPanel>
                 </Button>
             </Grid>
-     
-            <Label FontSize="15" Content="Имя файла:" Grid.Row="2" Grid.Column="0" />
-            <TextBox Margin="10" FontSize="15" Grid.Row="2" Grid.Column="1" Text="{Binding DumpFile}" />
         </Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
             <Button  FontSize="20" HorizontalAlignment="Stretch" Margin="10" Command="{Binding SaveCommand,IsAsync=True}" >

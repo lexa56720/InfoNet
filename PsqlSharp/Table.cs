@@ -15,7 +15,7 @@ namespace PsqlSharp
         public Type[]? ColumnTypes { get; private set; }
         public DataTable DataTable { get; }
 
-        public event EventHandler<object[]>? RowAdded;
+        public event EventHandler<DataRow>? RowAdded;
 
         public event EventHandler<CellChangedEventArgs>? CellChanged;
 
@@ -31,7 +31,7 @@ namespace PsqlSharp
             DataTable = table;
             ColumnsSetup(table);
 
-            DataTable.ColumnChanged += TableColumnChanged;
+            DataTable.ColumnChanged += TableCellChanged;
             DataTable.RowChanged += TableRowChanged;
         }
 
@@ -91,7 +91,7 @@ namespace PsqlSharp
             return builder.ToString();
         }
 
-        private void TableColumnChanged(object sender, DataColumnChangeEventArgs e)
+        private void TableCellChanged(object sender, DataColumnChangeEventArgs e)
         {
             var rowNumber = DataTable.Rows.IndexOf(e.Row);
             if (rowNumber >= 0)
@@ -107,9 +107,7 @@ namespace PsqlSharp
             if (e.Action == DataRowAction.Add)
             {
                 var values = new object[ColumnCount];
-                for (var i = 0; i < ColumnCount; i++)
-                    values[i] = e.Row.ItemArray[i];
-                RowAdded?.Invoke(this, values);
+                RowAdded?.Invoke(this, e.Row);
             }
         }
     }

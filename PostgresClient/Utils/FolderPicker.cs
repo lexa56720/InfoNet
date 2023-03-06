@@ -46,7 +46,7 @@ namespace PostgresClient.Utils
                 dialog.SetFolder(item);
             }
 
-            var options = FOS.FOS_PICKFOLDERS;
+            var options = FOS.FOS_CREATEPROMPT;
             options = (FOS)SetOptions((int)options);
             dialog.SetOptions(options);
 

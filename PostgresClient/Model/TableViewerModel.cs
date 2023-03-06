@@ -42,9 +42,12 @@ namespace PostgresClient.Model
             }
         }
 
-        private void SelectedTableRowAdded(object? sender, object[] e)
+        private void SelectedTableRowAdded(object? sender, DataRow e)
         {
-            Api.AddRow(SelectedTable, e);
+            Task.Run(async () =>
+            {
+                await Api.AddRow(SelectedTable, e.ItemArray);
+            });
         }
 
         private void SelectedTableCellChanged(object? sender, CellChangedEventArgs e)

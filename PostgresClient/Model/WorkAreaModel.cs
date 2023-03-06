@@ -14,6 +14,8 @@ namespace PostgresClient.Model
         public async Task<string?> ExecuteCommand(string commandText)
         {
             var result = await Api.ExecuteCommand(commandText);
+            if (result.Length == 0)
+                return null;
 
             var resultString = new StringBuilder();
             foreach (var table in result)
