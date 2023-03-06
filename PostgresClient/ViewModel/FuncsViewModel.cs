@@ -109,11 +109,10 @@ namespace PostgresClient.ViewModel
         {
             return new FuncsModel(api);
         }
-        private async Task ShowFunc(int index)
+        private void ShowFunc(int index)
         {
             IsEditable = true;
-            var code = Model.GetFunctionCode(index);
-            FuncBody = await code;
+            FuncBody = Model.GetFunctionCode(index); ;
         }
         private async void LoadFunc(Tuple<Function, string> loadRequest)
         {
@@ -157,7 +156,7 @@ namespace PostgresClient.ViewModel
             if (Selected != -1)
             {
                 await Update();
-                FuncBody = await Model.GetFunctionCode(Selected);
+                FuncBody = Model.GetFunctionCode(Selected);
             }
                 
         }

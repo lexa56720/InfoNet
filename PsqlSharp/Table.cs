@@ -118,9 +118,9 @@ namespace PsqlSharp
 
         public int ColumnIndex { get; }
 
-        public object Value { get; }
+        public object? Value { get; }
 
-        public CellChangedEventArgs(int columnIndex, int rowIndex, object value)
+        public CellChangedEventArgs(int columnIndex, int rowIndex, object? value)
         {
             ColumnIndex = columnIndex;
             RowIndex = rowIndex;

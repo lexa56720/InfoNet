@@ -18,7 +18,7 @@ namespace PostgresClient.Model
             return Array.ConvertAll(Functions, x => x.ToString());
         }
 
-        public async Task<string> GetFunctionCode(int index)
+        public string GetFunctionCode(int index)
         {
             if (index < 0 || index > Functions.Length)
                 return string.Empty;
