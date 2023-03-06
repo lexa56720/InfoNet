@@ -336,6 +336,7 @@ namespace PsqlSharp
                 using var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";
 
+                cmd.StartInfo.RedirectStandardError = true;
                 cmd.StartInfo.RedirectStandardInput = true;
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
@@ -358,7 +359,7 @@ namespace PsqlSharp
             {
                 var directory = (await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
                 var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
-                ClearDataBase();
+                await ClearDataBase();
 
                 using var cmd = new Process();
                 cmd.StartInfo.FileName = "cmd.exe";

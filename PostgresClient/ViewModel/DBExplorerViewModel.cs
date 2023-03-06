@@ -121,14 +121,17 @@ namespace PostgresClient.ViewModel
 
         private async Task Update()
         {
-            var dataBases = await Model.GetDataBases();
-            var mainNode = new Node("Базы данных")
+            await App.Current.Dispatcher.InvokeAsync(async () =>
             {
-                Nodes = new ObservableCollection<Node>()
-            };
-            foreach (var database in dataBases)
+                var dataBases = await Model.GetDataBases();
+                var mainNode = new Node("Базы данных")
+                {
+                    Nodes = new ObservableCollection<Node>()
+                };
+                foreach (var database in dataBases)
                     mainNode.Nodes.Add(new Node(database));
-            DataBases = new ObservableCollection<Node>(new Node[] { mainNode });
+                DataBases = new ObservableCollection<Node>(new Node[] { mainNode });
+            });
         }
     }
 }
