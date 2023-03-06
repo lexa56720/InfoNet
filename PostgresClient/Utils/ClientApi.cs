@@ -82,7 +82,7 @@ namespace PostgresClient.Utils
             catch (Exception e)
             {
                 OnExceprionOccured(e);
-                return null;
+                return Array.Empty<Table>();
             }
         }
 
@@ -97,7 +97,7 @@ namespace PostgresClient.Utils
             catch (Exception e)
             {
                 OnExceprionOccured(e);
-                return null;
+                return Array.Empty<string>();
             }
         }
 
@@ -112,7 +112,7 @@ namespace PostgresClient.Utils
             catch (Exception e)
             {
                 OnExceprionOccured(e);
-                return null;
+                return Array.Empty<Function>();
             }
         }
 
@@ -127,7 +127,7 @@ namespace PostgresClient.Utils
             catch (Exception e)
             {
                 OnExceprionOccured(e);
-                return null;
+                return Array.Empty<Function>();
             }
         }
 
@@ -139,7 +139,7 @@ namespace PostgresClient.Utils
                 OnSuccssesExecution();
                 return result;
             }
-            catch (Exception e) { OnExceprionOccured(e); return null; }
+            catch (Exception e) { OnExceprionOccured(e);  return Array.Empty<string>(); }
         }
 
         public async Task<string[]> GetAllTableNames(string dbName)
@@ -150,7 +150,7 @@ namespace PostgresClient.Utils
                 OnSuccssesExecution();
                 return result;
             }
-            catch (Exception e) { OnExceprionOccured(e); return null; }
+            catch (Exception e) { OnExceprionOccured(e); return Array.Empty<string>(); }
         }
 
         public async Task<DataBase?> GetDataBaseContent(string dbName)

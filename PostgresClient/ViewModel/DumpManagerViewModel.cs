@@ -52,8 +52,7 @@ namespace PostgresClient.ViewModel
         {
             if (!string.IsNullOrEmpty(DumpDirectory) && !string.IsNullOrEmpty(DumpFile))
             {
-                var path = Path.Combine(DumpDirectory, DumpFile);
-                if (Path.Exists(path) && await Model.Load(path))
+                if (Path.Exists(DumpDirectory))
                     await Model.Save(Path.Combine(DumpDirectory, DumpFile));
             }
 
