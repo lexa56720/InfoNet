@@ -73,7 +73,7 @@ namespace PsqlSharp
             return false;
         }
 
-        public async Task<Table[]> ExecuteCommand(string command)
+        public async Task<Table[]> ExecuteCommandAsync(string command)
         {
             await Semaphore.WaitAsync();
             try
@@ -84,7 +84,32 @@ namespace PsqlSharp
                     using var adapter = new NpgsqlDataAdapter(commandObj);
                     var dataSet = new DataSet();
                     adapter.Fill(dataSet);
-             
+
+                    var tables = new Table[dataSet.Tables.Count];
+                    for (var i = 0; i < dataSet.Tables.Count; i++)
+                        tables[i] = new Table(dataSet.Tables[i]);
+
+                    return tables;
+                }
+            }
+            finally
+            {
+                Semaphore.Release();
+            }
+            return Array.Empty<Table>();
+        }
+        public Table[] ExecuteCommand(string command)
+        {
+            Semaphore.Wait();
+            try
+            {
+                if (IsConnected)
+                {
+                    using var commandObj = new NpgsqlCommand(command, Connection);
+                    using var adapter = new NpgsqlDataAdapter(commandObj);
+                    var dataSet = new DataSet();
+                    adapter.Fill(dataSet);
+
                     var tables = new Table[dataSet.Tables.Count];
                     for (var i = 0; i < dataSet.Tables.Count; i++)
                         tables[i] = new Table(dataSet.Tables[i]);
@@ -99,11 +124,11 @@ namespace PsqlSharp
             return Array.Empty<Table>();
         }
 
-        public async Task<string[]> GetAllDataBaseNames()
+        public async Task<string[]> GetAllDataBaseNamesAsync()
         {
             if (IsConnected)
             {
-                var databases = (await ExecuteCommand("SELECT datname FROM pg_database where datistemplate='f';"))[0];
+                var databases = (await ExecuteCommandAsync("SELECT datname FROM pg_database where datistemplate='f';"))[0];
                 var result = new string[databases.RowCount];
                 for (var i = 0; i < databases.RowCount; i++)
                     result[i] = databases[i, 0];
@@ -111,19 +136,19 @@ namespace PsqlSharp
             }
             return Array.Empty<string>();
         }
-        public async Task<DataBase?> GetDataBaseContent(string dbName)
+        public async Task<DataBase?> GetDataBaseContentAsync(string dbName)
         {
-            var tables = await GetAllTableNames(dbName);
-            var funcs = await GetAllFunctions(dbName);
+            var tables = await GetAllTableNamesAsync(dbName);
+            var funcs = await GetAllFunctionsAsync(dbName);
             return new DataBase(dbName, tables, funcs);
         }
 
 
-        public async Task<string[]> GetAllTableNames()
+        public async Task<string[]> GetAllTableNamesAsync()
         {
             if (IsConnected)
             {
-                var tables = (await ExecuteCommand(@"select * from pg_tables;"))[0];
+                var tables = (await ExecuteCommandAsync(@"select * from pg_tables;"))[0];
 
                 var result = new List<string>();
                 for (var i = 0; i < tables.RowCount; i++)
@@ -136,23 +161,23 @@ namespace PsqlSharp
 
             return Array.Empty<string>();
         }
-        public async Task<string[]> GetAllTableNames(string dbName)
+        public async Task<string[]> GetAllTableNamesAsync(string dbName)
         {
             if (IsConnected)
             {
                 var db = new PostgresApi();
                 await db.ConnectAsync(ConnectionData with { Database = dbName });
-                return await db.GetAllTableNames();
+                return await db.GetAllTableNamesAsync();
             }
             return Array.Empty<string>();
         }
 
 
-        public async Task<Table?> GetTableContent(string tableName)
+        public async Task<Table?> GetTableContentAsync(string tableName)
         {
             if (IsConnected)
             {
-                var table = (await ExecuteCommand($"select * from {tableName}"))[0];
+                var table = (await ExecuteCommandAsync($"select * from {tableName}"))[0];
                 if (table != null)
                 {
                     table.TableName = tableName;
@@ -161,23 +186,23 @@ namespace PsqlSharp
             }
             return null;
         }
-        public async Task<Table?> GetTableContent(string tableName, string dbName)
+        public async Task<Table?> GetTableContentAsync(string tableName, string dbName)
         {
             if (IsConnected)
             {
                 var db = new PostgresApi();
                 await db.ConnectAsync(ConnectionData with { Database = dbName });
-                return await db.GetTableContent(tableName);
+                return await db.GetTableContentAsync(tableName);
             }
             return null;
         }
 
 
-        public async Task<Function[]> GetAllFunctions()
+        public async Task<Function[]> GetAllFunctionsAsync()
         {
             if (IsConnected)
             {
-                var funcTable = (await ExecuteCommand(
+                var funcTable = (await ExecuteCommandAsync(
                     @"select n.nspname as function_schema,
                 p.proname as function_name,
                 l.lanname as function_language,
@@ -201,62 +226,62 @@ namespace PsqlSharp
             }
             return Array.Empty<Function>();
         }
-        public async Task<Function[]> GetAllFunctions(string dbName)
+        public async Task<Function[]> GetAllFunctionsAsync(string dbName)
         {
             if (IsConnected)
             {
                 var db = new PostgresApi();
                 await db.ConnectAsync(ConnectionData with { Database = dbName });
-                return await db.GetAllFunctions();
+                return await db.GetAllFunctionsAsync();
             }
             return Array.Empty<Function>();
         }
 
 
-        public async Task<bool> RemoveFunction(Function function)
+        public async Task<bool> RemoveFunctionAsync(Function function)
         {
 
             if (IsConnected)
             {
-                await ExecuteCommand($"drop function {function.Name}({string.Join(',', function.Arguments)})");
+                await ExecuteCommandAsync($"drop function {function.Name}({string.Join(',', function.Arguments)})");
 
                 return true;
             }
 
             return false;
         }
-        public async Task<bool> UpdateFunction(Function updatedFunction)
+        public async Task<bool> UpdateFunctionAsync(Function updatedFunction)
         {
             if (IsConnected)
             {
 
                 try
                 {
-                    await ExecuteCommand("Begin;");
+                    await ExecuteCommandAsync("Begin;");
 
-                    await RemoveFunction(updatedFunction);
-                    await ExecuteCommand(updatedFunction.SourceCode);
+                    await RemoveFunctionAsync(updatedFunction);
+                    await ExecuteCommandAsync(updatedFunction.SourceCode);
                 }
                 catch
                 {
 
-                    await ExecuteCommand("rollback;");
+                    await ExecuteCommandAsync("rollback;");
                     throw;
                 }
 
-                await ExecuteCommand("commit;");
+                await ExecuteCommandAsync("commit;");
                 return true;
             }
             return false;
         }
 
-        public async Task<bool> RemoveRow(string tableName, int rowIndex)
+        public async Task<bool> RemoveRowAsync(string tableName, int rowIndex)
         {
             try
             {
-                var rowNumbers = (await ExecuteCommand($"select ctid, * from {tableName};"))[0];
+                var rowNumbers = (await ExecuteCommandAsync($"select ctid, * from {tableName};"))[0];
                 var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
-                await ExecuteCommand(
+                await ExecuteCommandAsync(
                     @$"Delete from {tableName}
                     WHERE ctid='{ctid}';");
                 return true;
@@ -267,27 +292,29 @@ namespace PsqlSharp
             }
         }
 
-        public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex)
+        public async Task<bool> SetCellValueAsync(Table table, object cellValue, int columnIndex, int rowIndex)
         {
-            var value = ConvertValuesTypes(new object[] { cellValue }, table)[0];
-            var rowNumbers = (await ExecuteCommand($"select ctid, * from {table.TableName};"))[0];
+            var value = ConvertValuesTypes(new object[] { cellValue }, table.ColumnTypes)[0];
+            var rowNumbers = (await ExecuteCommandAsync($"select ctid, * from {table.TableName};"))[0];
             var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
-            await ExecuteCommand(
+            await ExecuteCommandAsync(
                 @$"UPDATE {table.TableName}
                     SET {table.DataTable.Columns[columnIndex].ColumnName} = {value}
                     WHERE ctid='{ctid}';");
+            await UpdateRows(table);
             return true;
         }
-        public async Task<bool> AddRow(Table table, object[] values)
+        public async Task<bool> AddRowAsync(Table table, object[] values)
         {
-            values = ConvertValuesTypes(values, table);
-            await ExecuteCommand(
+            values = ConvertValuesTypes(values, table.ColumnTypes);
+            await ExecuteCommandAsync(
                @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
                     VALUES ({string.Join(", ", values)})");
+            await UpdateRows(table);
             return true;
 
         }
-        private string[] ConvertValuesTypes(object[] values, Table table)
+        private string[] ConvertValuesTypes(object?[] values, Type[] columnTypes)
         {
             var result = new string[values.Length];
             var typeConverter = new Dictionary<Type, Func<object, string>>()
@@ -312,13 +339,13 @@ namespace PsqlSharp
             };
             for (var i = 0; i < values.Length; i++)
             {
-                if (values[i].GetType() == typeof(DBNull))
+                if (values[i] == null || values[i].GetType() == typeof(DBNull))
                 {
                     result[i] = "null";
                     continue;
                 }
-                if (typeConverter.ContainsKey(table.ColumnTypes[i]))
-                    result[i] = typeConverter[table.ColumnTypes[i]](values[i]);
+                if (typeConverter.ContainsKey(columnTypes[i]))
+                    result[i] = typeConverter[columnTypes[i]](values[i]);
                 else
                     result[i] = values[i].ToString();
             }
@@ -326,11 +353,11 @@ namespace PsqlSharp
             return result;
         }
 
-        public async Task<bool> ExportDataBase(string outputPath)
+        public async Task<bool> ExportDataBaseAsync(string outputPath)
         {
             if (IsConnected)
             {
-                var directory = (await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
+                var directory = (await ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
                 var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
                 using var cmd = new Process();
@@ -353,11 +380,11 @@ namespace PsqlSharp
             }
             return false;
         }
-        public async Task<bool> ImportDataBase(string inputPath)
+        public async Task<bool> ImportDataBaseAsync(string inputPath)
         {
             if (IsConnected)
             {
-                var directory = (await ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
+                var directory = (await ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
                 var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
                 await ClearDataBase();
 
@@ -388,18 +415,105 @@ namespace PsqlSharp
         {
             var dropDBCommand = new StringBuilder();
 
-            var tables = await GetAllTableNames();
+            var tables = await GetAllTableNamesAsync();
             foreach (var table in tables)
                 dropDBCommand.Append($"Drop table {table} cascade;");
 
-            var funcs = await GetAllFunctions();
+            var funcs = await GetAllFunctionsAsync();
             foreach (var func in funcs)
                 dropDBCommand.Append($"drop function {func.Name}({string.Join(',', func.Arguments)});");
 
-            if (dropDBCommand.Length >0)
-                await ExecuteCommand(dropDBCommand.ToString());
+            if (dropDBCommand.Length > 0)
+                await ExecuteCommandAsync(dropDBCommand.ToString());
             return true;
         }
+        private async Task UpdateRows(Table table)
+        {
+            var a = await GetTableContentAsync(table.TableName);
+            int indexFrom = -1, indexTo = -1;
+            for (int i = 0; i < table.RowCount; i++)
+                if (!Enumerable.SequenceEqual(table.DataTable.Rows[i].ItemArray,a.DataTable.Rows[i].ItemArray))
+                {
+                    if (indexFrom < 0)
+                        indexFrom = i;
+                    else
+                        indexTo = i;
+                }
+            var c = table.DataTable.Rows[indexFrom].ItemArray;
+            table.DataTable.Rows[indexFrom].ItemArray = table.DataTable.Rows[indexTo].ItemArray;
+            table.DataTable.Rows[indexTo].ItemArray = c;
+        }
+        public bool IsCanAddRow(DataTable table, DataRow row)
+        {
+            try
+            {
+                ExecuteCommand("begin;");
 
+                var names = new string[table.Columns.Count];
+                var types = new Type[table.Columns.Count];
+                for (var i = 0; i < table.Columns.Count; i++)
+                {
+                    types[i] = table.Columns[i].DataType;
+                    names[i] = table.Columns[i].ColumnName;
+                }
+
+
+                var values = ConvertValuesTypes(row.ItemArray, types);
+                ExecuteCommand(
+                   @$"INSERT INTO {table.TableName}({string.Join(", ", names)})
+                    VALUES ({string.Join(", ", values)})");
+                ExecuteCommand("rollback;");
+                return true;
+            }
+            catch
+            {
+                ExecuteCommand("rollback;");
+                return false;
+            }
+        }
+        public bool IsCanChangeRow(DataTable table, DataRow row)
+        {
+            try
+            {
+                ExecuteCommand("begin;");
+
+                var names = new string[table.Columns.Count];
+                var types = new Type[table.Columns.Count];
+                for (var i = 0; i < table.Columns.Count; i++)
+                {
+                    types[i] = table.Columns[i].DataType;
+                    names[i] = table.Columns[i].ColumnName;
+                }
+
+                var builder = new StringBuilder();
+                var values = ConvertValuesTypes(row.ItemArray, types);
+
+
+                var tableRowNumbers = ExecuteCommand($"select ctid, * from {table.TableName};")[0];
+                for (var i = 0; i < table.Columns.Count; i++)
+                {
+                    var a = row.ItemArray[i];
+                    var index = table.Rows.IndexOf(row);
+                    var b = tableRowNumbers.DataTable.Rows[index][i+1];
+                    if (a != b)
+                        builder.Append($"{names[i]}={values[i]},");
+                }
+
+                var command = builder.ToString(0, builder.Length - 1);
+
+                var ctid = ((NpgsqlTid)tableRowNumbers.DataTable.Rows[table.Rows.IndexOf(row)][0]).ToString();
+
+                if (command.Length > 0)
+                    ExecuteCommand(@$"UPDATE {table.TableName} SET {command} WHERE ctid='{ctid}';");
+
+                ExecuteCommand("rollback;");
+                return true;
+            }
+            catch
+            {
+                ExecuteCommand("rollback;");
+                return false;
+            }
+        }
     }
 }

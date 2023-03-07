@@ -13,7 +13,7 @@ namespace PostgresClient.Model
 
         public async Task<string[]> GetFunctionsHeader()
         {
-            Functions = await Api.GetAllFunctions();
+            Functions = await Api.GetAllFunctionsAsync();
 
             return Array.ConvertAll(Functions, x => x.ToString());
         }
@@ -28,12 +28,12 @@ namespace PostgresClient.Model
         public async Task<bool> UpdateFunction(int index, string code)
         {
             Functions[index].UserCode = code;
-            return await Api.UpdateFunction(Functions[index]);
+            return await Api.UpdateFunctionAsync(Functions[index]);
         }
 
         public async Task DeleteFunction(int index)
         {
-            await Api.RemoveFunction(Functions[index]);
+            await Api.RemoveFunctionAsync(Functions[index]);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace PostgresClient.Model
         {
             if (SelectedTable != null)
             {
-                if (await Api.RemoveRow(SelectedTable.TableName, SelectedTable.IndexOfRow(row)))
+                if (await Api.RemoveRowAsync(SelectedTable.TableName, SelectedTable.IndexOfRow(row)))
                     SelectedTable.RemoveRow(row);
             }
         }
@@ -46,23 +46,23 @@ namespace PostgresClient.Model
         {
             Task.Run(async () =>
             {
-                await Api.AddRow(SelectedTable, e.ItemArray);
+                await Api.AddRowAsync(SelectedTable, e.ItemArray);
             });
         }
 
         private void SelectedTableCellChanged(object? sender, CellChangedEventArgs e)
         {
-            Api.SetColumnByRow(SelectedTable, e.Value, e.ColumnIndex, e.RowIndex);
+            Api.SetCellValueAsync(SelectedTable, e.Value, e.ColumnIndex, e.RowIndex);
         }
         public async Task<string[]> GetTables()
         {
-            var tables = await Api.GetAllTableNames();
+            var tables = await Api.GetAllTableNamesAsync();
             return tables ?? Array.Empty<string>();
         }
 
         public async Task<Table> GetSelectedTable(string tableName)
         {
-            var table = await Api.GetTableContent(tableName);
+            var table = await Api.GetTableContentAsync(tableName);
             table ??= new Table();
             SelectedTable = table;
             return SelectedTable;
@@ -70,7 +70,7 @@ namespace PostgresClient.Model
 
         public async Task<Table> GetTable(string tableName, string dbName)
         {
-            var table = await Api.GetTableContent(tableName, dbName);
+            var table = await Api.GetTableContentAsync(tableName, dbName);
             table ??= new Table();
             SelectedTable = null;
             return table;

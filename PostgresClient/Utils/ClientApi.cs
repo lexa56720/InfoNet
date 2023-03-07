@@ -1,5 +1,6 @@
 ﻿using PsqlSharp;
 using System;
+using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -30,11 +31,11 @@ namespace PostgresClient.Utils
             remove => SqlApi.ConnectionStatusChanged -= value;
         }
 
-        public async Task<bool> AddRow(Table table, object[] values)
+        public async Task<bool> AddRowAsync(Table table, object[] values)
         {
             try
             {
-                var result = await SqlApi.AddRow(table, values);
+                var result = await SqlApi.AddRowAsync(table, values);
                 OnSuccssesExecution();
                 return result;
             }
@@ -71,11 +72,11 @@ namespace PostgresClient.Utils
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<Table[]> ExecuteCommand(string command)
+        public async Task<Table[]> ExecuteCommandAsync(string command)
         {
             try
             {
-                var result = await SqlApi.ExecuteCommand(command);
+                var result = await SqlApi.ExecuteCommandAsync(command);
                 OnSuccssesExecution();
                 return result;
             }
@@ -86,11 +87,11 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<string[]> GetAllDataBaseNames()
+        public async Task<string[]> GetAllDataBaseNamesAsync()
         {
             try
             {
-                var result = await SqlApi.GetAllDataBaseNames();
+                var result = await SqlApi.GetAllDataBaseNamesAsync();
                 OnSuccssesExecution();
                 return result;
             }
@@ -101,11 +102,11 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<Function[]> GetAllFunctions()
+        public async Task<Function[]> GetAllFunctionsAsync()
         {
             try
             {
-                var result = await SqlApi.GetAllFunctions();
+                var result = await SqlApi.GetAllFunctionsAsync();
                 OnSuccssesExecution();
                 return result;
             }
@@ -116,11 +117,11 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<Function[]> GetAllFunctions(string dbName)
+        public async Task<Function[]> GetAllFunctionsAsync(string dbName)
         {
             try
             {
-                var result = await SqlApi.GetAllFunctions(dbName);
+                var result = await SqlApi.GetAllFunctionsAsync(dbName);
                 OnSuccssesExecution();
                 return result;
             }
@@ -131,120 +132,120 @@ namespace PostgresClient.Utils
             }
         }
 
-        public async Task<string[]> GetAllTableNames()
+        public async Task<string[]> GetAllTableNamesAsync()
         {
             try
             {
-                var result = await SqlApi.GetAllTableNames();
-                OnSuccssesExecution();
-                return result;
-            }
-            catch (Exception e) { OnExceprionOccured(e);  return Array.Empty<string>(); }
-        }
-
-        public async Task<string[]> GetAllTableNames(string dbName)
-        {
-            try
-            {
-                var result = await SqlApi.GetAllTableNames(dbName);
+                var result = await SqlApi.GetAllTableNamesAsync();
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return Array.Empty<string>(); }
         }
 
-        public async Task<DataBase?> GetDataBaseContent(string dbName)
+        public async Task<string[]> GetAllTableNamesAsync(string dbName)
         {
             try
             {
-                var result = await SqlApi.GetDataBaseContent(dbName);
+                var result = await SqlApi.GetAllTableNamesAsync(dbName);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e) { OnExceprionOccured(e); return Array.Empty<string>(); }
+        }
+
+        public async Task<DataBase?> GetDataBaseContentAsync(string dbName)
+        {
+            try
+            {
+                var result = await SqlApi.GetDataBaseContentAsync(dbName);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return null; }
         }
 
-        public async Task<Table?> GetTableContent(string tableName)
+        public async Task<Table?> GetTableContentAsync(string tableName)
         {
             try
             {
-                var result = await SqlApi.GetTableContent(tableName);
+                var result = await SqlApi.GetTableContentAsync(tableName);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return null; }
         }
 
-        public async Task<Table?> GetTableContent(string tableName, string dbName)
+        public async Task<Table?> GetTableContentAsync(string tableName, string dbName)
         {
             try
             {
-                var result = await SqlApi.GetTableContent(tableName, dbName);
+                var result = await SqlApi.GetTableContentAsync(tableName, dbName);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return null; }
         }
 
-        public async Task<bool> RemoveFunction(Function function)
+        public async Task<bool> RemoveFunctionAsync(Function function)
         {
             try
             {
-                var result = await SqlApi.RemoveFunction(function);
+                var result = await SqlApi.RemoveFunctionAsync(function);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowCount)
+        public async Task<bool> SetCellValueAsync(Table table, object cellValue, int columnIndex, int rowCount)
         {
             try
             {
-                var result = await SqlApi.SetColumnByRow(table, cellValue, columnIndex, rowCount);
+                var result = await SqlApi.SetCellValueAsync(table, cellValue, columnIndex, rowCount);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<bool> UpdateFunction(Function updatedFunction)
+        public async Task<bool> UpdateFunctionAsync(Function updatedFunction)
         {
             try
             {
-                var result = await SqlApi.UpdateFunction(updatedFunction); ;
+                var result = await SqlApi.UpdateFunctionAsync(updatedFunction); ;
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
-        public async Task<bool> ExportDataBase(string outputPath)
+        public async Task<bool> ExportDataBaseAsync(string outputPath)
         {
             try
             {
-                var result = await SqlApi.ExportDataBase(outputPath);
-                OnSuccssesExecution();
-                return result;
-            }
-            catch (Exception e) { OnExceprionOccured(e); return false; }
-        }
-
-        public async Task<bool> ImportDataBase(string inputPath)
-        {
-            try
-            {
-                var result = await SqlApi.ImportDataBase(inputPath);
+                var result = await SqlApi.ExportDataBaseAsync(outputPath);
                 OnSuccssesExecution();
                 return result;
             }
             catch (Exception e) { OnExceprionOccured(e); return false; }
         }
 
-        public async Task<bool> RemoveRow(string tableName, int rowIndex)
+        public async Task<bool> ImportDataBaseAsync(string inputPath)
         {
             try
             {
-                var result = await SqlApi.RemoveRow(tableName, rowIndex); ;
+                var result = await SqlApi.ImportDataBaseAsync(inputPath);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e) { OnExceprionOccured(e); return false; }
+        }
+
+        public async Task<bool> RemoveRowAsync(string tableName, int rowIndex)
+        {
+            try
+            {
+                var result = await SqlApi.RemoveRowAsync(tableName, rowIndex); ;
                 OnSuccssesExecution();
                 return result;
             }
@@ -259,6 +260,31 @@ namespace PostgresClient.Utils
         private void OnSuccssesExecution([CallerMemberName] string callerName = "")
         {
             SuccesExecution?.Invoke(this, callerName);
+        }
+
+        public Table[] ExecuteCommand(string command)
+        {
+            try
+            {
+                var result = SqlApi.ExecuteCommand(command);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnExceprionOccured(e);
+                return Array.Empty<Table>();
+            }
+        }
+
+        public bool IsCanAddRow(DataTable table, DataRow row)
+        {
+            return SqlApi.IsCanAddRow(table, row);
+        }
+
+        public bool IsCanChangeRow(DataTable table, DataRow row)
+        {
+            return SqlApi.IsCanChangeRow(table, row);
         }
     }
 }

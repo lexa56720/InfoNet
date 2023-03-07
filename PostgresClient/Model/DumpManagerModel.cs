@@ -11,12 +11,12 @@ namespace PostgresClient.Model
 
         public async Task Save(string path)
         {
-            await Api.ExportDataBase(path);
+            await Api.ExportDataBaseAsync(path);
         }
 
         public async Task<bool> Load(string path)
         {
-            return await Api.ImportDataBase(path);
+            return await Api.ImportDataBaseAsync(path);
         }
     }
 }

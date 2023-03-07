@@ -41,12 +41,12 @@ namespace PostgresClient.Model
 
         private async Task<DataBase[]> GetDataBasesRequest()
         {
-            var dbNames = await Api.GetAllDataBaseNames();
+            var dbNames = await Api.GetAllDataBaseNamesAsync();
 
             var tasks = new Task<DataBase?>[dbNames.Length];
 
             for (var i = 0; i < dbNames.Length; i++)
-                tasks[i] = Api.GetDataBaseContent(dbNames[i]);
+                tasks[i] = Api.GetDataBaseContentAsync(dbNames[i]);
 
             await Task.WhenAll(tasks);
             return Result = tasks.Select(t => t.Result).Where(r => r != null).ToArray();          
