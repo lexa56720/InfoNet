@@ -7,10 +7,21 @@ namespace PsqlSharp
 {
     public class Table
     {
+
         public int ColumnCount => DataTable.Columns.Count;
         public int RowCount => DataTable.Rows.Count;
 
-        public string? TableName { get; internal set; }
+        public string? TableName
+        {
+            get => tableName;
+            internal set
+            {
+                tableName = value;
+                DataTable.TableName = value;
+            }
+        }
+        private string? tableName;
+
         public string[]? ColumnNames { get; private set; }
         public Type[]? ColumnTypes { get; private set; }
         public DataTable DataTable { get; }
@@ -30,7 +41,7 @@ namespace PsqlSharp
         {
             DataTable = table;
             ColumnsSetup(table);
-
+       
             DataTable.ColumnChanged += TableCellChanged;
             DataTable.RowChanged += TableRowChanged;
         }
@@ -81,7 +92,7 @@ namespace PsqlSharp
             var builder = new StringBuilder();
             builder.Append(string.Format(formater, ColumnNames)).Append("\n\n"); ;
 
-            string[] columns=new string[ColumnCount];
+            string[] columns = new string[ColumnCount];
             for (var i = 0; i < RowCount; i++)
             {
                 for (var j = 0; j < ColumnCount; j++)

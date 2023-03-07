@@ -1,4 +1,6 @@
-﻿namespace PsqlSharp
+﻿using System.Data;
+
+namespace PsqlSharp
 {
     public interface ISqlApi
     {
@@ -11,31 +13,33 @@
         public Task<bool> ConnectAsync(ConnectionData connectionData);
         public Task<bool> DisconnectAsync();
 
-        public Task<Table[]> ExecuteCommand(string command);
+        public Task<Table[]> ExecuteCommandAsync(string command);
+        public Table[] ExecuteCommand(string command);
 
 
-        public Task<string[]> GetAllDataBaseNames();
-        public Task<DataBase?> GetDataBaseContent(string dbName);
+        public Task<string[]> GetAllDataBaseNamesAsync();
+        public Task<DataBase?> GetDataBaseContentAsync(string dbName);
 
-        public Task<Table?> GetTableContent(string tableName);
-        public Task<Table?> GetTableContent(string tableName, string dbName);
+        public Task<Table?> GetTableContentAsync(string tableName);
+        public Task<Table?> GetTableContentAsync(string tableName, string dbName);
 
 
-        public Task<string[]> GetAllTableNames();
-        public Task<string[]> GetAllTableNames(string dbName);
+        public Task<string[]> GetAllTableNamesAsync();
+        public Task<string[]> GetAllTableNamesAsync(string dbName);
 
-        public Task<Function[]> GetAllFunctions();
-        public Task<Function[]> GetAllFunctions(string dbName);
+        public Task<Function[]> GetAllFunctionsAsync();
+        public Task<Function[]> GetAllFunctionsAsync(string dbName);
 
-        public Task<bool> RemoveFunction(Function function);
-        public Task<bool> UpdateFunction(Function updatedFunction);
+        public Task<bool> RemoveFunctionAsync(Function function);
+        public Task<bool> UpdateFunctionAsync(Function updatedFunction);
 
-        public Task<bool> RemoveRow(string tableName, int rowIndex);
-        public Task<bool> SetColumnByRow(Table table, object cellValue, int columnIndex, int rowIndex);
-        public Task<bool> AddRow(Table table, object[] values);
+        public Task<bool> RemoveRowAsync(string tableName, int rowIndex);
+        public Task<bool> SetCellValueAsync(Table table, object cellValue, int columnIndex, int rowIndex);
+        public Task<bool> AddRowAsync(Table table, object[] values);
 
-        public Task<bool> ExportDataBase(string outputPath);
-
-        public Task<bool> ImportDataBase(string inputPath);
+        public bool IsCanAddRow(DataTable table, DataRow row);
+        public bool IsCanChangeRow(DataTable table, DataRow row);
+        public Task<bool> ExportDataBaseAsync(string outputPath);
+        public Task<bool> ImportDataBaseAsync(string inputPath);
     }
 }

@@ -23,7 +23,7 @@ namespace InfoNet
 
         private static async Task<bool> LoadDump(ConnectionData connection, string inputPath)
         {
-            var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+            var directory = await Api.ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
 
             var cmd = new Process();
@@ -44,7 +44,7 @@ namespace InfoNet
 
         private static async Task<bool> CreateDump(ConnectionData connection, string outputPath)
         {
-            var directory = await Api.ExecuteCommand("SELECT * FROM pg_settings WHERE name = 'data_directory'");
+            var directory = await Api.ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'");
             var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
 
             var cmd = new Process();
