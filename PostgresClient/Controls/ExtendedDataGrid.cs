@@ -27,11 +27,7 @@ namespace PostgresClient.Controls
         protected override void OnCellEditEnding(DataGridCellEditEndingEventArgs e)
         {
             base.OnCellEditEnding(e);
-            if ((e.EditingElement as TextBox).Text != CellValue)
-            {
-
-                IsValueChanged = true;
-            }
+            IsValueChanged = (e.EditingElement as TextBox).Text != CellValue;
         }
 
         protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
@@ -51,24 +47,18 @@ namespace PostgresClient.Controls
 
         protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
         {
-            base.OnExecutedCommitEdit(e); 
+            base.OnExecutedCommitEdit(e);
             if (Validation.GetErrors(EditedRow).Count > 0)
             {
                 EditedRow.Background = new SolidColorBrush(Color.FromRgb(198, 40, 40));
             }
-            else
-                EditedRow.Background = new SolidColorBrush();
-            if (IsValueChanged)
+            else if (IsValueChanged)
             {
-               
-                if (Validation.GetErrors(EditedRow).Count < 0)
-                {
-                    EditedRow.Background = new SolidColorBrush(Color.FromRgb(46, 125, 50));
-                    IsValueChanged = false;
-                }
-                   
+                EditedRow.Background = new SolidColorBrush(Color.FromRgb(46, 125, 50));
+                IsValueChanged = false;
             }
-          
+            else if (!(EditedRow.Background as SolidColorBrush).Color.Equals(Color.FromRgb(46, 125, 50)))
+                EditedRow.Background = new SolidColorBrush();
 
         }
     }

@@ -37,7 +37,7 @@ namespace PostgresClient.Model
         {
             if (SelectedTable != null)
             {
-                if (await Api.RemoveRowAsync(SelectedTable.TableName, SelectedTable.IndexOfRow(row)))
+                if (await Api.RemoveRowAsync(SelectedTable.TableName, SelectedTable.GetIndexByRow(row)))
                     SelectedTable.RemoveRow(row);
             }
         }
@@ -52,7 +52,7 @@ namespace PostgresClient.Model
 
         private void SelectedTableCellChanged(object? sender, CellChangedEventArgs e)
         {
-            Api.SetCellValueAsync(SelectedTable, e.Value, e.ColumnIndex, e.RowIndex);
+            Api.SetCellValueAsync(SelectedTable, e.Value, e.ColumnIndex,SelectedTable.GetGlobalIndexByInner(e.RowIndex));
         }
         public async Task<string[]> GetTables()
         {
