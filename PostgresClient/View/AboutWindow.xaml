@@ -20,7 +20,7 @@
         <StackPanel VerticalAlignment="Stretch">
             <Label FontSize="25" Content="Postgres Client" HorizontalAlignment="Center"/>
             <TextBlock  FontSize="22" Text="Программма была разработана студентами группы АВТ-010 специально для курса информационных систем. " TextWrapping="WrapWithOverflow"  HorizontalAlignment="Center"/>
-            <Image VerticalAlignment="Center" Source="/PostgresClient;component/cat.png" Width="220"  />
+            <Image VerticalAlignment="Center" Source="/PostgresClient;component/cat.png" Width="250"  />
             <Label FontSize="15" Content="2023. Все права защищены." HorizontalAlignment="Center"/>
             
 

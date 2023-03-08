@@ -362,7 +362,7 @@
                     <Setter TargetName="Border" Property="Background" Value="#4a4a4a" />
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter TargetName="Border" Property="Background" Value="#121212" />
+                    <Setter TargetName="Border" Property="Opacity" Value="0.5" />
                 <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
                 <Setter Property="Foreground" Value="#888888"/>
                 <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
@@ -446,7 +446,7 @@
                                 <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#888888"/>
+                                <Setter Property="Opacity" Value="0.5"/>
                             </Trigger>
 
                             <Trigger Property="IsGrouping" Value="true">

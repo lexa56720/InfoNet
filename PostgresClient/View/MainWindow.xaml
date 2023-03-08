@@ -83,9 +83,8 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <!--App icon-->
 
-                    <Image Source="/PostgresClient;component/AppIcon.png" VerticalAlignment="Top" Width="35" Margin="5,-2,5,0"  Height="32" >
-                    </Image>
-                    <TextBlock Text="Postgres Client" FontFamily="Segoe UI" Margin="5,5,5,-5" VerticalAlignment="Center" FontSize="15" />
+                    <Image Source="/PostgresClient;component/AppIcon.png" VerticalAlignment="Top" Width="25" Margin="5,2,5,0"  Height="32" />
+                    <TextBlock Text="Postgres Client" FontFamily="Segoe UI" Margin="5,5,5,5" VerticalAlignment="Center" FontSize="15" />
                 </StackPanel>
 
                 <!--Caption buttons-->

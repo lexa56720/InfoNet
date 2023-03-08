@@ -11,11 +11,9 @@ namespace PostgresClient
     public partial class App : Application
     {
         public static ClientApi Api { get; private set; }
-
         public App()
         {
             Api = new ClientApi(new PostgresApi());
         }
-
     }
 }
