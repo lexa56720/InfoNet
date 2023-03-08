@@ -16,7 +16,7 @@ namespace PsqlSharp
 
         public override string ToString()
         {
-            return $"Host={Host};Username={Username};Password={Password};Database={Database.ToLower()};Port={Port};Include Error Detail=true";
+            return $"Host={Host};Username={Username};Password={Password};Database={Database.ToLower()};Port={Port};";
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
@@ -40,8 +41,11 @@ namespace PsqlSharp
         public Table(DataTable table)
         {
             DataTable = table;
+            DataTable.ExtendedProperties.Add("Table", this);
             ColumnsSetup(table);
-       
+            for (var i = 0; i < DataTable.Rows.Count; i++)
+                RowIndexes.Insert(i, i);
+
             DataTable.ColumnChanged += TableCellChanged;
             DataTable.RowChanged += TableRowChanged;
         }
@@ -50,23 +54,54 @@ namespace PsqlSharp
         {
             ColumnNames = new string[ColumnCount];
             ColumnTypes = new Type[ColumnCount];
-            for (var i = 0; i < table.Columns.Count; i++)
+            for (var j = 0; j < table.Columns.Count; j++)
             {
-                ColumnTypes[i] = table.Columns[i].DataType;
-                ColumnNames[i] = table.Columns[i].ColumnName;
+                ColumnTypes[j] = table.Columns[j].DataType;
+                ColumnNames[j] = table.Columns[j].ColumnName;
             }
         }
-        public int IndexOfRow(DataRow row)
-        {
-            for (var i = 0; i < DataTable.Rows.Count; i++)
-                if (DataTable.Rows[i] == row)
-                    return i;
-            return -1;
-        }
+
         public void RemoveRow(DataRow row)
         {
-            DataTable.Rows.RemoveAt(IndexOfRow(row));
+            var index = DataTable.Rows.IndexOf(row);
+            DataTable.Rows.RemoveAt(index);
+            RowIndexes.Remove(index);
+            for (int i = 0; i < RowIndexes.Count; i++)
+                if (RowIndexes[i] > index)
+                    RowIndexes[i]--;
         }
+
+
+
+        public List<int> RowIndexes = new List<int>();
+        public DataRow GetRowByIndex(int index)
+        {
+            var innerIndex = RowIndexes[index];
+            return DataTable.Rows[innerIndex];
+        }
+        public int GetIndexByRow(DataRow row)
+        {
+            var index = DataTable.Rows.IndexOf(row);
+            return RowIndexes.IndexOf(index);
+        }
+        public void UpdateIndex(int oldIndex, int newIndex)
+        {
+            if (oldIndex == -1)
+            {
+                RowIndexes.Insert(newIndex, DataTable.Rows.Count-1);
+            }
+            else
+            {
+                var value = RowIndexes[oldIndex];
+                RowIndexes.RemoveAt(oldIndex);
+                RowIndexes.Insert(newIndex, value);
+            }
+        }
+        public int GetGlobalIndexByInner(int innerIndex)
+        {
+            return RowIndexes.IndexOf(innerIndex);
+        }
+
 
         private string GetFormater()
         {
@@ -96,7 +131,7 @@ namespace PsqlSharp
             for (var i = 0; i < RowCount; i++)
             {
                 for (var j = 0; j < ColumnCount; j++)
-                    columns[j] = this[i, j];
+                    columns[j] = GetRowByIndex(i).ItemArray[j].ToString();
                 builder.Append(string.Format(formater, columns)).Append('\n');
             }
             return builder.ToString();
@@ -112,7 +147,6 @@ namespace PsqlSharp
                 CellChanged?.Invoke(this, new CellChangedEventArgs(columnIndex, rowNumber, value));
             }
         }
-
         private void TableRowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Add)
