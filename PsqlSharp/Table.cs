@@ -8,9 +8,14 @@ namespace PsqlSharp
 {
     public class Table
     {
-
         public int ColumnCount => DataTable.Columns.Count;
         public int RowCount => DataTable.Rows.Count;
+
+        public DataRowCollection Rows => DataTable.Rows;
+
+        public string[] ColumnNames { get; private set; }=Array.Empty<string>();
+        public Type[]? ColumnTypes { get; private set; }
+        public DataTable DataTable { get; }
 
         public string? TableName
         {
@@ -23,15 +28,14 @@ namespace PsqlSharp
         }
         private string? tableName;
 
-        public string[]? ColumnNames { get; private set; }
-        public Type[]? ColumnTypes { get; private set; }
-        public DataTable DataTable { get; }
+        public string this[int i, int j] => DataTable.Rows[i][j].ToString() ?? string.Empty;
 
         public event EventHandler<DataRow>? RowAdded;
 
         public event EventHandler<CellChangedEventArgs>? CellChanged;
 
-        public string this[int i, int j] => DataTable.Rows[i][j].ToString() ?? string.Empty;
+       
+        private List<int> RowIndexes = new List<int>();
 
         public Table()
         {
@@ -72,37 +76,6 @@ namespace PsqlSharp
         }
 
 
-
-        public List<int> RowIndexes = new List<int>();
-        public DataRow GetRowByIndex(int index)
-        {
-            var innerIndex = RowIndexes[index];
-            return DataTable.Rows[innerIndex];
-        }
-        public int GetIndexByRow(DataRow row)
-        {
-            var index = DataTable.Rows.IndexOf(row);
-            return RowIndexes.IndexOf(index);
-        }
-        public void UpdateIndex(int oldIndex, int newIndex)
-        {
-            if (oldIndex == -1)
-            {
-                RowIndexes.Insert(newIndex, DataTable.Rows.Count-1);
-            }
-            else
-            {
-                var value = RowIndexes[oldIndex];
-                RowIndexes.RemoveAt(oldIndex);
-                RowIndexes.Insert(newIndex, value);
-            }
-        }
-        public int GetGlobalIndexByInner(int innerIndex)
-        {
-            return RowIndexes.IndexOf(innerIndex);
-        }
-
-
         private string GetFormater()
         {
             var longestInColumn = new int[ColumnCount];
@@ -135,6 +108,34 @@ namespace PsqlSharp
                 builder.Append(string.Format(formater, columns)).Append('\n');
             }
             return builder.ToString();
+        }
+
+        internal DataRow GetRowByIndex(int index)
+        {
+            var innerIndex = RowIndexes[index];
+            return DataTable.Rows[innerIndex];
+        }
+        internal int GetIndexByRow(DataRow row)
+        {
+            var index = DataTable.Rows.IndexOf(row);
+            return RowIndexes.IndexOf(index);
+        }
+        internal void UpdateIndex(int oldIndex, int newIndex)
+        {
+            if (oldIndex == -1)
+            {
+                RowIndexes.Insert(newIndex, DataTable.Rows.Count - 1);
+            }
+            else
+            {
+                var value = RowIndexes[oldIndex];
+                RowIndexes.RemoveAt(oldIndex);
+                RowIndexes.Insert(newIndex, value);
+            }
+        }
+        internal int GetGlobalIndexByInner(int innerIndex)
+        {
+            return RowIndexes.IndexOf(innerIndex);
         }
 
         private void TableCellChanged(object sender, DataColumnChangeEventArgs e)

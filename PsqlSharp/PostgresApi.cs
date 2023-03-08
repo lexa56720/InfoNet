@@ -162,7 +162,6 @@ namespace PsqlSharp
             return new DataBase(dbName, tables, funcs);
         }
 
-
         public async Task<string[]> GetAllTableNamesAsync()
         {
             if (!IsConnected)
@@ -190,17 +189,17 @@ namespace PsqlSharp
             return await db.GetAllTableNamesAsync();
         }
 
-
         public async Task<Table?> GetTableContentAsync(string tableName)
         {
             if (!IsConnected)
                 return null;
 
-            var table = (await ExecuteCommandAsync($"select * from {tableName}"))[0];
+            var table = (await ExecuteCommandAsync($"select * from {tableName}"));
+            if (table.Length == 0)
+                return null;
 
-            if (table != null)
-                table.TableName = tableName;
-            return table;
+            table[0].TableName = tableName;
+            return table[0];
         }
         public async Task<Table?> GetTableContentAsync(string tableName, string dbName)
         {
@@ -211,7 +210,6 @@ namespace PsqlSharp
             await db.ConnectAsync(ConnectionData with { Database = dbName });
             return await db.GetTableContentAsync(tableName);
         }
-
 
         public async Task<Function[]> GetAllFunctionsAsync()
         {
@@ -235,10 +233,11 @@ namespace PsqlSharp
                 join pg_type t on t.oid = p.prorettype
                 where n.nspname not in ('pg_catalog', 'information_schema')
                 order by function_schema,
-                    function_name; "))[0];
-            if (funcTable != null)
-                return Function.Parse(funcTable);
-            return Array.Empty<Function>();
+                    function_name; "));
+            if (funcTable.Length==0)
+                return Array.Empty<Function>();
+
+            return Function.Parse(funcTable[0]);     
         }
         public async Task<Function[]> GetAllFunctionsAsync(string dbName)
         {
@@ -249,7 +248,6 @@ namespace PsqlSharp
             await db.ConnectAsync(ConnectionData with { Database = dbName });
             return await db.GetAllFunctionsAsync();
         }
-
 
         public async Task<bool> RemoveFunctionAsync(Function function)
         {
@@ -288,10 +286,10 @@ namespace PsqlSharp
                     WHERE ctid='{ctid}';");
             return true;
         }
-
         public async Task<bool> SetCellValueAsync(Table table, object cellValue, int columnIndex, int rowIndex)
         {
-            var value = ConvertValuesTypes(new object[] { cellValue }, table.ColumnTypes)[0];
+            rowIndex = table.GetGlobalIndexByInner(rowIndex);
+            var value = ConvertValuesTypes(new object[] { cellValue })[0];
             var rowNumbers = (await ExecuteCommandAsync($"select ctid, * from {table.TableName};"))[0];
             var ctid = ((NpgsqlTid)rowNumbers.DataTable.Rows[rowIndex][0]).ToString();
             await ExecuteAndUpdateRows(@$"
@@ -300,54 +298,13 @@ namespace PsqlSharp
                 WHERE ctid='{ctid}';", table);
             return true;
         }
-
-        private async Task ExecuteAndUpdateRows(string command, Table table)
+        public async Task<bool> AddRowAsync(Table table, object?[] values)
         {
-            var result = (await ExecuteCommandAsync(@$"
-                Select ctid,* from {table.TableName};
-                {command};
-                Select ctid,* from {table.TableName};"));
-            int indexFrom = -1, indexTo = -1;
-
-            var a = result[1].DataTable.AsEnumerable().Select(r => r.ItemArray.First().ToString());
-            var b = result[0].DataTable.AsEnumerable().Select(r => r.ItemArray.First().ToString());
-
-            indexFrom = b.ToList().FindIndex(b => !a.Contains(b, StringComparer.Ordinal));
-            indexTo = a.ToList().FindIndex(a => !b.Contains(a, StringComparer.Ordinal));
-
-            if (indexTo >= 0 && indexFrom != indexTo)
-                table.UpdateIndex(indexFrom, indexTo);
-        }
-
-
-        public async Task<bool> AddRowAsync(Table table, object[] values)
-        {
-            values = ConvertValuesTypes(values, table.ColumnTypes);
+            values = ConvertValuesTypes(values);
             await ExecuteAndUpdateRows(
                @$"INSERT INTO {table.TableName}({string.Join(", ", table.ColumnNames)})
                     VALUES ({string.Join(", ", values)})", table);
             return true;
-        }
-        private string[] ConvertValuesTypes(object?[] values, Type[] columnTypes)
-        {
-            var result = new string[values.Length];
-            for (var i = 0; i < values.Length; i++)
-            {
-                if (values[i] != null && values[i].GetType() != typeof(DBNull))
-                {
-                    if (TypeConverter.ContainsKey(columnTypes[i]))
-                        result[i] = TypeConverter[columnTypes[i]](values[i]);
-                    else
-                        result[i] = values[i].ToString();
-                }
-                else
-                {
-                    result[i] = "null";
-                    continue;
-                }
-            }
-
-            return result;
         }
 
         public async Task<bool> ExportDataBaseAsync(string outputPath)
@@ -403,21 +360,15 @@ namespace PsqlSharp
             return true;
         }
 
-        public bool IsCanAddRow(DataTable table, DataRow row)
+        public bool IsCanAddRow(DataTable dataTable, DataRow row)
         {
             try
             {
-                var names = new string[table.Columns.Count];
-                var types = new Type[table.Columns.Count];
-                for (var i = 0; i < table.Columns.Count; i++)
-                {
-                    types[i] = table.Columns[i].DataType;
-                    names[i] = table.Columns[i].ColumnName;
-                }
+                var table = dataTable.ExtendedProperties["Table"] as Table;
 
-                var values = ConvertValuesTypes(row.ItemArray, types);
+                var values = ConvertValuesTypes(row.ItemArray);
                 ExecuteCommand(@$"begin; 
-                    INSERT INTO {table.TableName}({string.Join(", ", names)})
+                    INSERT INTO {dataTable.TableName}({string.Join(", ", table.ColumnNames)})
                     VALUES ({string.Join(", ", values)});
                             rollback;");
                 return true;
@@ -425,43 +376,53 @@ namespace PsqlSharp
             catch
             {
                 ExecuteCommand("rollback;");
-                return false;
+                throw;
             }
         }
-        public bool IsCanChangeRow(DataTable table, DataRow row)
+        public bool IsCanChangeRow(DataTable dataTable, DataRow row)
         {
             try
             {
-                var names = new string[table.Columns.Count];
-                var types = new Type[table.Columns.Count];
-                for (var i = 0; i < table.Columns.Count; i++)
-                {
-                    types[i] = table.Columns[i].DataType;
-                    names[i] = table.Columns[i].ColumnName;
-                }
+                var table = dataTable.ExtendedProperties["Table"] as Table;
+                var values = ConvertValuesTypes(row.ItemArray);
 
                 var builder = new StringBuilder();
-                var values = ConvertValuesTypes(row.ItemArray, types);
-                for (var i = 0; i < table.Columns.Count; i++)
-                    builder.Append($"{names[i]}={values[i]},");
+                for (var i = 0; i < dataTable.Columns.Count; i++)
+                    builder.Append($"{table.ColumnNames[i]}={values[i]},");
                 var command = builder.ToString(0, builder.Length - 1);
 
-                var t = table.ExtendedProperties["Table"];
-                var tableRowNumbers = ExecuteCommand($"select ctid, * from {table.TableName};")[0];
-                var ctid = ((NpgsqlTid)tableRowNumbers.DataTable.Rows[(t as Table).GetIndexByRow(row)][0]).ToString();
+                var tableRowNumbers = ExecuteCommand($"select ctid, * from {dataTable.TableName};")[0];
+                var ctid = ((NpgsqlTid)tableRowNumbers.DataTable.Rows[table.GetIndexByRow(row)][0]).ToString();
 
                 if (command.Length > 0)
-                    ExecuteCommand(@$"begin; UPDATE {table.TableName} SET {command} WHERE ctid='{ctid}'; rollback;");
+                    ExecuteCommand(@$"begin; UPDATE {dataTable.TableName} SET {command} WHERE ctid='{ctid}'; rollback;");
 
                 return true;
             }
             catch
             {
                 ExecuteCommand("rollback;");
-                return false;
+                throw;
             }
         }
 
+        private async Task ExecuteAndUpdateRows(string command, Table table)
+        {
+            var result = (await ExecuteCommandAsync(@$"
+                Select ctid,* from {table.TableName};
+                {command};
+                Select ctid,* from {table.TableName};"));
+            int indexFrom = -1, indexTo = -1;
+
+            var a = result[1].DataTable.AsEnumerable().Select(r => r.ItemArray.First().ToString());
+            var b = result[0].DataTable.AsEnumerable().Select(r => r.ItemArray.First().ToString());
+
+            indexFrom = b.ToList().FindIndex(b => !a.Contains(b, StringComparer.Ordinal));
+            indexTo = a.ToList().FindIndex(a => !b.Contains(a, StringComparer.Ordinal));
+
+            if (indexTo >= 0 && indexFrom != indexTo)
+                table.UpdateIndex(indexFrom, indexTo);
+        }
         private async Task<bool> ClearDataBase()
         {
             var dropDBCommand = new StringBuilder();
@@ -477,6 +438,26 @@ namespace PsqlSharp
             if (dropDBCommand.Length > 0)
                 await ExecuteCommandAsync(dropDBCommand.ToString());
             return true;
+        }
+        private string[] ConvertValuesTypes(object?[] values)
+        {
+            var result = new string[values.Length];
+            for (var i = 0; i < values.Length; i++)
+            {
+                if (values[i] != null && values[i].GetType() != typeof(DBNull))
+                {
+                    if (TypeConverter.ContainsKey(values[i].GetType()))
+                        result[i] = TypeConverter[values[i].GetType()](values[i]);
+                    else
+                        result[i] = values[i].ToString();
+                }
+                else
+                {
+                    result[i] = "null";
+                    continue;
+                }
+            }
+            return result;
         }
     }
 }

@@ -15,13 +15,19 @@ namespace PostgresClient.Controls
 
         private bool IsValueChanged;
 
+        private Color ErrorColor = Color.FromRgb(198, 40, 40);
+        private Color ChangedColor = Color.FromRgb(46, 125, 50);
+
         protected override void OnPreparingCellForEdit(DataGridPreparingCellForEditEventArgs e)
         {
             EditedRow = e.Row;
+
             var textBox = e.EditingElement as TextBox;
-            textBox.Foreground = this.Foreground;
-            textBox.Background = this.Background;
-            CellValue = (textBox).Text;
+            textBox.Foreground = Foreground;
+            textBox.Background = Background;
+
+            CellValue = textBox.Text;
+
             base.OnPreparingCellForEdit(e);
         }
         protected override void OnCellEditEnding(DataGridCellEditEndingEventArgs e)
@@ -30,36 +36,18 @@ namespace PostgresClient.Controls
             IsValueChanged = (e.EditingElement as TextBox).Text != CellValue;
         }
 
-        protected override void OnRowEditEnding(DataGridRowEditEndingEventArgs e)
-        {
-            base.OnRowEditEnding(e);
-
-        }
-        protected override void OnCanExecuteCommitEdit(CanExecuteRoutedEventArgs e)
-        {
-            base.OnCanExecuteCommitEdit(e);
-        }
-
-        protected override void OnExecutedCancelEdit(ExecutedRoutedEventArgs e)
-        {
-            base.OnExecutedCancelEdit(e);
-        }
-
         protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
         {
             base.OnExecutedCommitEdit(e);
             if (Validation.GetErrors(EditedRow).Count > 0)
-            {
-                EditedRow.Background = new SolidColorBrush(Color.FromRgb(198, 40, 40));
-            }
+                EditedRow.Background = new SolidColorBrush(ErrorColor);
             else if (IsValueChanged)
             {
-                EditedRow.Background = new SolidColorBrush(Color.FromRgb(46, 125, 50));
+                EditedRow.Background = new SolidColorBrush(ChangedColor);
                 IsValueChanged = false;
             }
-            else if (!(EditedRow.Background as SolidColorBrush).Color.Equals(Color.FromRgb(46, 125, 50)))
+            else if (!(EditedRow.Background as SolidColorBrush).Color.Equals(ChangedColor))
                 EditedRow.Background = new SolidColorBrush();
-
         }
     }
 }

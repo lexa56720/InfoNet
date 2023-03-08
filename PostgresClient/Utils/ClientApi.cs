@@ -10,9 +10,9 @@ namespace PostgresClient.Utils
     {
         private ISqlApi SqlApi { get; }
 
-        public event EventHandler<Exception> ExceptionOccured;
+        public event EventHandler<Exception>? ExceptionOccured;
 
-        public event EventHandler<string> SuccesExecution;
+        public event EventHandler<string>? SuccesExecution;
 
         public ClientApi(ISqlApi sqlApi)
         {
@@ -31,7 +31,7 @@ namespace PostgresClient.Utils
             remove => SqlApi.ConnectionStatusChanged -= value;
         }
 
-        public async Task<bool> AddRowAsync(Table table, object[] values)
+        public async Task<bool> AddRowAsync(Table table, object?[] values)
         {
             try
             {
@@ -279,12 +279,32 @@ namespace PostgresClient.Utils
 
         public bool IsCanAddRow(DataTable table, DataRow row)
         {
-            return SqlApi.IsCanAddRow(table, row);
+            try
+            {
+                var result = SqlApi.IsCanAddRow(table, row);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnExceprionOccured(e);
+                return false;
+            }
         }
 
         public bool IsCanChangeRow(DataTable table, DataRow row)
         {
-            return SqlApi.IsCanChangeRow(table, row);
+            try
+            {
+                var result = SqlApi.IsCanChangeRow(table, row);
+                OnSuccssesExecution();
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnExceprionOccured(e);
+                return false;
+            }
         }
     }
 }

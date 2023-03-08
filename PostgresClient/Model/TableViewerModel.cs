@@ -7,12 +7,12 @@ namespace PostgresClient.Model
 {
     internal class TableViewerModel : BaseModel
     {
-        private Table? SelectedTable
+        private Table SelectedTable
         {
             get => selectedTable;
             set
             {
-                if (selectedTable != null)
+                if(selectedTable!=null)
                 {
                     selectedTable.CellChanged -= SelectedTableCellChanged;
                     selectedTable.RowAdded -= SelectedTableRowAdded;
@@ -20,14 +20,11 @@ namespace PostgresClient.Model
 
                 selectedTable = value;
 
-                if (selectedTable != null)
-                {
-                    selectedTable.CellChanged += SelectedTableCellChanged;
-                    selectedTable.RowAdded += SelectedTableRowAdded;
-                }
+                selectedTable.CellChanged += SelectedTableCellChanged;
+                selectedTable.RowAdded += SelectedTableRowAdded;
             }
         }
-        private Table? selectedTable;
+        private Table selectedTable;
 
         public TableViewerModel(ISqlApi api) : base(api)
         {
@@ -35,11 +32,8 @@ namespace PostgresClient.Model
         }
         public async Task DeleteRow(DataRow row)
         {
-            if (SelectedTable != null)
-            {
-                if (await Api.RemoveRowAsync(SelectedTable.TableName, SelectedTable.GetIndexByRow(row)))
-                    SelectedTable.RemoveRow(row);
-            }
+            if (await Api.RemoveRowAsync(SelectedTable.TableName, SelectedTable.Rows.IndexOf(row)))
+                SelectedTable.RemoveRow(row);
         }
 
         private void SelectedTableRowAdded(object? sender, DataRow e)
@@ -52,7 +46,7 @@ namespace PostgresClient.Model
 
         private void SelectedTableCellChanged(object? sender, CellChangedEventArgs e)
         {
-            Api.SetCellValueAsync(SelectedTable, e.Value, e.ColumnIndex,SelectedTable.GetGlobalIndexByInner(e.RowIndex));
+            Api.SetCellValueAsync(SelectedTable, e.Value, e.ColumnIndex, e.RowIndex);
         }
         public async Task<string[]> GetTables()
         {
@@ -72,7 +66,6 @@ namespace PostgresClient.Model
         {
             var table = await Api.GetTableContentAsync(tableName, dbName);
             table ??= new Table();
-            SelectedTable = null;
             return table;
         }
 

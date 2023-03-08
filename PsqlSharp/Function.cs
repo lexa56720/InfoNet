@@ -4,11 +4,11 @@ namespace PsqlSharp
 {
     public class Function
     {
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
-        public string[] Arguments { get; private set; }
+        public string[] Arguments { get; private set; } = Array.Empty<string>();
 
-        public string ReturnType { get; private set; }
+        public string ReturnType { get; private set; } = string.Empty;
 
         public string SourceCode 
         { 
@@ -21,9 +21,8 @@ namespace PsqlSharp
                 userCode = SourceCode.Substring(start,end-start);
             }
         }
-        private string sourceCode;
+        private string sourceCode=string.Empty;
         
-
         public string? UserCode 
         { 
             get => userCode;
