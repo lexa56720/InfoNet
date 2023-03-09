@@ -185,7 +185,7 @@
                         <Button Margin="5,5,5,0"  IsEnabled="{Binding IsConnected}"  Command="{Binding DumpManager}">
                             <StackPanel  Orientation="Horizontal">
                                 <TextBlock Text="&#xec7a;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
-                                <TextBlock Text="Управление дампами" Padding="5,2,5,5" TextAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Управление дампами" Padding="5,2,5,5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Margin="5,5,5,0"  IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" >
