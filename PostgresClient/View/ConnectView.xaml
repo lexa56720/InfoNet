@@ -33,7 +33,7 @@
             <TextBox FontSize="15" Grid.Row="0" Grid.Column="1" Text="{Binding Username}" />
 
             <Label  FontSize="15" Content="Пароль:" Grid.Row="1" Grid.Column="0"/>
-            <TextBox FontSize="15"  Grid.Row="1" Grid.Column="1" Text="{Binding Password}" />
+            <PasswordBox x:Name="PasswordBox" FontSize="15"  Grid.Row="1" Grid.Column="1"  />
 
             <Label FontSize="15" Content="База данных:" Grid.Row="2" Grid.Column="0"/>
             <TextBox  FontSize="15" Grid.Row="2" Grid.Column="1"  Text="{Binding DataBase}" />
@@ -44,7 +44,7 @@
             <Label FontSize="15" Content="Порт:" Grid.Row="4" Grid.Column="0"/>
             <TextBox FontSize="15" Grid.Row="4" Grid.Column="1"  Text="{Binding Port}" />
         </Grid>
-        <Button FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}" >
+        <Button FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}" CommandParameter="{x:Reference Name=PasswordBox}" >
             <StackPanel  Orientation="Horizontal">
                 <TextBlock TextAlignment="Center" Padding="5" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" >
                     <TextBlock.Style>

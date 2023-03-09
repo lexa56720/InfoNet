@@ -2,6 +2,7 @@
 using PostgresClient.Utils;
 using PsqlSharp;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
@@ -13,12 +14,12 @@ namespace PostgresClient.ViewModel
         {
             get
             {
-                return new Command(async () =>
+                return new Command(async (o) =>
                 {
                     if (IsConnected)
                         await Disconnect();
                     else
-                        await Connect();
+                        await Connect(o);
                 });
             }
         }
@@ -50,7 +51,6 @@ namespace PostgresClient.ViewModel
 
         public string Username { get; set; } = string.Empty;
 
-        public string Password { get; set; } = string.Empty;
 
         public string DataBase { get; set; } = string.Empty;
 
@@ -70,9 +70,11 @@ namespace PostgresClient.ViewModel
             return new ConnectModel(api);
         }
 
-        public async Task Connect()
+        public async Task Connect(object? o)
         {
-            await Model.Connect(DataBase, Username, Password, Server, Port);
+            var password = (o as PasswordBox)?.Password;
+            if (!string.IsNullOrEmpty(password))
+                await Model.Connect(DataBase, Username, password, Server, Port);
         }
         private async Task Disconnect()
         {

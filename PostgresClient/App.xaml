@@ -2,10 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PostgresClient.View"
-             xmlns:controls="clr-namespace:PostgresClient.Controls" xmlns:shell="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+             xmlns:controls="clr-namespace:PostgresClient.Controls" xmlns:shell="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-        
+
+        <Storyboard x:Key="MouseOverStart">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" 
+                                    To="#323232"
+                                    AutoReverse="False"
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard  x:Key="MouseOverEnd">
+            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" 
+                                    To="#00323232"
+                                    AutoReverse="False"
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0.3"/>
+        </Storyboard>
+        <Style TargetType="ToolTip">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Background" Value="#323232"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
         
         <Style TargetType="Label">
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
@@ -23,7 +43,7 @@
             </Style.Resources>
             <Setter Property="Control.FontSize" Value="20" />
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
-            <Setter Property="Control.Background" Value="Transparent" />
+            <Setter Property="Control.Background" Value="#00323232" />
             <Setter Property="Control.Foreground" Value="White" />
             <Setter Property="VerticalContentAlignment" Value="Top" />
             <Setter Property="BorderThickness" Value="0"/>
@@ -38,18 +58,35 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#323232"/>
-                </Trigger>
-                  <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#242424"/>
-                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseOverStart}"/>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseOverEnd}"/>
+                    </MultiTrigger.ExitActions>
+                    
+                </MultiTrigger>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" 
+                                    To="#242424"
+                                    AutoReverse="True"
+                                    FillBehavior="Stop" 
+                                    Duration="0:0:0.15"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Opacity" Value="0.5"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
         <Style TargetType="Grid">
             <Setter Property="Control.Background" Value="Transparent" />
             <Style.Resources>
@@ -78,7 +115,7 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="5" />
         </Style>
-        
+
         <Style TargetType="TextBox">
             <Style.Resources>
                 <Style TargetType="Border">
@@ -87,10 +124,10 @@
             </Style.Resources>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#424242"/>
+                    <Setter Property="Background" Value="#383838"/>
                 </Trigger>
                 <Trigger Property="IsKeyboardFocused" Value="True">
-                    <Setter Property="Background" Value="#181818"/>
+                    <Setter Property="Background" Value="#262626"/>
                 </Trigger>
             </Style.Triggers>
 
@@ -99,27 +136,48 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="#373737" />
+            <Setter Property="Background" Value="#323232" />
         </Style>
-        
+
         <Style TargetType="PasswordBox">
+
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
-            <Setter Property="Background" Value="#484848" />
-            <Setter Property="Margin" Value="2" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Background" Value="#323232" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border x:Name="border" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#383838"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="#262626"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-        
+
         <Style TargetType="Frame">
             <Setter Property="Background" Value="#282828" />
             <Setter Property="BorderThickness" Value="0"  />
             <Setter Property="Padding" Value="0"/>
             <Setter Property="NavigationUIVisibility" Value="Hidden"/>
         </Style>
-        
+
         <Style TargetType="StackPanel">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Margin" Value="0"  />
         </Style>
-        
+
         <Style TargetType="Border">
             <Setter Property="CornerRadius" Value="5" />
             <Setter Property="BorderThickness" Value="0" />
@@ -139,7 +197,7 @@
         </Style>
 
         <!--#region ScrollBar -->
-        
+
         <SolidColorBrush x:Key="StandardBorderBrush" Color="SeaGreen" />
         <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Black" />
         <SolidColorBrush x:Key="HoverBorderBrush" Color="#DDD" />
@@ -147,7 +205,7 @@
         <SolidColorBrush x:Key="SelectedForegroundBrush" Color="White" />
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
         <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
-        <SolidColorBrush x:Key="NormalBrush" Color="Aqua" />
+        <SolidColorBrush x:Key="NormalBrush" Color="#404040" />
         <SolidColorBrush x:Key="NormalBorderBrush" Color="AliceBlue" />
         <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#484848" />
         <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
@@ -192,7 +250,7 @@
                             <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource GlyphBrush}" Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="true">
+                            <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="Border" Property="Background" Value="Red" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
@@ -226,11 +284,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border CornerRadius="5" Background="#404040" BorderThickness="0"  Width="{TemplateBinding Width}" Margin="0,0,-10,0" >
+                        <Border x:Name="BorderX"  CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="0"  Width="{TemplateBinding Width}" Margin="0,0,-10,0" >
                             <Border.Resources>
                                 <Style TargetType="Border" >
                                     <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger  Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="Red"/>
                                         </Trigger>
                                     </Style.Triggers>
@@ -240,7 +298,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-    
+
         </Style>
 
         <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
@@ -306,7 +364,7 @@
                     <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                 </Trigger>
             </Style.Triggers>
-            
+
         </Style>
         <Style TargetType="{x:Type ScrollViewer}">
             <Setter Property="Template">
@@ -333,7 +391,7 @@
         <!--#endregion-->
 
         <!--#region ComboBox -->
-        
+
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -363,11 +421,11 @@
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter TargetName="Border" Property="Opacity" Value="0.5" />
-                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
-                <Setter Property="Foreground" Value="#888888"/>
-                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
-            </Trigger>
-        </ControlTemplate.Triggers>
+                    <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                    <Setter Property="Foreground" Value="#888888"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+                </Trigger>
+            </ControlTemplate.Triggers>
         </ControlTemplate>
 
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
@@ -433,7 +491,7 @@
                                     <Border CornerRadius="20" Background="#242424" Padding="0" Margin="-2,-5,0,-5" BorderThickness="0">
                                         <ScrollViewer Background="#262626" Margin="0" SnapsToDevicePixels="True">
 
-                                            
+
                                             <StackPanel Background="Transparent"   IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
 
                                         </ScrollViewer>
@@ -503,7 +561,7 @@
             </Setter>
         </Style>
         <!--#endregion-->
-       
+
         <!--#region LISTVIEW-->
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#242424"/>
@@ -532,6 +590,10 @@
                                 <Setter Property="Foreground"
                                     Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#323232"/>
+                            </Trigger>
+                            
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -590,7 +652,7 @@
 
         <!-- Cell Style -->
 
-        
+
         <Style x:Key="Style_HeaderGripper" TargetType="{x:Type Thumb}">
             <Setter Property="Width" Value="8"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -603,12 +665,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="MinWidth" Value="0" />
             <Setter Property="MinHeight" Value="28" />
-   
+
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -652,7 +714,7 @@
                             <Trigger Property="SortDirection" Value="Descending">
                                 <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
                             </Trigger>
-                          
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -692,10 +754,23 @@
                     <Setter Property="Foreground" Value="White"/>
                 </MultiDataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#282828"/>
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseOverStart}"/>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" 
+                                    To="#242424"
+                                    AutoReverse="False"
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
                 </Trigger>
             </Style.Triggers>
-       
+
         </Style>
 
         <!-- DataGridRow -->
@@ -727,8 +802,8 @@
                               Grid.Column="1"
                                ItemsPanel="{TemplateBinding ItemsPanel}"
                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                
-                             
+
+
                             </SelectiveScrollingGrid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -740,13 +815,13 @@
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
-                    
+
 
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- DataGrid -->    
+        <!-- DataGrid -->
         <Style x:Key="{x:Type DataGrid}" TargetType="{x:Type DataGrid}">
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -824,7 +899,7 @@
             </Style.Triggers>
         </Style>
         <!--#endregion-->
-        
+
         <!--#region TreeView-->
         <Style TargetType="{x:Type TreeView}">
             <Setter Property="Template">
@@ -853,7 +928,7 @@
         </Style>
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="BorderThickness" Value="0" />
-           
+
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="BorderBrush" Value="Red" />
