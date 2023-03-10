@@ -1,7 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Diagnostics;
-using System.Runtime.Intrinsics.X86;
+﻿using System.Data;
 using System.Text;
 
 namespace PsqlSharp
@@ -13,7 +10,7 @@ namespace PsqlSharp
 
         public DataRowCollection Rows => DataTable.Rows;
 
-        public string[] ColumnNames { get; private set; }=Array.Empty<string>();
+        public string[] ColumnNames { get; private set; } = Array.Empty<string>();
         public Type[]? ColumnTypes { get; private set; }
         public DataTable DataTable { get; }
 
@@ -34,7 +31,7 @@ namespace PsqlSharp
 
         public event EventHandler<CellChangedEventArgs>? CellChanged;
 
-       
+
         private List<int> RowIndexes = new List<int>();
 
         public Table()

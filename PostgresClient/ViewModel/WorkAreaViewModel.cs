@@ -2,7 +2,6 @@
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
@@ -22,6 +21,7 @@ namespace PostgresClient.ViewModel
         }
         private string commandResult;
         public ICommand Execute => new Command(async () => await ExecuteCommand());
+
         protected override WorkAreaModel Model => (WorkAreaModel)base.Model;
 
         public WorkAreaViewModel(ISqlApi api) : base(api)
@@ -38,7 +38,7 @@ namespace PostgresClient.ViewModel
             {
                 var result = await Model.ExecuteCommand(CommandText);
                 if (result != null)
-                    CommandResult += new string('-', 20)+'\n' + result;
+                    CommandResult += new string('-', 20) + '\n' + result;
                 await Messenger.Send("UpdateDB");
             }
         }

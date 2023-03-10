@@ -2,9 +2,7 @@
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
-using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel

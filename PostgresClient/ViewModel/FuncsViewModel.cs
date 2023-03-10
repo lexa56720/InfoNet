@@ -1,13 +1,9 @@
-﻿using PostgresClient.Controls;
-using PostgresClient.Model;
+﻿using PostgresClient.Model;
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
-using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace PostgresClient.ViewModel
 {
@@ -146,7 +142,6 @@ namespace PostgresClient.ViewModel
                 await Update();
                 SuccssesSave = true;
             }
-
             else
                 FailedSave = true;
         }

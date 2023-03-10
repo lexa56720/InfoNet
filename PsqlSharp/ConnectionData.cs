@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PsqlSharp
+﻿namespace PsqlSharp
 {
     public record ConnectionData
     {

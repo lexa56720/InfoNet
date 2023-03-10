@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PsqlSharp
+﻿namespace PsqlSharp
 {
     public class Function
     {
@@ -10,28 +8,28 @@ namespace PsqlSharp
 
         public string ReturnType { get; private set; } = string.Empty;
 
-        public string SourceCode 
-        { 
+        public string SourceCode
+        {
             get => sourceCode;
             private set
             {
                 sourceCode = value;
                 var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
-                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase)+3;
-                userCode = SourceCode.Substring(start,end-start);
+                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase) + 3;
+                userCode = SourceCode.Substring(start, end - start);
             }
         }
-        private string sourceCode=string.Empty;
-        
-        public string? UserCode 
-        { 
+        private string sourceCode = string.Empty;
+
+        public string? UserCode
+        {
             get => userCode;
-            set  
+            set
             {
                 userCode = value;
                 var start = SourceCode.IndexOf("Begin", StringComparison.OrdinalIgnoreCase);
-                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase)+3;
-                sourceCode = SourceCode.Remove(start, end - start).Insert(start,UserCode);
+                var end = SourceCode.LastIndexOf("End", StringComparison.OrdinalIgnoreCase) + 3;
+                sourceCode = SourceCode.Remove(start, end - start).Insert(start, UserCode);
             }
         }
         private string? userCode;

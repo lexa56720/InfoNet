@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -27,7 +26,7 @@ namespace PostgresClient.Controls
         private int pageWidth;
         public ExtendedRichTextBox()
         {
-  
+
         }
 
         public ExtendedRichTextBox(FlowDocument document)

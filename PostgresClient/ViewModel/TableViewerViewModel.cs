@@ -2,11 +2,8 @@
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PsqlSharp;
-using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel
@@ -92,8 +89,8 @@ namespace PostgresClient.ViewModel
 
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
-            Messenger.Subscribe("UpdateTables",async () => await UpdateTables());
-            Messenger.Subscribe<Tuple<string, string>>("ShowTable",async (s,m) => await ShowTableFromDB(m));
+            Messenger.Subscribe("UpdateTables", async () => await UpdateTables());
+            Messenger.Subscribe<Tuple<string, string>>("ShowTable", async (s, m) => await ShowTableFromDB(m));
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {

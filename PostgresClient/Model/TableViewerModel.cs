@@ -1,7 +1,5 @@
 ﻿using PsqlSharp;
-using System;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
@@ -12,7 +10,7 @@ namespace PostgresClient.Model
             get => selectedTable;
             set
             {
-                if(selectedTable!=null)
+                if (selectedTable != null)
                 {
                     selectedTable.CellChanged -= SelectedTableCellChanged;
                     selectedTable.RowAdded -= SelectedTableRowAdded;

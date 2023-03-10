@@ -2,7 +2,6 @@
 using NodaTime;
 using Npgsql;
 using NpgsqlTypes;
-using System;
 using System.Data;
 using System.Diagnostics;
 using System.Text;
@@ -94,7 +93,7 @@ namespace PsqlSharp
         }
 
         public async Task<Table[]> ExecuteCommandAsync(string command)
-        {         
+        {
             if (!IsConnected)
                 return Array.Empty<Table>();
 
@@ -120,7 +119,7 @@ namespace PsqlSharp
             }
         }
         public Table[] ExecuteCommand(string command)
-        {     
+        {
             if (!IsConnected)
                 return Array.Empty<Table>();
 
@@ -234,10 +233,10 @@ namespace PsqlSharp
                 where n.nspname not in ('pg_catalog', 'information_schema')
                 order by function_schema,
                     function_name; "));
-            if (funcTable.Length==0)
+            if (funcTable.Length == 0)
                 return Array.Empty<Function>();
 
-            return Function.Parse(funcTable[0]);     
+            return Function.Parse(funcTable[0]);
         }
         public async Task<Function[]> GetAllFunctionsAsync(string dbName)
         {
@@ -298,6 +297,7 @@ namespace PsqlSharp
                 WHERE ctid='{ctid}';", table);
             return true;
         }
+
         public async Task<bool> AddRowAsync(Table table, object?[] values)
         {
             values = ConvertValuesTypes(values);
@@ -306,7 +306,6 @@ namespace PsqlSharp
                     VALUES ({string.Join(", ", values)})", table);
             return true;
         }
-
         public async Task<bool> ExportDataBaseAsync(string outputPath)
         {
             if (!IsConnected)
@@ -423,6 +422,8 @@ namespace PsqlSharp
             if (indexTo >= 0 && indexFrom != indexTo)
                 table.UpdateIndex(indexFrom, indexTo);
         }
+
+
         private async Task<bool> ClearDataBase()
         {
             var dropDBCommand = new StringBuilder();

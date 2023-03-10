@@ -1,7 +1,4 @@
 ﻿using PsqlSharp;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {
@@ -30,7 +27,7 @@ namespace PostgresClient.Model
             await Task.Delay(Timeout);
             if (GetResultAgeInMs() > Timeout)
                 return await GetDataBasesRequest();
-            else 
+            else
                 return Result;
         }
 
@@ -49,7 +46,7 @@ namespace PostgresClient.Model
                 tasks[i] = Api.GetDataBaseContentAsync(dbNames[i]);
 
             await Task.WhenAll(tasks);
-            return Result = tasks.Select(t => t.Result).Where(r => r != null).ToArray();          
+            return Result = tasks.Select(t => t.Result).Where(r => r != null).ToArray();
         }
     }
 }

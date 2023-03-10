@@ -19,7 +19,7 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(SidePanel));
             }
         }
-        private Page sidePanel;
+        private Page sidePanel = new SidePanel();
 
         public Page Debugger
         {
@@ -30,7 +30,7 @@ namespace PostgresClient.ViewModel
                 OnPropertyChanged(nameof(Debugger));
             }
         }
-        private Page debugger;
+        private Page debugger = new Debugger();
 
         public Page MainFrame
         {
@@ -44,13 +44,13 @@ namespace PostgresClient.ViewModel
         private Page mainFrame;
 
 
-        public Page WorkFrame { get; }
+        public Page WorkFrame { get; } = new WorkArea();
         public ICommand NavigateToWork => new Command((o) => NavigateTo(WorkFrame));
 
-        public Page TableViewerFrame { get; }
+        public Page TableViewerFrame { get; } = new TableViewer();
         public ICommand NavigateToTable => new Command((o) => NavigateTo(TableViewerFrame));
 
-        public Page FuncFrame { get; }
+        public Page FuncFrame { get; } = new FuncsView();
         public ICommand NavigateToFunc => new Command((o) => NavigateTo(FuncFrame));
 
 
@@ -63,11 +63,6 @@ namespace PostgresClient.ViewModel
 
         public MainViewModel(ISqlApi api) : base(api)
         {
-            SidePanel = new SidePanel();
-            WorkFrame = new WorkArea();
-            TableViewerFrame = new TableViewer();
-            FuncFrame = new FuncsView();
-            Debugger = new View.Debugger();
             SubscribeToNavigation();
         }
         protected override BaseModel CreateModel(ISqlApi api)
