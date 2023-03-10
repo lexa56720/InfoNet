@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoNet", "InfoNet\InfoNet.csproj", "{17FCD05F-24F2-46DB-8083-B575B3A0820C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsqlSharp", "PsqlSharp\PsqlSharp.csproj", "{C0929136-FC14-4565-A9DD-049DD8C3A325}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresClient", "PostgresClient\PostgresClient.csproj", "{CA122578-8AF3-4C8F-B74F-3A0AF48DB80D}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17FCD05F-24F2-46DB-8083-B575B3A0820C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17FCD05F-24F2-46DB-8083-B575B3A0820C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17FCD05F-24F2-46DB-8083-B575B3A0820C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17FCD05F-24F2-46DB-8083-B575B3A0820C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0929136-FC14-4565-A9DD-049DD8C3A325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0929136-FC14-4565-A9DD-049DD8C3A325}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0929136-FC14-4565-A9DD-049DD8C3A325}.Release|Any CPU.ActiveCfg = Release|Any CPU
