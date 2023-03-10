@@ -38,9 +38,9 @@ namespace PostgresClient.ViewModel
             Content = ConnectionManager = new ConnectView();
 
 
-            Messenger.Subscribe("DBExplorer", (o, e) => Content = DBExplorer);
-            Messenger.Subscribe("ConnectionManager", (o, e) => Content = ConnectionManager);
-            Messenger.Subscribe("DumpManager", (o, e) => Content = DumpManager);
+            Messenger.Subscribe("DBExplorer", () => Content = DBExplorer);
+            Messenger.Subscribe("ConnectionManager", () => Content = ConnectionManager);
+            Messenger.Subscribe("DumpManager", () => Content = DumpManager);
         }
     }
 }

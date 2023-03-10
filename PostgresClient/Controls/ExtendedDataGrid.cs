@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,6 +21,13 @@ namespace PostgresClient.Controls
         private Color ErrorColor = Color.FromRgb(198, 40, 40);
         private Color ChangedColor = Color.FromRgb(46, 125, 50);
 
+        private IDictionary CellValueHolder;
+        public ExtendedDataGrid()
+        {
+            CellValueHolder = GetType().BaseType.GetField("_editingCellAutomationValueHolders",
+             BindingFlags.NonPublic |
+             BindingFlags.Instance).GetValue(this) as IDictionary;
+        }
         protected override void OnPreparingCellForEdit(DataGridPreparingCellForEditEventArgs e)
         {
             EditedRow = e.Row;
@@ -34,6 +44,12 @@ namespace PostgresClient.Controls
         {
             base.OnCellEditEnding(e);
             IsValueChanged = (e.EditingElement as TextBox).Text != CellValue;
+        }
+
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
+            CellValueHolder.Clear();
         }
 
         protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace PostgresClient.Utils
+namespace PostgresClient.Controls
 {
     class ExtendedDataGridValidation : ValidationRule
     {

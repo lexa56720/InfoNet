@@ -48,9 +48,9 @@ namespace PostgresClient.ViewModel
         {
             if (!string.IsNullOrEmpty(DumpDirectory) && Path.Exists(DumpDirectory) && await Model.Load(DumpDirectory))
             {
-                Messenger.Send(new Message("UpdateDB"), this);
-                Messenger.Send(new Message("UpdateFuncs"), this);
-                Messenger.Send(new Message("UpdateTables"), this);
+                await Messenger.Send("UpdateDB");
+                await Messenger.Send("UpdateFuncs");
+                await Messenger.Send("UpdateTables");
             }
         }
         private void OnFocus()
