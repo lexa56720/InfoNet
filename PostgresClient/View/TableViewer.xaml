@@ -49,7 +49,7 @@
                                        GridLinesVisibility="None"  Background="#202020" Foreground="White" Margin="5,10,0,0" Padding="5" FontSize="20" BorderThickness="0"
                                        HorizontalScrollBarVisibility="Auto" ItemsSource="{Binding TableContent}" IsEnabled="{Binding IsConnected}" IsReadOnly="{Binding IsNotEditable}">
                 <controls:ExtendedDataGrid.RowValidationRules>
-                    <utils:ExtendedDataGridValidation ValidationStep="UpdatedValue"/>
+                    <controls:ExtendedDataGridValidation ValidationStep="UpdatedValue"/>
                 </controls:ExtendedDataGrid.RowValidationRules>
                 <controls:ExtendedDataGrid.RowValidationErrorTemplate>
                     <ControlTemplate>

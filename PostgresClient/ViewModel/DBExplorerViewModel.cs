@@ -92,7 +92,7 @@ namespace PostgresClient.ViewModel
         protected override DBExplorerModel Model => (DBExplorerModel)base.Model;
         public DBExplorerViewModel(ISqlApi api) : base(api)
         {
-            Messenger.Subscribe("UpdateDB", async (o, m) => await Update());
+            Messenger.Subscribe("UpdateDB", async () => await Update());
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -112,11 +112,14 @@ namespace PostgresClient.ViewModel
         }
         private void FuncSelected(Function function, DataBase database)
         {
-            Messenger.Send(new Message("ShowFunc"), Tuple.Create(function, database.Name));
+            Messenger.Send("ShowFunc", Tuple.Create(function, database.Name));
+            Messenger.Send("ShowFuncWindow");
+
         }
         private void TableSelected(string tableName, DataBase database)
         {
-            Messenger.Send(new Message("ShowTable"), Tuple.Create(tableName, database.Name));
+            Messenger.Send("ShowTable", Tuple.Create(tableName, database.Name));
+            Messenger.Send("ShowTableWindow");
         }
 
         private async Task Update()

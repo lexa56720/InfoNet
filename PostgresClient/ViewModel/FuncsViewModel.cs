@@ -95,15 +95,15 @@ namespace PostgresClient.ViewModel
         }
         public ICommand SaveCommand => new Command(async (o) => await Save());
         public ICommand ResetCommand => new Command(async (o) => await Reset());
-        public ICommand RemoveCommand => new Command((o) => Remove());
+        public ICommand RemoveCommand => new Command(async (o) => await Remove());
 
         public ICommand PageLoaded => new Command(async (o) => await Update());
         protected override FuncsModel Model => (FuncsModel)base.Model;
 
         public FuncsViewModel(ISqlApi api) : base(api)
         {
-            Messenger.Subscribe("ShowFunc", (m, o) => LoadFunc(m as Tuple<Function, string>));
-            Messenger.Subscribe("UpdateFuncs", async (m, o) => await Update());
+            Messenger.Subscribe<Tuple<Function, string>>("ShowFunc", LoadFunc);
+            Messenger.Subscribe("UpdateFuncs", async () => await Update());
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
@@ -114,7 +114,7 @@ namespace PostgresClient.ViewModel
             IsEditable = true;
             FuncBody = Model.GetFunctionCode(index); ;
         }
-        private async void LoadFunc(Tuple<Function, string> loadRequest)
+        private async void LoadFunc(object? sender, Tuple<Function, string> loadRequest)
         {
             await Update();
             FuncBody = loadRequest.Item1.SourceCode;
@@ -142,7 +142,7 @@ namespace PostgresClient.ViewModel
 
             if (result)
             {
-                Messenger.Send(new Message("UpdateDB"), this);
+                await Messenger.Send("UpdateDB");
                 await Update();
                 SuccssesSave = true;
             }
@@ -158,18 +158,18 @@ namespace PostgresClient.ViewModel
                 await Update();
                 FuncBody = Model.GetFunctionCode(Selected);
             }
-                
+
         }
 
         private async Task Remove()
         {
-            if(Selected!=-1)
+            if (Selected != -1)
                 await Task.Run(async () =>
                 {
                     await Model.DeleteFunction(Selected);
                     await Update();
                     Selected = -1;
-                    Messenger.Send(new Message("UpdateDB"), this);
+                    await Messenger.Send("UpdateDB");
                 });
         }
 

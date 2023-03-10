@@ -55,9 +55,9 @@ namespace PostgresClient.ViewModel
 
 
         public ICommand About => new Command((o) => (new AboutWindow()).Show());
-        public ICommand DumpManager => new Command(() => Messenger.Send(new Message("DumpManager"), this));
-        public ICommand ConnectionManager => new Command(() => Messenger.Send(new Message("ConnectionManager"), this));
-        public ICommand DBExplorer => new Command(() => Messenger.Send(new Message("DBExplorer"), this));
+        public ICommand DumpManager => new Command(() => Messenger.Send("DumpManager"));
+        public ICommand ConnectionManager => new Command(() => Messenger.Send("ConnectionManager"));
+        public ICommand DBExplorer => new Command(() => Messenger.Send("DBExplorer"));
 
         protected override MainModel Model => (MainModel)base.Model;
 
@@ -76,9 +76,8 @@ namespace PostgresClient.ViewModel
         }
         private void SubscribeToNavigation()
         {
-            Messenger.Subscribe("ShowTable", (o, e) => NavigateTo(TableViewerFrame));
-            Messenger.Subscribe("ShowFunc", (o, e) => NavigateTo(FuncFrame));
-            Messenger.Subscribe("ShowWork", (o, e) => NavigateTo(WorkFrame));
+            Messenger.Subscribe("ShowTableWindow", () => NavigateTo(TableViewerFrame));
+            Messenger.Subscribe("ShowFuncWindow", () => NavigateTo(FuncFrame));
         }
 
         private void NavigateTo(Page page)

@@ -23,7 +23,7 @@ namespace PostgresClient.Model
         {
             if (Api.ConnectionData == null)
                 return false;
-            return Api.ConnectionData.Database == dbName;
+            return Api.ConnectionData.Database.Equals(dbName);
         }
     }
 }

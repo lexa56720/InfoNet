@@ -92,10 +92,8 @@ namespace PostgresClient.ViewModel
 
         public TableViewerViewModel(ISqlApi api) : base(api)
         {
-            Messenger.Subscribe("UpdateTables",
-               async (o, e) => await UpdateTables());
-            Messenger.Subscribe("ShowTable",
-               async (o, e) => await ShowTableFromDB(o as Tuple<string, string>));
+            Messenger.Subscribe("UpdateTables",async () => await UpdateTables());
+            Messenger.Subscribe<Tuple<string, string>>("ShowTable",async (s,m) => await ShowTableFromDB(m));
         }
         protected override BaseModel CreateModel(ISqlApi api)
         {
