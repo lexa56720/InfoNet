@@ -18,12 +18,11 @@ namespace PostgresClient.ViewModel
         }
         private Page content;
 
+        private Page DBExplorer { get; set; } = new DBExplorer();
 
-        private Page DBExplorer { get; set; }
+        private Page ConnectionManager { get; set; } = new ConnectView();
 
-        private Page ConnectionManager { get; set; }
-
-        private Page DumpManager { get; set; }
+        private Page DumpManager { get; set; } = new DumpManager();
 
         private void OnPropertyChanged(string? name)
         {
@@ -33,10 +32,7 @@ namespace PostgresClient.ViewModel
 
         public SidePanelViewModel()
         {
-            DBExplorer = new DBExplorer();
-            DumpManager = new DumpManager();
-            Content = ConnectionManager = new ConnectView();
-
+            Content = ConnectionManager;
 
             Messenger.Subscribe("DBExplorer", () => Content = DBExplorer);
             Messenger.Subscribe("ConnectionManager", () => Content = ConnectionManager);

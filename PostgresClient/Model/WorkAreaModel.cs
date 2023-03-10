@@ -1,6 +1,5 @@
 ﻿using PsqlSharp;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PostgresClient.Model
 {

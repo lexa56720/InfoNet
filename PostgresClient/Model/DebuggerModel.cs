@@ -1,5 +1,4 @@
 ﻿using PostgresClient.Utils;
-using System;
 
 namespace PostgresClient.Model
 {

@@ -83,7 +83,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <!--App icon-->
 
-                    <Image Source="/PostgresClient;component/AppIcon.png" VerticalAlignment="Top" Width="25" Margin="5,2,5,0"  Height="32" />
+                    <Image Source="/PostgresClient;component/Resources/AppIcon.png" VerticalAlignment="Top" Width="25" Margin="5,2,5,0"  Height="32" />
                     <TextBlock Text="Postgres Client" FontFamily="Segoe UI" Margin="5,5,5,5" VerticalAlignment="Center" FontSize="15" />
                 </StackPanel>
 
@@ -191,7 +191,7 @@
                         <Button Margin="5,5,5,0"  IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" >
                             <StackPanel  Orientation="Horizontal">
                                 <TextBlock Text="&#xed25;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
-                                <TextBlock Text="Обозреватель базы данных"  Padding="5,2,5,5"  TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Обозреватель баз данных"  Padding="5,2,5,5"  TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

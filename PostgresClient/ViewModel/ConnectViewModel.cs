@@ -1,7 +1,6 @@
 ﻿using PostgresClient.Model;
 using PostgresClient.Utils;
 using PsqlSharp;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
