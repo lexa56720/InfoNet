@@ -7,6 +7,22 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
     <ImplicitUsings>enable</ImplicitUsings>
+<<<<<<<<< Temporary merge branch 1
+=========
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+>>>>>>>>> Temporary merge branch 2
+<<<<<<<<< Temporary merge branch 1
+=========
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+>>>>>>>>> Temporary merge branch 2
+<<<<<<<<< Temporary merge branch 1
+=========
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+>>>>>>>>> Temporary merge branch 2
+<<<<<<<<< Temporary merge branch 1
+=========
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+>>>>>>>>> Temporary merge branch 2
   </PropertyGroup>
 
   <ItemGroup>
