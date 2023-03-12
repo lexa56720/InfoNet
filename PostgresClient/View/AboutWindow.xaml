@@ -27,7 +27,7 @@
         </StackPanel>
         <Button Grid.Row="2" VerticalAlignment="Bottom"    Click="Ok_Click">
             <StackPanel Margin="2"   Orientation="Horizontal">
-                <TextBlock Text="&#xe73e;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                <TextBlock Text="&#xe73e;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
             </StackPanel>
         </Button>
     </Grid>

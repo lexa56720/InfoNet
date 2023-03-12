@@ -23,7 +23,7 @@
                         <ControlTemplate TargetType="Button">
                             <Grid Background="Transparent" Width="44" Height="30">
                                 <Border  x:Name="LayoutRoot" CornerRadius="5">
-                                    <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe Fluent Icons" FontSize="10" 
+                                    <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="{StaticResource SegoeIcons}" FontSize="10" 
                                    Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display"/>
                                 </Border>
@@ -84,7 +84,7 @@
                     <!--App icon-->
 
                     <Image Source="/PostgresClient;component/Resources/AppIcon.png" VerticalAlignment="Top" Width="25" Margin="5,2,5,0"  Height="32" />
-                    <TextBlock Text="Postgres Client" FontFamily="Segoe UI" Margin="5,5,5,5" VerticalAlignment="Center" FontSize="15" />
+                    <TextBlock Text="Postgres Client" FontFamily="{StaticResource SegoeUI}" Margin="5,5,5,5" VerticalAlignment="Center" FontSize="15" />
                 </StackPanel>
 
                 <!--Caption buttons-->
@@ -116,25 +116,25 @@
                 <StackPanel Background="#222222" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3"   >
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToWork, IsAsync=True}" IsEnabled="{Binding IsConnected}">
                         <StackPanel  Orientation="Horizontal">
-                            <TextBlock Text="&#xe756;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="&#xe756;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                             <TextBlock Text="Команды" TextAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToTable,IsAsync=True}" IsEnabled="{Binding IsConnected}" >
                         <StackPanel  Orientation="Horizontal">
-                            <TextBlock Text="&#xf0e2;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="&#xf0e2;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                             <TextBlock Text="Таблицы" TextAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Margin="15,0,10,0" Command="{Binding NavigateToFunc, IsAsync=True}" IsEnabled="{Binding IsConnected}" >
                         <StackPanel  Orientation="Horizontal">
-                            <TextBlock Text="&#xe713;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="&#xe713;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                             <TextBlock Text="Функции" TextAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Margin="15,0,10,0" Command="{Binding About, IsAsync=True}" >
                         <StackPanel  Orientation="Horizontal">
-                            <TextBlock Text="&#xe946;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                            <TextBlock Text="&#xe946;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                             <TextBlock Text="О программе" TextAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -178,19 +178,19 @@
                         </StackPanel.LayoutTransform>
                         <Button Margin="5,5,5,0" Command="{Binding ConnectionManager}">
                             <StackPanel  Orientation="Horizontal">
-                                <TextBlock Padding="10" Text="&#xe774;" TextAlignment="Center"  VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Padding="10" Text="&#xe774;" TextAlignment="Center"  VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                                 <TextBlock Text="Управление соеденением"  Padding="5,2,5,5"  TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Margin="5,5,5,0"  IsEnabled="{Binding IsConnected}"  Command="{Binding DumpManager}">
                             <StackPanel  Orientation="Horizontal">
-                                <TextBlock Text="&#xec7a;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Text="&#xec7a;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                                 <TextBlock Text="Управление дампами" Padding="5,2,5,5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Margin="5,5,5,0"  IsEnabled="{Binding IsConnected}" Command="{Binding DBExplorer}" >
                             <StackPanel  Orientation="Horizontal">
-                                <TextBlock Text="&#xed25;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                                <TextBlock Text="&#xed25;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                                 <TextBlock Text="Обозреватель баз данных"  Padding="5,2,5,5"  TextAlignment="Center" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>

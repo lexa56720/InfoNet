@@ -46,7 +46,7 @@
         </Grid>
         <Button FontSize="20" HorizontalAlignment="Center" Margin="10" Command="{Binding ConnectClick}" CommandParameter="{x:Reference Name=PasswordBox}" >
             <StackPanel  Orientation="Horizontal">
-                <TextBlock TextAlignment="Center" Padding="5" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" >
+                <TextBlock TextAlignment="Center" Padding="5" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" >
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
