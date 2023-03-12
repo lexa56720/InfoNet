@@ -30,7 +30,7 @@ namespace PsqlSharp
                 { typeof(Period),o=>
                     {
                         var period=(Period)o;
-                        return $"'{period.ToString()}'";
+                        return $"'{period}'";
                     }
                 },
             };
