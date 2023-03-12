@@ -323,7 +323,7 @@ namespace PsqlSharp
 
             cmd.StartInfo.RedirectStandardError = true;
             cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.CreateNoWindow = false;
+            cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
 
