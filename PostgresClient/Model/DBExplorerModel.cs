@@ -3,7 +3,7 @@
     internal class DBExplorerModel : BaseModel
     {
 
-        private int Timeout = 1000;
+        private int Timeout = 400;
         public DBExplorerModel(ISqlApi api) : base(api)
         {
         }

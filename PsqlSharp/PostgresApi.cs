@@ -5,6 +5,7 @@ using NpgsqlTypes;
 using SqlApi;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 namespace PsqlSharp
@@ -313,20 +314,25 @@ namespace PsqlSharp
                 return false;
 
             var directory = (await ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
-            var dumExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
+            var dumpExe = directory[0, 1].Replace("data", "bin/pg_dump.exe");
+            var codePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
 
             using var cmd = new Process();
+
             cmd.StartInfo.FileName = "cmd.exe";
 
             cmd.StartInfo.RedirectStandardError = true;
             cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.CreateNoWindow = false;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
 
+            await cmd.StandardInput.WriteLineAsync($"chcp {codePage}");
             await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
-            await cmd.StandardInput.WriteLineAsync($"\"{dumExe}\" -h {ConnectionData.Host} -U {ConnectionData.Username} -d{ConnectionData.Database} -F tar -f {outputPath}");
+            await cmd.StandardInput.WriteLineAsync($"\"{dumpExe}\" -h {ConnectionData.Host} -U {ConnectionData.Username}" +
+                $" -d{ConnectionData.Database} -F tar -f \"{outputPath}\"");
 
+      
             cmd.StandardInput.Close();
             cmd.StandardError.Close();
 
@@ -340,6 +346,7 @@ namespace PsqlSharp
 
             var directory = (await ExecuteCommandAsync("SELECT * FROM pg_settings WHERE name = 'data_directory'"))[0];
             var restoreExe = directory[0, 1].Replace("data", "bin/pg_restore.exe");
+            var codePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
             await ClearDataBase();
 
             using var cmd = new Process();
@@ -350,8 +357,10 @@ namespace PsqlSharp
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
 
+            await cmd.StandardInput.WriteLineAsync($"chcp {codePage}");
             await cmd.StandardInput.WriteLineAsync($"set pgpassword={ConnectionData.Password}");
-            await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {ConnectionData.Host} -U {ConnectionData.Username} -d {ConnectionData.Database} {inputPath}");
+            await cmd.StandardInput.WriteLineAsync($"\"{restoreExe}\" --verbose --clean --no-acl --no-owner -h {ConnectionData.Host} " +
+                $"-U {ConnectionData.Username} -d {ConnectionData.Database} \"{inputPath}\"");
 
             cmd.StandardInput.Close();
             cmd.StandardError.Close();
