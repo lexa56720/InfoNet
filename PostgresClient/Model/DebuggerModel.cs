@@ -18,7 +18,7 @@ namespace PostgresClient.Model
 
         private void Api_SuccessExecution(object? sender, string e)
         {
-            OnNewLogLine($"Комманда {e} выполнена успешно");
+            OnNewLogLine($"Команда {e} выполнена успешно");
         }
 
         private void Api_ExceptionOccured(object? sender, Exception e)

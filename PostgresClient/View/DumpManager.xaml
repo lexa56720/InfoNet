@@ -38,7 +38,7 @@
                 </TextBox>
                 <Button VerticalContentAlignment="Center" Margin="0,5,0,5" Command="{Binding GotFocus}" Grid.Column="1" HorizontalAlignment="Center">
                     <StackPanel  Orientation="Horizontal">
-                        <TextBlock Text="&#xe8a7;" TextAlignment="Center"  VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                        <TextBlock Text="&#xe8a7;" TextAlignment="Center"  VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                     </StackPanel>
                 </Button>
             </Grid>
@@ -46,13 +46,13 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
             <Button  FontSize="20" HorizontalAlignment="Stretch" Margin="10" Command="{Binding SaveCommand,IsAsync=True}" >
                 <StackPanel  Orientation="Horizontal">
-                    <TextBlock Text="&#xe78c;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="&#xe78c;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                     <TextBlock Text="Сохранить дамп" TextAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <Button  FontSize="20" HorizontalAlignment="Stretch" Margin="10" Command="{Binding LoadCommand,IsAsync=True}" >
                 <StackPanel  Orientation="Horizontal">
-                    <TextBlock Text="&#xe8da;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="&#xe8da;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                     <TextBlock Text="Загрузить дамп" TextAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>

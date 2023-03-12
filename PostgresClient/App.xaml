@@ -5,7 +5,9 @@
              xmlns:controls="clr-namespace:PostgresClient.Controls" xmlns:shell="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-
+        <FontFamily x:Key="SegoeIcons">./Resources/Fonts/#Segoe Fluent Icons</FontFamily>
+        <FontFamily x:Key="SegoeUI">./Resources/Fonts/#{StaticResource SegoeUI}</FontFamily>
+        
         <Storyboard x:Key="MouseOverStart">
             <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" 
                                     To="#323232"
@@ -21,14 +23,14 @@
                                     Duration="0:0:0.3"/>
         </Storyboard>
         <Style TargetType="ToolTip">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
             <Setter Property="Background" Value="#323232"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         
         <Style TargetType="Label">
-            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontFamily" Value="{StaticResource SegoeUI}" />
             <Setter Property="Control.Foreground" Value="White" />
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
@@ -42,7 +44,7 @@
                 </Style>
             </Style.Resources>
             <Setter Property="Control.FontSize" Value="20" />
-            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontFamily" Value="{StaticResource SegoeUI}" />
             <Setter Property="Control.Background" Value="#00323232" />
             <Setter Property="Control.Foreground" Value="White" />
             <Setter Property="VerticalContentAlignment" Value="Top" />
@@ -111,7 +113,7 @@
         </Style>
 
         <Style TargetType="TextBlock">
-            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontFamily" Value="{StaticResource SegoeUI}" />
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="5" />
         </Style>
@@ -131,7 +133,7 @@
                 </Trigger>
             </Style.Triggers>
 
-            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontFamily" Value="{StaticResource SegoeUI}" />
             <Setter Property="Margin" Value="5" />
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="White"/>
@@ -141,7 +143,7 @@
 
         <Style TargetType="PasswordBox">
 
-            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontFamily" Value="{StaticResource SegoeUI}" />
             <Setter Property="Margin" Value="5" />
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="White"/>

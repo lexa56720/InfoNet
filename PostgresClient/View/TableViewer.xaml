@@ -20,7 +20,7 @@
                 
                 <ComboBox  x:Name="mybox" FontSize="20" IsDropDownOpen="{Binding IsDropDownOpened}" IsEnabled="{Binding IsConnected}" 
                       SelectedValue="{Binding SelectedTable,IsAsync=True,Mode=TwoWay}" ItemsSource="{Binding Tables}"  MaxWidth="120" BorderThickness="0" Margin="0,0,10,0"/>
-                <TextBlock Text="Таблица" FontSize="20" FontFamily="Segoe UI" Foreground="LightGray" VerticalAlignment="Center"  Padding="5" IsHitTestVisible="False">
+                <TextBlock Text="Таблица" FontSize="20" FontFamily="{StaticResource SegoeUI}" Foreground="LightGray" VerticalAlignment="Center"  Padding="5" IsHitTestVisible="False">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Hidden"/>
@@ -35,7 +35,7 @@
             </Grid>
             <Button  Command="{Binding DeleteRowCommand}" IsEnabled="{Binding IsEditable}">
                 <StackPanel Margin="2"   Orientation="Horizontal">
-                    <TextBlock Text="&#xe74d;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" />
+                    <TextBlock Text="&#xe74d;" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource SegoeIcons}" />
                     <TextBlock Text="Удалить строку" TextAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>

@@ -17,6 +17,8 @@
   <ItemGroup>
     <None Remove="AppIcon.png" />
     <None Remove="cat.png" />
+    <None Remove="Resources\Fonts\SegoeIcons.ttf" />
+    <None Remove="Resources\Fonts\segoeui.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,8 @@
     <Resource Include="Resources\AppIcon.png" />
     <Resource Include="AssemblyInfo.cs" />
     <Resource Include="Resources\cat.png" />
+    <Resource Include="Resources\Fonts\SegoeIcons.ttf" />
+    <Resource Include="Resources\Fonts\segoeui.ttf" />
   </ItemGroup>
 
   <ItemGroup>
