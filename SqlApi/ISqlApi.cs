@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace PsqlSharp
+namespace SqlApi
 {
     public interface ISqlApi
     {

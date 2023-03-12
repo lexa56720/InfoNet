@@ -43,6 +43,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PsqlSharp\PsqlSharp.csproj" />
+    <ProjectReference Include="..\SqlApi\SqlApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="SqlApi" />
   </ItemGroup>
 
 </Project>

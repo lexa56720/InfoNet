@@ -1,5 +1,4 @@
 ﻿using PostgresClient.Model;
-using PsqlSharp;
 using System.ComponentModel;
 
 namespace PostgresClient.ViewModel

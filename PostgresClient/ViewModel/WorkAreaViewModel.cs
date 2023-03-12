@@ -1,7 +1,6 @@
 ﻿using PostgresClient.Model;
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
-using PsqlSharp;
 using System.Windows.Input;
 
 namespace PostgresClient.ViewModel

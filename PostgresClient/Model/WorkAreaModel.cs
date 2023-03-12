@@ -1,5 +1,4 @@
-﻿using PsqlSharp;
-using System.Text;
+﻿using System.Text;
 
 namespace PostgresClient.Model
 {

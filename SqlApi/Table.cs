@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Text;
 
-namespace PsqlSharp
+namespace SqlApi
 {
     public class Table
     {
@@ -17,7 +17,7 @@ namespace PsqlSharp
         public string? TableName
         {
             get => tableName;
-            internal set
+            set
             {
                 tableName = value;
                 DataTable.TableName = value;
@@ -107,17 +107,17 @@ namespace PsqlSharp
             return builder.ToString();
         }
 
-        internal DataRow GetRowByIndex(int index)
+        public DataRow GetRowByIndex(int index)
         {
             var innerIndex = RowIndexes[index];
             return DataTable.Rows[innerIndex];
         }
-        internal int GetIndexByRow(DataRow row)
+        public int GetIndexByRow(DataRow row)
         {
             var index = DataTable.Rows.IndexOf(row);
             return RowIndexes.IndexOf(index);
         }
-        internal void UpdateIndex(int oldIndex, int newIndex)
+        public void UpdateIndex(int oldIndex, int newIndex)
         {
             if (oldIndex == -1)
             {
@@ -130,7 +130,7 @@ namespace PsqlSharp
                 RowIndexes.Insert(newIndex, value);
             }
         }
-        internal int GetGlobalIndexByInner(int innerIndex)
+        public int GetGlobalIndexByInner(int innerIndex)
         {
             return RowIndexes.IndexOf(innerIndex);
         }

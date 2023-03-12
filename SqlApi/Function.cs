@@ -1,4 +1,4 @@
-﻿namespace PsqlSharp
+﻿namespace SqlApi
 {
     public class Function
     {

@@ -2,7 +2,6 @@
 using PostgresClient.Utils;
 using PostgresClient.Utils.MessageCentre;
 using PostgresClient.View;
-using PsqlSharp;
 using System.Windows.Controls;
 using System.Windows.Input;
 

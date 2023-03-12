@@ -1,6 +1,4 @@
-﻿using PsqlSharp;
-
-namespace PostgresClient.Model
+﻿namespace PostgresClient.Model
 {
     internal abstract class BaseModel
     {
