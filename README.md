@@ -1,4 +1,3 @@
 # InfoNet
-postgresql client written on c#
-# VERY GOOD VERY NICE
+PostgreSQL client written on c# and WPF
 ![alt text](scrn.png)
